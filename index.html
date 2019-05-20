@@ -1,12 +1,86 @@
-<!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="utf-8" />
-  <title>test git hub page 2</title>
-  </head>
-<body>
- <h1 style="color: red" >Test GitHub page №2</h1>
- <h2>dev version 2 (2346)</h2>
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>FS_FreeTime</title>
+    <base target="_top">
+    <meta name="robots" content="noindex">
 
-</body>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+    <link rel="stylesheet" href="css/main.css" type="text/css"/>
+    <link rel="stylesheet" href="css/landScape.css" type="text/css"/>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!--<script src="js/sweetAlertMin.js"></script>-->
+    <script id="JSONP"></script>
+
+  </head>
+
+
+
+
+<body>
+
+
+  <div class="buttonBar">
+        <button onClick="lookButton()">Look</button>
+          <span style="width: 3em"></span>
+        <button onClick="setMin()">min</button>
+          <span style="width: 1em"></span>
+        <button onClick="setStDate()">start Date</button>
+          <span style="width: 1em"></span>
+        <button id="loginButton" onClick="loginButtonClick(this)" style="min-width: 5em">Log in</button>
+          <span style="width: 1em"></span>
+        <button id="helpButton" onClick="helpButtonClick(this)" style="min-width: 2em"><b> ? </b></button>
+          <span style="width: 1em"></span>
+        <span style="line-height: 2em; color: red"> Gt</span>
+         <!--<span style="width: 1em"></span>
+        <button id="testPOST" onClick="loginRequest(this)" style="min-width: 2em"><b> test </b></button>-->
+
+    </div>
+
+    <div class="inner" onClick="showTableState()">
+        <table id="mainTable">
+             <!-- content is inserting by JS -->
+             <tr><td>Checking...</td></tr>
+        </table>
+    </div>
+
+   <!--
+    <br>
+    <ul id="tableState">
+        <li>Table State:</li>
+    </ul>
+   -->
+
+  <!-- For Swap Dialogue -->
+  <div id="swapDialog"></div>
+
+  <script src="js/JS_apiHandler.js"></script>
+  <script src="js/testRasp.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/setTable.js"></script>
+  <script src="js/request.js"></script>
+  <script src="js/freeTime.js"></script>
+
+
+
+  <script>
+
+    window.addEventListener('error', function (e) {
+      var stack = e.error.stack;
+      var message = e.error.toString();
+      if (stack) {
+          message += '\n' + stack;
+      }
+      console.log('catchedErr: ' + message)
+    });
+
+    window.onload = start();
+
+  </script>
+
+ </body>
 </html>

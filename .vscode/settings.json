@@ -1,0 +1,8 @@
+{
+  "eslint.validate": [ "javascript", "html" ],
+  "workbench.editor.enablePreview": false,
+  "files.exclude": {
+    "package-lock.json": true,
+    "README.md": true
+  }
+}
