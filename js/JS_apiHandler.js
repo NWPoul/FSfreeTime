@@ -1,19 +1,8 @@
 //GLOBAL VARIABLES
-var TOGGLE = 'JSONP';//'local'//
+
 
 /*global
- user,
- userPs,
- raspData,
- testAPIanswer,
- prevReqData,
- devMode,
-
- start,
- storeUser,
- prevReqHandling,
- logInResponseHandler,
- changesUpploadResponse,
+ 
 */
 
 

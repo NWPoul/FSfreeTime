@@ -3,23 +3,76 @@
  user,
  userPs,
  raspData,
+ stDate,
+ endDate
 
- loginRequest,
- parseTdIndex,
- defineShift,
- uploadChanges,
- reset
- */
+ promisedPOST,
+ dateToYYYYMMDD,
+ parseCSV
+*/
+
+
+function getDates() {
+  if (!stDate){
+    stDate ='2019-05-21';
+    // stDate = prompt('Start Date YYYY-MM-DD:');
+  }
+  endDate = new Date(stDate);
+  endDate.setMonth(endDate.getMonth() + 1);
+  //   stDate = dateToYYYYMMDD(stDate);
+  endDate = dateToYYYYMMDD(endDate);
+
+  return {
+    stDate: stDate,
+    endDate: endDate
+  };
+}// end getDatesFromSS
+
+
+function getBookingDataAndSetTable (stDate, endDate) {
+  if (!stDate) { var dates = getDates(); }
+  
+  stDate = dates.stDate || '2019-05-21';
+  endDate = dates.endDate || '2019-05-23';
+
+  var url = 'https://booking.flystation.net/Control/Booking/ListBooking'
+           +'/loadDataList'
+           +'/0/1/1';
+
+  var params = {
+  // '_search': "false",  GFilter[search]': '',  'GFilterReset': 1,
+    'method': 'POST',
+
+    'login':                 'instruktor@flystation.net',
+    'password':              'hfcgbcfybt',
+    'GFilter[filtermore]':    1,
+    'GFilter[bookingactive]': 'y',
+    'GFilter[dateid]':        'bookingtimefly',
+    'GFilter[sdate]':         stDate,
+    'GFilter[edate]':         endDate
+  };
+
+  promisedPOST (url, params)
+    .catch(error => {
+      console.error('Failed!', error);
+      return( [ ['Loading error'], [error] ] );
+    })
+    .then(response => handlingGetBookingResponse(response) );
+}//end getBookingData
+
+
+
+
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////   Authorisation module /////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function logIn () {
-
   let preUser = prompt( 'введите Ваш login в системе', '-' );
   let ps = prompt('введите Ваш пароль в системе', '');
-
   storeUser(preUser, ps);
 }
 
