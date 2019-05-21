@@ -32,34 +32,9 @@ function Global(raspData) {
   condFormat(tbody);
 
   mainTable.appendChild(tbody);
-
-  restoreState();
-//    getPrevReqAndSetData();// Загрузить активные предыдущие запросы = допилить потом
 }//=====END GLOBAL================================
 
 
-// eslint-disable-next-line no-unused-vars
-function callReset() {
-  //get rasp data
-  //set table
-//    raspData = getRasp();
-  var actualChanges = document.getElementsByClassName('changed');
-  if (!actualChanges.length) {
-    reset();
-  } else {
-    swal({
-      buttons: ['Перезагрузить расписание', 'Вернуться'],
-      title: 'Перезагрузка расписания!',
-      text: 'Есть неотправленные изменения смен \n они будут потеряны!'
-    })
-      .then( (choice) => {
-        if (!choice) {
-          reset();
-        }
-      });
-  }
-
-}
 
 
 function reset() {
@@ -68,34 +43,7 @@ function reset() {
   getRaspAndSetTable();
 }//End reset
 
-// eslint-disable-next-line no-unused-vars
-function SoftReload() {
-  // raspData = raspData;
-  var mainTable = document.getElementById('mainTable');
-  var tbody = mainTable.tBodies[0];
 
-  TDconcat(raspData, tbody);
-  condFormat(tbody);
-
-  localStorage.removeItem('mainTableState');
-
-  mainTableState = {
-    checkMute: false,
-    checkCnt: 0,
-    tdChecked: {},
-    tdChanged: []
-  };
-}//End SoftReload
-
-function restoreState() {
-  var savedState = localStorage.getItem('mainTableState');
-  if (!savedState) { return; }
-  savedState = JSON.parse(savedState);
-  console.log(savedState);
-  savedState.tdChanged.forEach( function(td) {
-    changeShift(td.tdId, td.newShift);
-  });
-}//End restoreState
 
 // eslint-disable-next-line no-unused-vars
 function showTableState() {
@@ -212,42 +160,6 @@ function condFormat(tbody) {
 
 
 
-//======================================================================================
-//===== working with previous requests =================================================
-//======================================================================================
-
-// eslint-disable-next-line no-unused-vars
-function prevReqHandling(flag) {
-  if(!prevReqData) return;
-  //console.log(raspData[0]);
-  //  console.log(prevReqData);
-  //  console.log(mainTableState);
-
-  for (let i = 0, last = prevReqData.length; i < last; i++) {
-    // let curAuthorMail = prevReqData[i].authorMail;
-    // let curReqStatus = prevReqData[i].status;
-    let curReqChanges = prevReqData[i].changes;
-
-    var curTdZamReq = {};
-    curReqChanges.forEach( function(change) {
-      var curDateIndex = findDateIndex(change.dateT);
-      var curInstrIndex = findInstrIndex(change.instr);
-
-      if (curDateIndex && curInstrIndex) {
-        curTdZamReq.td = [curInstrIndex,curDateIndex];
-        curTdZamReq.shift = change.shift;
-        showPrevZamReq(curTdZamReq.td, curTdZamReq.shift);
-        console.log(curTdZamReq);
-      }
-    });
-
-
-  } // end for
-
-
-
-
-}
 
 function findDateIndex(DateMS) {
   var Dates = raspData[0];
@@ -260,21 +172,3 @@ function findDateIndex(DateMS) {
 
   return null;
 } // end findDateIndex return zero based index
-
-
-
-function findInstrIndex(instr) {
-  for (var i=1; i<= raspData.length; i++) {
-    if (instr == raspData[i][0]) return i ;
-  }
-  return null;
-
-} // end findInstrIndex return zero based index
-
-
-function showPrevZamReq(td, zamShift) {
-  var tdId = 'r' +td[0] +'c' +td[1];
-  var actTD = document.getElementById(tdId);
-  actTD.innerHTML = zamShift;
-  actTD.classList.add('zamReq');
-} //===== END showPrevZamReq
