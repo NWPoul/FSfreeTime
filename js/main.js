@@ -2,52 +2,42 @@
 var devMode = false; // toggle for dev mode links/res on dev pages or not
 
 //GLOBAL NAME SPACE
-var user;
-var userPs;
-var userData;
-
-var raspData;
-var stDate;
-var endDate;
-// eslint-disable-next-line no-unused-vars
-var APIanswer;
-var mainTableState;
-var swapDialogData = {};
-
+const GVAR = {
+  user: '',
+  userPs: '',
+  userData: {},
+  bookingData: {},
+  stDate: '',
+  endDate: '',
+  mainTableState: {}
+};
 /* global
- logIn,
+ setUser,
  setLoginButtonText,
- getBookingDataAndSetTable,
- showTableState,
+
+ getDates,
+ getBookingData,
+ proceedBookingData
 
 
 */
-
-
-
 // ===== END GLOBAL NAME SPACE =====
 
 
 // !!! START POINT !!!
-// eslint-disable-next-line no-unused-vars
 function start() {
-  //localStorage.removeItem('author'); //избавляемся от записи прошлой версий!
   var mainTableStatus = document.getElementById('mainTable');
+  mainTableStatus.innerHTML = '<tr><td>Нужна авторизация! Нажмите "Log_in"</td></tr>';
 
-  if ( localStorage.getItem('user') ) {
-    user = localStorage.getItem('user');
-    userPs = localStorage.getItem('userPs');
-    userData = localStorage.getItem('userData');
+  setUser();
+  getDates();
+  getBookingData(GVAR.stDate, GVAR.endDate)
+    .then( bookingData => {
+      GVAR.bookingData = proceedBookingData(bookingData);
+      Global(GVAR.bookingData);
+    });
 
-    setLoginButtonText(user);
-    getBookingDataAndSetTable();
-    mainTableStatus.innerHTML = '<tr><td>Loading data...</td></tr>';
-
-  } else {
-    mainTableStatus.innerHTML = '<tr><td>Нужна авторизация! Нажмите "Log_in"</td></tr>';
-    logIn();
-  }
-
+  mainTableStatus.innerHTML = '<tr><td>Loading data...</td></tr>';
 }// end start
 
 
@@ -64,8 +54,7 @@ function start() {
 
 
 function lookButton() {
-  if(!stDate) getDates();
-  getBookingDataAndSetTable (stDate, endDate);
+  start();
 }
 
 function checkTD(actTD) {
@@ -73,8 +62,8 @@ function checkTD(actTD) {
 
   var actTDiD = actTD.id;
   actTD.classList.add('check');
-  mainTableState.tdChecked[actTDiD] = true;
-  mainTableState.checkCnt++;
+  GVAR.mainTableState.tdChecked[actTDiD] = true;
+  GVAR.mainTableState.checkCnt++;
   // showTableState();//debug
 }  // ======================= end check td
 
@@ -83,8 +72,8 @@ function uncheckTD(actTD) {
 
   var actTDiD = actTD.id;
   actTD.classList.remove('check');
-  delete mainTableState.tdChecked[actTDiD];
-  mainTableState.checkCnt--;
+  delete GVAR.mainTableState.tdChecked[actTDiD];
+  GVAR.mainTableState.checkCnt--;
   // showTableState();//debug
 }  // ===================== end uncheck td
 
@@ -92,7 +81,7 @@ function closeDialog() {
   var dialogDiv = document.getElementById('swapDialog');
   dialogDiv.innerHTML = '';
   dialogDiv.style.display = 'none';
-  mainTableState.checkMute = false;
+  GVAR.mainTableState.checkMute = false;
 } //===== END closeDialog  ============================================ closeDialog
 
 

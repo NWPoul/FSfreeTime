@@ -1,40 +1,39 @@
 
 /*global
- user,
- userPs,
- raspData,
- stDate,
- endDate
+ GVAR,
 
  promisedPOST,
  dateToYYYYMMDD,
- parseCSV
+
 */
 
 
-function getDates() {
-  if (!stDate){
-    stDate ='2019-05-21';
-    // stDate = prompt('Start Date YYYY-MM-DD:');
-  }
-  endDate = new Date(stDate);
+function getDates(buttonCall) {
+  if (buttonCall) { GVAR.stDate = prompt('Start Date YYYY-MM-DD:', '2019-05-21'); }
+
+  if (!GVAR.stDate) { GVAR.stDate = '2019-05-21'; }
+
+  let endDate = new Date(GVAR.stDate);
   endDate.setMonth(endDate.getMonth() + 1);
   //   stDate = dateToYYYYMMDD(stDate);
-  endDate = dateToYYYYMMDD(endDate);
+  GVAR.endDate = dateToYYYYMMDD(endDate);
+
+  setDateButtonText(GVAR.stDate);
 
   return {
-    stDate: stDate,
-    endDate: endDate
+    stDate: GVAR.stDate,
+    endDate: GVAR.endDate
   };
 }// end getDatesFromSS
 
+function setDateButtonText(text) {
+  if (!text) return;
+  var dateButton = document.getElementById('dateButton');
+  dateButton.innerText = text;
+}
 
-function getBookingDataAndSetTable (stDate, endDate) {
-  if (!stDate) { var dates = getDates(); }
-  
-  stDate = dates.stDate || '2019-05-21';
-  endDate = dates.endDate || '2019-05-23';
 
+async function getBookingData (stDate, endDate) {
   var url = 'https://booking.flystation.net/Control/Booking/ListBooking'
            +'/loadDataList'
            +'/0/1/1';
@@ -52,12 +51,15 @@ function getBookingDataAndSetTable (stDate, endDate) {
     'GFilter[edate]':         endDate
   };
 
-  promisedPOST (url, params)
+  return promisedPOST (url, params)
     .catch(error => {
       console.error('Failed!', error);
       return( [ ['Loading error'], [error] ] );
     })
-    .then(response => handlingGetBookingResponse(response) );
+    .then(response => {
+      return response;
+    });
+
 }//end getBookingData
 
 
@@ -70,26 +72,43 @@ function getBookingDataAndSetTable (stDate, endDate) {
 /////   Authorisation module /////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+function setUser() {
+  if ( localStorage.getItem('user') &&
+       localStorage.getItem('userPs') ) {
+
+    GVAR.user = localStorage.getItem('user');
+    GVAR.userPs = localStorage.getItem('userPs');
+    GVAR.userData = localStorage.getItem('userData');
+    setLoginButtonText(GVAR.user);
+  } else {
+    logIn();
+  }
+}
+
 function logIn () {
-  let preUser = prompt( 'введите Ваш login в системе', '-' );
+  let user = prompt( 'введите Ваш login в системе', '' );
   let ps = prompt('введите Ваш пароль в системе', '');
-  storeUser(preUser, ps);
+  if (!user || !ps) {
+    alert('user and password required!');
+    return;
+  }
+  storeUser(user, ps);
+  setLoginButtonText(user);
 }
 
 // eslint-disable-next-line no-unused-vars
-function storeUser(preUser, ps) {
-  if (!preUser || !ps) return;
-  localStorage.setItem('user', preUser);
+function storeUser(user, ps) {
+  localStorage.setItem('user', user);
   localStorage.setItem('userPs', ps);
-  user = preUser;
-  userPs = ps;
+  GVAR.user = user;
+  GVAR.userPs = ps;
 }
 
 function logOut() {
   localStorage.removeItem('user');
   localStorage.removeItem('userPs');
-  user = null;
-  userPs = null;
+  GVAR.user = null;
+  GVAR.userPs = null;
   setLoginButtonText('Log in');
 }
 

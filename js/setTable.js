@@ -1,8 +1,9 @@
 /*global
- raspData,
  mainTableState,
 
- cellOnClick2swap,
+ parseCSV,
+ msToCustomDateObj,
+
 
 */
 
@@ -40,32 +41,23 @@ function getTestData(dataReq) {
 
 
 //-----------------------------------------------------------------------------------------------
-//First step - get and prepare booking data------------------------------------------------------
+//First step - prepare booking data------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-function handlingGetBookingResponse (bookingResponse) {
-  let bookingArr = parseCSV( bookingResponse, ';' );
-  bookingArr.sort(function(a,b){
-    return a[0] - b[0];
-  });
-  convertBookingData( bookingArr );
-  Global( bookingArr );
-}
-
-
-function convertBookingData( bookingArr ) {
-  bookingArr = bookingArr || getTestData('ShortBookingsArr');
-
+function proceedBookingData( bookingData ) {
   let block30 = 30*60*1000;
-
+  let bookingArr = parseCSV( bookingData, ';' );
+  let colCnt = bookingArr[0].length;
   let timeCol = 0,
     dateStrCol = 1,
     timeValCol = 2,
-    restRecStCol = 3,
-    colCnt = bookingArr[0].length;
+    restRecStCol = 3;
+
+  bookingArr.sort( function(a,b) {
+    return a[timeCol] - b[timeCol];
+  });
 
   for (let i = 0; bookingArr[i+1] ; i++) {
-
     let curTime = bookingArr[i][timeCol];
     let curFTimeVal = bookingArr[i][timeValCol];
 
@@ -96,7 +88,7 @@ function convertBookingData( bookingArr ) {
       }
     }
 
-    bookingArr[i][dateStrCol] = JSON.stringify( msToCustomDateObj(curTime) );
+    bookingArr[i][dateStrCol] = ( msToCustomDateObj(curTime) );
   }//END for bookings rec
 
   return bookingArr;
@@ -145,12 +137,42 @@ function simpleTable(Arr, tbody) {
   }//end for rows
 
   return(tbody);
-}//=====END TDconcat==================
+}//=====END simpleTable==================
 
 
 
 
+function simpleTable2(Arr, tbody) {
+  tbody = tbody || document.createElement('tbody');
+  let rowsN = Arr.length,
+    colsN = Arr[0].length;
 
+  for(let ri = 0; ri < rowsN; ri++){
+    let tr = document.createElement('tr');
+    let rowStr = '';
+    rowStr += '<th id="r' +ri +'c0">' +
+               Arr[ri][1].dayName +
+               ', ' +
+               Arr[ri][1].dayN +
+               '/' +
+               Arr[ri][1].monthN +
+               ' ' +
+               Arr[ri][1].time +
+              '</th>';
+
+    for (let ci = 3; ci < colsN; ci++) {
+      let tdID = 'r' +ri +'c' +ci;
+      rowStr += '<td id="' +tdID +'">' +
+                 Arr[ri][ci] +
+                '</td>';
+    }// end for cols
+
+    tr.innerHTML = rowStr;
+    tbody.appendChild(tr);
+  }//end for rows
+
+  return(tbody);
+}//=====END simpleTable2==================
 
 
 
@@ -173,7 +195,7 @@ function simpleTable(Arr, tbody) {
 //--------------------------------------------------------------------------------------------------------
 
 // eslint-disable-next-line no-unused-vars
-function Global(raspData) {
+function Global(bookingData) {
   var mainTable = document.getElementById('mainTable');
   mainTable.innerHTML = '';
   // mainTable.onclick = ;
@@ -188,10 +210,10 @@ function Global(raspData) {
 
   var tbody = document.createElement('tbody');
 
-  // TDconcat(raspData, tbody);
+  // TDconcat(bookingData, tbody);
   // condFormat(tbody);
 
-  simpleTable(raspData, tbody);
+  simpleTable2(bookingData, tbody);
 
   mainTable.appendChild(tbody);
 }//=====END GLOBAL================================
@@ -202,7 +224,7 @@ function Global(raspData) {
 function reset() {
   localStorage.removeItem('mainTableState');
   console.log('reset ' + this);
-  getBookingDataAndSetTable();
+  proceedBookingData();
 }//End reset
 
 

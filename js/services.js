@@ -133,9 +133,10 @@ function extractDateTime(rec, tIndex) {
 // }//end timeIndexFunc
 
 function customDate ( date ) {
-  let time = date.getTime();
+  let timeMS = date.getTime();
   let monthN = date.getMonth();
   let dayN = date.getDate();
+  let time = date.getHours() + ':' + ( (+date.getMinutes() == 30) ? '30' : '00' );
   let dayWeekN = date.getDay();
   let HDay = isHoliday(monthN, dayN, dayWeekN);
 
@@ -143,7 +144,7 @@ function customDate ( date ) {
 
   let dateObj = {
     time: time,
-    monthN: monthN,
+    monthN: +monthN+1,
     dayN: dayN,
     dayName: dayName[dayWeekN],
     HDay: HDay
@@ -170,6 +171,39 @@ function isHoliday(monthN, dayN, dayWeekN){
   } else if (holidays2019[monthN].indexOf(dayN)!= -1) {
     return true;
   }
-
   return false;
 }//===END isHoliday================================================
+
+
+
+
+function promisedPOST(url, params) {
+  return new Promise(function(resolve, reject) {
+    var paramsQstring = '';
+    for (let param in params){
+      paramsQstring += '&' + param + '=' + params[param];
+    }
+
+    var req = new XMLHttpRequest();
+
+    req.open('post', url);
+    //request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    //request.setRequestHeader('Accept', 'charset=windows-1252');
+    req.onload = function() {
+      if (req.status == 200) {
+        resolve(req.response);
+      } else {
+        reject(Error(req.statusText));
+      }
+    };
+    // handle network errors
+
+    req.onerror = function() {
+      reject(Error('Network Error'));
+    }; // make the request
+
+    req.send(paramsQstring);//formData);
+
+  });
+}
