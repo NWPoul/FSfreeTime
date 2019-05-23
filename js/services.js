@@ -6,7 +6,7 @@ function parseCSV(strCSV, delimiter) {
   var parsedArr = [];
   var regexp = new RegExp(delimiter+'\n', 'mg');
   var rows = strCSV.split(regexp);
-  
+
   for (var i = 1, rowsCnt = rows.length - 1; i < rowsCnt; i++) {  //length - 1 => remoove last empty row
     var preRow = rows[i].split(';');
     var row = [
@@ -40,12 +40,14 @@ function parseFTime(str) {
   return FTime_ms;
 }// end parse FTime
 
-function jsTimeToSS(jsTime) {
+function msToCustomDateObj(msTime) {
   // var SSTime = (jsTime+3*60*60*1000)/1000/60/60/24+25569;
-  var SSTime = new Date(jsTime)
-  return SSTime;
+  let date = new Date(msTime);
+  let dateObj = customDate(date);
+
+  return dateObj;
 }
-  
+
 function dateToYYYYMMDD(srcDate, delimeter) {
   delimeter = delimeter || '-';
   var year =   srcDate.getFullYear(),
@@ -69,7 +71,7 @@ function sortBookingData( bookingArr, colIndex ) {
       time1 = a[colIndex+1];
     var date2 = b[colIndex],
       time2 = b[colIndex+1];
-  
+
     var dateDiff = date1-date2;
     if (dateDiff === 0) {
       return time1 - time2;
@@ -78,54 +80,96 @@ function sortBookingData( bookingArr, colIndex ) {
     }
   });
 }// end sortBookingData
-  
-  
+
+
 function tuneResult(resultsArr, tIndex) {
   tIndex = tIndex || 0;
-  
+
   resultsArr.forEach(function(rec) {
     var extractedDateTimeValues = extractDateTime(rec, tIndex);
     rec.splice(tIndex, 1, extractedDateTimeValues[0], extractedDateTimeValues[1]);
   });
 }//end tuneResult
-  
+
 function extractDateTime(rec, tIndex) {
   var dateTime = rec[tIndex].split(' ');
   var dateArr = dateTime[0].split('.');
   var dateVal = +dateArr[0] + dateArr[1]*100 + dateArr[2]*10000;
   var timeVal = +dateTime[1].replace(':','');
-  
+
   return([+dateVal, +timeVal]);
 }//end extractDateTime
-  
-  
-  
-function setTimeSlotArr() {
-  var timeSlotArr = [];
-  for (var i = 0; i <= 23; i++ ) {
-    timeSlotArr.push([i*100+0,0]);
-    timeSlotArr.push([i*100+30,0]);
+
+
+
+// function setTimeSlotArr() {
+//   var timeSlotArr = [];
+//   for (var i = 0; i <= 23; i++ ) {
+//     timeSlotArr.push([i*100+0,0]);
+//     timeSlotArr.push([i*100+30,0]);
+//   }
+//   return(timeSlotArr);
+// }//end setTimeSlotArr
+
+
+// function timeIndexFunc(arg, mode) {
+//   arg = +arg;
+//   var result;
+
+//   switch (mode) {
+//   case 'index':
+//     result = Math.ceil( (arg / 100)*2 );
+//     break;
+//   case 'time':
+//     result = arg*50 - (arg%2*20);
+//     break;
+//   case 'next':
+//     result = (arg > 2300) ? 0 :
+//       arg + ( (arg%100) ? 70 : 30 );
+//     break;
+//   }
+
+//   return(result);
+// }//end timeIndexFunc
+
+function customDate ( date ) {
+  let time = date.getTime();
+  let monthN = date.getMonth();
+  let dayN = date.getDate();
+  let dayWeekN = date.getDay();
+  let HDay = isHoliday(monthN, dayN, dayWeekN);
+
+  let dayName = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+
+  let dateObj = {
+    time: time,
+    monthN: monthN,
+    dayN: dayN,
+    dayName: dayName[dayWeekN],
+    HDay: HDay
+  };
+  // let JSONdateObj = JSON.stringify(dateObj)
+
+  return dateObj;//[time, monthN, dayN, dayName[dayWeekN], HDay];
+}//=====END customDate================================================================= end customDate
+
+function isHoliday(monthN, dayN, dayWeekN){
+  var holidays2019 = [
+    [1,2,3,4,7,8], //[0]JAN 2019
+    [],            //[1]FEB
+    [8],           //[2]MAR
+    [],            //[3]ARP
+    [1,2,3,9,10],  //[4]MAY
+    [12],          //[5]JUN
+    [],[],[],[],   //JUL//AUG//SEP//OKT
+    [4], []        //[10]NOV//DEC
+  ];
+
+  if (dayWeekN == 0 || dayWeekN == 6) {
+    return true;
+  } else if (holidays2019[monthN].indexOf(dayN)!= -1) {
+    return true;
   }
-  return(timeSlotArr);
-}//end setTimeSlotArr
-  
-  
-function timeIndexFunc(arg, mode) {
-  arg = +arg;
-  var result;
-  
-  switch (mode) {
-  case 'index':
-    result = Math.ceil( (arg / 100)*2 );
-    break;
-  case 'time':
-    result = arg*50 - (arg%2*20);
-    break;
-  case 'next':
-    result = (arg > 2300) ? 0 :
-      arg + ( (arg%100) ? 70 : 30 );
-    break;
-  }
-  
-  return(result);
-}//end timeIndexFunc
+
+  return false;
+}//===END isHoliday================================================

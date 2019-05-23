@@ -3,7 +3,7 @@
  mainTableState,
 
  cellOnClick2swap,
- 
+
 */
 
 
@@ -56,26 +56,26 @@ function handlingGetBookingResponse (bookingResponse) {
 function convertBookingData( bookingArr ) {
   bookingArr = bookingArr || getTestData('ShortBookingsArr');
 
-  var block30 = 30*60*1000;
+  let block30 = 30*60*1000;
 
-  var timeCol = 0,
+  let timeCol = 0,
     dateStrCol = 1,
     timeValCol = 2,
     restRecStCol = 3,
     colCnt = bookingArr[0].length;
 
-  for (var i = 0; bookingArr[i+1] ; i++) {
+  for (let i = 0; bookingArr[i+1] ; i++) {
 
-    var curTime = bookingArr[i][timeCol];
-    var curFTimeVal = bookingArr[i][timeValCol];
+    let curTime = bookingArr[i][timeCol];
+    let curFTimeVal = bookingArr[i][timeValCol];
 
     //summarise same timeslots !(bookingArr[i+1] again - needed coz we deletng rows ahead!)
     while (bookingArr[i+1] && bookingArr[i+1][timeCol] == curTime) {
       curFTimeVal += bookingArr[i+1][timeValCol];
       bookingArr[i][timeValCol] = curFTimeVal;
 
-      for (var iSum = restRecStCol; iSum < colCnt; iSum++ ) {
-        bookingArr[i][iSum] += '\n' + bookingArr[i+1][iSum];
+      for (let iSum = restRecStCol; iSum < colCnt; iSum++ ) {
+        bookingArr[i][iSum] += '<br>' + bookingArr[i+1][iSum];
       }
       bookingArr.splice(i+1,1);
     }
@@ -84,10 +84,10 @@ function convertBookingData( bookingArr ) {
       bookingArr[i][timeValCol] = 30;
       curFTimeVal -= 30;
 
-      var nextTime = curTime + block30;
+      let nextTime = curTime + block30;
       if (  !bookingArr[i+1]
             || bookingArr[i+1][timeCol] != nextTime ) {
-        var addRec = new Array(colCnt);
+        let addRec = new Array(colCnt);
         addRec[timeCol] = nextTime;
         addRec[timeValCol] = curFTimeVal;
         bookingArr.splice(i+1,0,addRec);
@@ -96,7 +96,7 @@ function convertBookingData( bookingArr ) {
       }
     }
 
-    bookingArr[i][dateStrCol] = jsTimeToSS(curTime);
+    bookingArr[i][dateStrCol] = JSON.stringify( msToCustomDateObj(curTime) );
   }//END for bookings rec
 
   return bookingArr;
@@ -120,6 +120,34 @@ function setDatesRow( stDate, endDate ) {
 //--------------------------------------------------------------------------------------------------------
 //           SECOND STEP - prepare data for result table                                             -----
 //--------------------------------------------------------------------------------------------------------
+
+function simpleTable(Arr, tbody) {
+  tbody = tbody || document.createElement('tbody');
+  let rowsN = Arr.length,
+    colsN = Arr[0].length;
+
+  for(let ri = 0; ri < rowsN; ri++){
+    let tr = document.createElement('tr');
+    var rowStr = '';
+    rowStr += '<th id="r' +ri +'c0">' +
+               Arr[ri][0] +
+              '</th>';
+
+    for (let ci = 1; ci < colsN; ci++) {
+      let tdID = 'r' +ri +'c' +ci;
+      rowStr += '<td id="' +tdID +'">' +
+                 Arr[ri][ci] +
+                '</td>';
+    }// end for cols
+
+    tr.innerHTML = rowStr;
+    tbody.appendChild(tr);
+  }//end for rows
+
+  return(tbody);
+}//=====END TDconcat==================
+
+
 
 
 
@@ -160,8 +188,10 @@ function Global(raspData) {
 
   var tbody = document.createElement('tbody');
 
-  TDconcat(raspData, tbody);
-  condFormat(tbody);
+  // TDconcat(raspData, tbody);
+  // condFormat(tbody);
+
+  simpleTable(raspData, tbody);
 
   mainTable.appendChild(tbody);
 }//=====END GLOBAL================================

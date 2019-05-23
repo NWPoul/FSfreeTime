@@ -8,7 +8,7 @@ var userData;
 
 var raspData;
 var stDate;
-var endDate;  
+var endDate;
 // eslint-disable-next-line no-unused-vars
 var APIanswer;
 var mainTableState;
@@ -20,7 +20,7 @@ var swapDialogData = {};
  getBookingDataAndSetTable,
  showTableState,
 
- 
+
 */
 
 
@@ -75,8 +75,7 @@ function checkTD(actTD) {
   actTD.classList.add('check');
   mainTableState.tdChecked[actTDiD] = true;
   mainTableState.checkCnt++;
-
-  showTableState();//debug
+  // showTableState();//debug
 }  // ======================= end check td
 
 function uncheckTD(actTD) {
@@ -86,8 +85,7 @@ function uncheckTD(actTD) {
   actTD.classList.remove('check');
   delete mainTableState.tdChecked[actTDiD];
   mainTableState.checkCnt--;
-
-  showTableState();//debug
+  // showTableState();//debug
 }  // ===================== end uncheck td
 
 function closeDialog() {
@@ -104,11 +102,11 @@ function closeDialog() {
 
 
 
-function test() {
-  var testVal;
-  for (var i = 0; i <= 47; i++) {
-    var arg = timeIndexFunc(i, 'time');
-    testVal =  timeIndexFunc(arg, 'next');
-    console.log(arg+'-'+testVal);
-  }
-}
+// function test() {
+//   var testVal;
+//   for (var i = 0; i <= 47; i++) {
+//     var arg = timeIndexFunc(i, 'time');
+//     testVal =  timeIndexFunc(arg, 'next');
+//     console.log(arg+'-'+testVal);
+//   }
+// }
