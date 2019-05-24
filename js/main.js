@@ -13,13 +13,10 @@ const GVAR = {
 };
 /* global
  setUser,
- setLoginButtonText,
 
  getDates,
  getBookingData,
  proceedBookingData
-
-
 */
 // ===== END GLOBAL NAME SPACE =====
 
@@ -31,13 +28,22 @@ function start() {
 
   setUser();
   getDates();
-  getBookingData(GVAR.stDate, GVAR.endDate)
-    .then( bookingData => {
-      GVAR.bookingData = proceedBookingData(bookingData);
-      Global(GVAR.bookingData);
-    });
+  // getBookingData(GVAR.stDate, GVAR.endDate)
+  //   .then( bookingData => {
+  //     GVAR.bookingData = proceedBookingData(bookingData);
+  //     Global(GVAR.bookingData);
+  //   });
 
   mainTableStatus.innerHTML = '<tr><td>Loading data...</td></tr>';
+
+    //testing
+    let bookingData = getTestData('newCSV');
+    GVAR.bookingData = proceedBookingData(bookingData);
+    Global(GVAR.bookingData);
+
+
+
+
 }// end start
 
 

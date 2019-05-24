@@ -30,6 +30,19 @@ function getTestData(dataReq) {
       [20190426,1600,15],[20190426,1600,6],[20190426,1630,20],[20190426,1700,30],[20190426,1730,30],[20190426,1800,4],[20190426,1800,20],[20190426,1830,15],[20190426,1830,15],[20190426,1900,30],
       [20190426,1930,15],[20190426,1930,15],[20190426,2000,20],[20190426,2030,30],[20190426,2100,60],[20190426,2200,6],[20190426,2200,15],[20190426,2230,60],[20190426,2330,15]
     ],
+    newCSV: `NO;BookingNo;Amount;Discount;Total;Status;PayTime;FlyTime;Minutes;Tariff;Name;Email;Phone;Comment;
+    1;0282130;3,00;0,00;3,00;1;30.11.-0001 00:00:00;06.05.2019 22:00;3;Кризис стафф;Карабешкин Андрей Дмитриевич;karabeshkin.a@mail.ru;+79112367941;;
+    2;0282129;7,00;0,00;7,00;3;07.05.2019 09:23:47;06.05.2019 22:00;7;Кризис стафф;Карабешкин Андрей Дмитриевич;karabeshkin.a@mail.ru;+79112367941;;
+    3;0282121;4,00;0,00;4,00;3;06.05.2019 21:00:42;06.05.2019 19:30;14;Кризис стафф;Юрьян Павел ;p.yuryan@gmail.com;+79119664863;;
+    4;0282120;4,00;0,00;4,00;3;06.05.2019 21:00:18;06.05.2019 19:30;14;Кризис стафф;Заморский Алексей Владимирович;zamorskiy@mail.ru;+79213557712;;
+    5;0282119;4,00;0,00;4,00;3;06.05.2019 20:59:17;06.05.2019 19:30;14;Кризис стафф;Скворцов Павел Александрович;nwpoul@yandex.ru;+79119726492;;
+    6;0282118;1000,00;0,00;1000,00;3;06.05.2019 20:54:04;06.05.2019 20:00;1.5;1.5 минуты;Кабинетский Алексей Сергеевич;kabinetskiy@normann.ru;+79215759911;;
+    7;0282117;1000,00;0,00;1000,00;3;06.05.2019 20:53:57;06.05.2019 20:00;1.5;1.5 минуты;Кабинетский Алексей Сергеевич;kabinetskiy@normann.ru;+79215759911;;
+    8;0282111;1000,00;0,00;1000,00;3;06.05.2019 18:46:59;06.05.2019 18:30;1.5;1.5 минуты;Репина Ольга ;olga.repina.1983@inbox.ru;+79111636415;;
+    9;0282108;19,00;0,00;19,00;3;06.05.2019 18:24:23;06.05.2019 16:30;19;Сотрудники;Лящук Анастасия ;freefly@pisem.net;+79312805919;;
+    10;0282108;19,00;0,00;19,00;3;06.05.2019 18:24:23;06.05.2019 16:30;19;Сотрудники;Лящук Анастасия ;freefly@pisem.net;+79312805919;;
+    `,
+
     csv: 'NO;BookingNo;Status;FlyTime;Minutes;Tariff;Name;Email;Phone;Comment;\n65;0280612;3;22.04.2019 13:00;10;10 минут (прайм-тайм);Гуров Кирилл ;25652040@flystation.net;+79523591179;;\n66;0280610;3;22.04.2019 18:30;6;Сертификат 6 мин.;Мартинович Полина ;polina_martinovich@mail.ru;+79110876427;;\n67;0280595;3;23.04.2019 18:00;2;2 минуты (прайм-тайм);Манифест Манифест Манифест;6330707@bk.ru;+78126330707;Савельева Светлана\n 8-911-943-38-34;\n68;0280580;3;22.04.2019 10:00;4;4 минуты (со скидкой);Мошек Лариса ;teplosk@inbox.ru;+79112233100;;\n69;0280579;3;24.04.2019 19:30;4;Сертификат 4 мин.;Сигинина Екатерина ;25183564@flystation.net;+79112406434;;\n70;0280505;3;24.04.2019 11:00;4;4 минуты (со скидкой);Огурская Елена ;logur_spb@mail.ru;+79215670062;',
     other: 'other'
   };
@@ -61,7 +74,9 @@ function proceedBookingData( bookingData ) {
     let curTime = bookingArr[i][timeCol];
     let curFTimeVal = bookingArr[i][timeValCol];
 
-    //summarise same timeslots !(bookingArr[i+1] again - needed coz we deletng rows ahead!)
+
+    // 1 GROUPING same TIMESLOTS
+    // !!! Checking bookingArr[i+1] again - coz we deletng recs ahead!!!
     while (bookingArr[i+1] && bookingArr[i+1][timeCol] == curTime) {
       curFTimeVal += bookingArr[i+1][timeValCol];
       bookingArr[i][timeValCol] = curFTimeVal;
@@ -69,24 +84,28 @@ function proceedBookingData( bookingData ) {
       for (let iSum = restRecStCol; iSum < colCnt; iSum++ ) {
         bookingArr[i][iSum] += '<br>' + bookingArr[i+1][iSum];
       }
-      bookingArr.splice(i+1,1);
-    }
+      bookingArr.splice(i+1, 1); // Deleting rec ahead after sum!
+    }//End grouping same timeslots
 
+
+    // 2 SPREADING EXCEEDED TIME on next slots (insert slots if needed)
     if (curFTimeVal > 30) {
       bookingArr[i][timeValCol] = 30;
+// bookingArr[i][timeValCol+1] = 30; // !!! Проверить как будет парситься случай когда несколько флаеров в блоке в сумме даю.т > 30!!!
       curFTimeVal -= 30;
 
       let nextTime = curTime + block30;
       if (  !bookingArr[i+1]
-            || bookingArr[i+1][timeCol] != nextTime ) {
-        let addRec = new Array(colCnt);
+          || bookingArr[i+1][timeCol] != nextTime ) {
+        let addRec = bookingArr[i].slice();
         addRec[timeCol] = nextTime;
         addRec[timeValCol] = curFTimeVal;
-        bookingArr.splice(i+1,0,addRec);
+
+        bookingArr.splice(i+1, 0, addRec);
       } else {
         bookingArr[i+1][timeValCol] += curFTimeVal;
       }
-    }
+    }//End spreading exceeded
 
     bookingArr[i][dateStrCol] = ( msToCustomDateObj(curTime) );
   }//END for bookings rec
@@ -146,6 +165,20 @@ function simpleTable2(Arr, tbody) {
   tbody = tbody || document.createElement('tbody');
   let rowsN = Arr.length,
     colsN = Arr[0].length;
+console.log(Arr);
+
+  let firstRow = document.createElement('tr');
+  firstRow.innerHTML = '<th id="r0c0">' + 'Date/Time' + '</th>' +
+                       '<td>' + 'Tmin' + '</td>' +
+                       '<td>' + 'Emin' + '</td>' +
+                       '<td>' + 'Flyers' + '</td>' +
+                       '<td>' + 'Notes' + '</td>' +
+                       '<td>' + 'Booking №' + '</td>' +
+                       '<td>' + 'Status' + '</td>' +
+                       '<td>' + 'Tariff' + '</td>' +
+                       '<td>' + 'mail' + '</td>' +
+                       '<td>' + 'phone' + '</td>';
+  tbody.appendChild(firstRow);
 
   for(let ri = 0; ri < rowsN; ri++){
     let tr = document.createElement('tr');
@@ -160,7 +193,7 @@ function simpleTable2(Arr, tbody) {
                Arr[ri][1].time +
               '</th>';
 
-    for (let ci = 3; ci < colsN; ci++) {
+    for (let ci = 2; ci < colsN; ci++) {
       let tdID = 'r' +ri +'c' +ci;
       rowStr += '<td id="' +tdID +'">' +
                  Arr[ri][ci] +
