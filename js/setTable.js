@@ -91,20 +91,23 @@ function proceedBookingData( bookingData ) {
     // 2 SPREADING EXCEEDED TIME on next slots (insert slots if needed)
     if (curFTimeVal > 30) {
       bookingArr[i][timeValCol] = 30;
-// bookingArr[i][timeValCol+1] = 30; // !!! Проверить как будет парситься случай когда несколько флаеров в блоке в сумме даю.т > 30!!!
       curFTimeVal -= 30;
 
       let nextTime = curTime + block30;
       if (  !bookingArr[i+1]
           || bookingArr[i+1][timeCol] != nextTime ) {
-        let addRec = bookingArr[i].slice();
+        let addRec = new Array(colCnt).fill('');//bookingArr[i].slice();
         addRec[timeCol] = nextTime;
         addRec[timeValCol] = curFTimeVal;
+        addRec[restRecStCol+1] = '(from prev slot)';
 
         bookingArr.splice(i+1, 0, addRec);
       } else {
         bookingArr[i+1][timeValCol] += curFTimeVal;
       }
+
+      //bookingArr[i+1][timeValCol+1] = '(+...)<br>' + bookingArr[i+1][timeValCol+1];
+
     }//End spreading exceeded
 
     bookingArr[i][dateStrCol] = ( msToCustomDateObj(curTime) );
