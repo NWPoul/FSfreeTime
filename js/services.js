@@ -46,7 +46,7 @@ function msToCustomDateObj(msTime) {
   let dateObj = customDate(date);
 
   return dateObj;
-}
+}// end parse msToCustomDateObj
 
 function dateToYYYYMMDD(srcDate, delimeter) {
   delimeter = delimeter || '-';
@@ -58,11 +58,6 @@ function dateToYYYYMMDD(srcDate, delimeter) {
                + ( (day>9)   ? day   : ('0' + day)   );
   return resDate;
 }// end dateToYYYYMMDD
-
-
-
-
-
 
 
 function sortBookingData( bookingArr, colIndex ) {
@@ -82,6 +77,7 @@ function sortBookingData( bookingArr, colIndex ) {
 }// end sortBookingData
 
 
+
 function tuneResult(resultsArr, tIndex) {
   tIndex = tIndex || 0;
 
@@ -90,6 +86,8 @@ function tuneResult(resultsArr, tIndex) {
     rec.splice(tIndex, 1, extractedDateTimeValues[0], extractedDateTimeValues[1]);
   });
 }//end tuneResult
+
+
 
 function extractDateTime(rec, tIndex) {
   var dateTime = rec[tIndex].split(' ');
@@ -101,6 +99,47 @@ function extractDateTime(rec, tIndex) {
 }//end extractDateTime
 
 
+
+function customDate ( date ) {
+  let timeMS = date.getTime();
+  let monthN = date.getMonth();
+  let dayN = date.getDate();
+  let time = date.getHours() + ':' + ( (+date.getMinutes() == 30) ? '30' : '00' );
+  let dayWeekN = date.getDay();
+  let HDay = isHoliday(monthN, dayN, dayWeekN);
+
+  let dayName = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+  let dateObj = {
+    time: time,
+    monthN: +monthN+1,
+    dayN: dayN,
+    dayName: dayName[dayWeekN],
+    HDay: HDay
+  };
+  // let JSONdateObj = JSON.stringify(dateObj)
+  return dateObj;//[time, monthN, dayN, dayName[dayWeekN], HDay];
+}//end customDate
+
+
+function isHoliday(monthN, dayN, dayWeekN){
+  var holidays2019 = [
+    [1,2,3,4,7,8], //[0]JAN 2019
+    [],            //[1]FEB
+    [8],           //[2]MAR
+    [],            //[3]ARP
+    [1,2,3,9,10],  //[4]MAY
+    [12],          //[5]JUN
+    [],[],[],[],   //JUL//AUG//SEP//OKT
+    [4], []        //[10]NOV//DEC
+  ];
+
+  if (dayWeekN == 0 || dayWeekN == 6) {
+    return true;
+  } else if (holidays2019[monthN].indexOf(dayN)!= -1) {
+    return true;
+  }
+  return false;
+}//end isHoliday
 
 // function setTimeSlotArr() {
 //   var timeSlotArr = [];
@@ -128,53 +167,8 @@ function extractDateTime(rec, tIndex) {
 //       arg + ( (arg%100) ? 70 : 30 );
 //     break;
 //   }
-
 //   return(result);
 // }//end timeIndexFunc
-
-function customDate ( date ) {
-  let timeMS = date.getTime();
-  let monthN = date.getMonth();
-  let dayN = date.getDate();
-  let time = date.getHours() + ':' + ( (+date.getMinutes() == 30) ? '30' : '00' );
-  let dayWeekN = date.getDay();
-  let HDay = isHoliday(monthN, dayN, dayWeekN);
-
-  let dayName = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
-
-  let dateObj = {
-    time: time,
-    monthN: +monthN+1,
-    dayN: dayN,
-    dayName: dayName[dayWeekN],
-    HDay: HDay
-  };
-  // let JSONdateObj = JSON.stringify(dateObj)
-
-  return dateObj;//[time, monthN, dayN, dayName[dayWeekN], HDay];
-}//=====END customDate================================================================= end customDate
-
-function isHoliday(monthN, dayN, dayWeekN){
-  var holidays2019 = [
-    [1,2,3,4,7,8], //[0]JAN 2019
-    [],            //[1]FEB
-    [8],           //[2]MAR
-    [],            //[3]ARP
-    [1,2,3,9,10],  //[4]MAY
-    [12],          //[5]JUN
-    [],[],[],[],   //JUL//AUG//SEP//OKT
-    [4], []        //[10]NOV//DEC
-  ];
-
-  if (dayWeekN == 0 || dayWeekN == 6) {
-    return true;
-  } else if (holidays2019[monthN].indexOf(dayN)!= -1) {
-    return true;
-  }
-  return false;
-}//===END isHoliday================================================
-
-
 
 
 function promisedPOST(url, params) {
@@ -187,9 +181,9 @@ function promisedPOST(url, params) {
     var req = new XMLHttpRequest();
 
     req.open('post', url);
-    //request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+
     req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    //request.setRequestHeader('Accept', 'charset=windows-1252');
+
     req.onload = function() {
       if (req.status == 200) {
         resolve(req.response);
@@ -198,12 +192,10 @@ function promisedPOST(url, params) {
       }
     };
     // handle network errors
-
     req.onerror = function() {
       reject(Error('Network Error'));
-    }; // make the request
-
-    req.send(paramsQstring);//formData);
-
+    };
+    // make the request
+    req.send(paramsQstring);
   });
-}
+}//===END promisedPOST================================================

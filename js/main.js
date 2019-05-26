@@ -89,19 +89,3 @@ function closeDialog() {
   dialogDiv.style.display = 'none';
   GVAR.mainTableState.checkMute = false;
 } //===== END closeDialog  ============================================ closeDialog
-
-
-
-
-
-
-
-
-// function test() {
-//   var testVal;
-//   for (var i = 0; i <= 47; i++) {
-//     var arg = timeIndexFunc(i, 'time');
-//     testVal =  timeIndexFunc(arg, 'next');
-//     console.log(arg+'-'+testVal);
-//   }
-// }
