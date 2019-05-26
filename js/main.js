@@ -30,16 +30,16 @@ function start() {
   getDates();
   // getBookingData(GVAR.stDate, GVAR.endDate)
   //   .then( bookingData => {
-  //     GVAR.bookingData = proceedBookingData(bookingData);
-  //     Global(GVAR.bookingData);
+  //     GVAR.bookingArr = proceedBookingData(bookingData);
+  //     Global(GVAR.bookingArr);
   //   });
 
   mainTableStatus.innerHTML = '<tr><td>Loading data...</td></tr>';
 
     //testing
     let bookingData = getTestData('newCSV');
-    GVAR.bookingData = proceedBookingData(bookingData);
-    Global(GVAR.bookingData);
+    GVAR.bookingArr = proceedBookingData(bookingData);
+    Global(GVAR.bookingArr);
 
 
 

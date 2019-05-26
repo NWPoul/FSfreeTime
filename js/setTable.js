@@ -17,16 +17,12 @@
 
 function proceedBookingData( bookingData ) {
   let block30 = 30*60*1000;
-  let bookingArr = parseCSV( bookingData, ';' );
-  let colCnt = bookingArr[0].length;
   let timeCol = 0,
-    dateStrCol = 1,
-    timeValCol = 2,
-    restRecStCol = 3;
+    timeValCol = 1,
+    restRecStCol = 2;
 
-  bookingArr.sort( function(a,b) {
-    return a[timeCol] - b[timeCol];
-  });
+  let bookingArr = bookingDataToArr( bookingData, timeCol );
+  let colCnt = bookingArr[0].length;
 
   for (let i = 0; bookingArr[i+1] ; i++) {
     let curTime = bookingArr[i][timeCol];
@@ -67,12 +63,19 @@ function proceedBookingData( bookingData ) {
       //bookingArr[i+1][timeValCol+1] = '(+...)<br>' + bookingArr[i+1][timeValCol+1];
 
     }//End spreading exceeded
-
-    bookingArr[i][dateStrCol] = ( msToCustomDateObj(curTime) );
   }//END for bookings rec
 
   return bookingArr;
 }// END convertBookingData
+
+function bookingDataToArr( bookingData, sortCol ) {
+  let bookingArr = parseCSV(bookingData, ';');
+  bookingArr.sort(function (a, b) {
+    return a[sortCol] - b[sortCol];
+  });
+  return bookingArr;
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////                           END first dtep for booking data                                      /////
@@ -126,7 +129,7 @@ function simpleTable2(Arr, tbody) {
   tbody = tbody || document.createElement('tbody');
   let rowsN = Arr.length,
     colsN = Arr[0].length;
-  console.log(Arr);
+  let timeCol = 0;
 
   let firstRow = document.createElement('tr');
   firstRow.innerHTML = '<th id="r0c0">' + 'Date/Time' + '</th>' +
@@ -141,20 +144,19 @@ function simpleTable2(Arr, tbody) {
                        '<td>' + 'phone' + '</td>';
   tbody.appendChild(firstRow);
 
-  for(let ri = 0; ri < rowsN; ri++){
+  for(let ri = 0; ri < rowsN; ri++) {
+    let dateStr = msToCustomDateObj( Arr[ri][timeCol] );
+
     let tr = document.createElement('tr');
     let rowStr = '';
     rowStr += '<th id="r' +ri +'c0">' +
-               Arr[ri][1].dayName +
-               ', ' +
-               Arr[ri][1].dayN +
-               '/' +
-               Arr[ri][1].monthN +
-               ' ' +
-               Arr[ri][1].time +
+               dateStr.dayName + ', ' +
+               dateStr.dayN + '/' +
+               dateStr.monthN + ' ' +
+               dateStr.time +
               '</th>';
 
-    for (let ci = 2; ci < colsN; ci++) {
+    for (let ci = 1; ci < colsN; ci++) {
       let tdID = 'r' +ri +'c' +ci;
       rowStr += '<td id="' +tdID +'">' +
                  Arr[ri][ci] +

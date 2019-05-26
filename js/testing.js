@@ -44,12 +44,31 @@ function getTestData(dataReq) {
 
 
 
-function proceedBookingDataToObj( bookingData ) {
-  let block30 = 30*60*1000;
-  let { bookingArr, timeCol, timeValCol, restRecStCol, colCnt, dateStrCol } = bookingDataToArr(bookingData);
+function proceedBookingArrToObj( bookingArr ) {
+  let block30m = 30*60*1000;
+  let block24hr = 24*60*60*1000;
+  let stDateMs = Date.parse( GVAR.stDate );
+  let stDateN = dateMsToDateN( stDateMs );
 
+  let timeCol = 0,
+    timeValCol = 1,
+    restRecStCol = 2;
+  let colCnt = bookingArr[0].length;
+
+  let bookingObj = {};
+  let curDateBookingObj = {};
+  let curDateN = stDateN;
+
+  bookingObj.[d + curDateN] = curDateBookingObj;
   for (let i = 0; bookingArr[i+1] ; i++) {
     let curTime = bookingArr[i][timeCol];
+    let curDateN = dateMsToDateN(curTime);
+    if (curTime != curDateN) {
+      curDateBookingObj = {};
+      bookingObj.[d + curDateN] = curDateBookingObj;
+    }
+
+
     let curFTimeVal = bookingArr[i][timeValCol];
 
 
@@ -62,58 +81,12 @@ function proceedBookingDataToObj( bookingData ) {
     if (curFTimeVal > 30) curFTimeVal = spreadExceedTime(bookingArr, i, timeValCol, curFTimeVal, curTime, block30, timeCol, colCnt, restRecStCol);
     //End spreading exceeded
 
-    bookingArr[i][dateStrCol] = ( msToCustomDateObj(curTime) );
+//bookingArr[i][dateStrCol] = ( msToCustomDateObj(curTime) );
   }//END for bookings rec
 
-  return bookingArr;
-}// END convertBookingData
+  return bookingObj;
+}// END proceedBookingArrToObj
 
-
-
-
-function spreadExceTime(bookingArr, i, timeValCol, curFTimeVal, curTime, block30, timeCol, colCnt, restRecStCol) {
-  {
-    bookingArr[i][timeValCol] = 30;
-    curFTimeVal -= 30;
-    let nextTime = curTime + block30;
-    if (!bookingArr[i + 1]
-      || bookingArr[i + 1][timeCol] != nextTime) {
-      let addRec = new Array(colCnt).fill(''); //bookingArr[i].slice();
-      addRec[timeCol] = nextTime;
-      addRec[timeValCol] = curFTimeVal;
-      addRec[restRecStCol + 1] = '(from prev slot)';
-      bookingArr.splice(i + 1, 0, addRec);
-    }
-    else {
-      bookingArr[i + 1][timeValCol] += curFTimeVal;
-    }
-    //bookingArr[i+1][timeValCol+1] = '(+...)<br>' + bookingArr[i+1][timeValCol+1];
-  } //End spreading exceeded
-  return curFTimeVal;
-}
-
-function bookingDataToArr(bookingData) {
-  let bookingArr = parseCSV(bookingData, ';');
-  let colCnt = bookingArr[0].length;
-  let timeCol = 0, dateStrCol = 1, timeValCol = 2, restRecStCol = 3;
-  bookingArr.sort(function (a, b) {
-    return a[timeCol] - b[timeCol];
-  });
-  return { bookingArr, timeCol, timeValCol, restRecStCol, colCnt, dateStrCol };
-}
-
-function groupTimeSlots(bookingArr, i, timeCol, curTime, curFTimeVal, timeValCol, restRecStCol, colCnt) {
-  // !!! Checking bookingArr[i+1] again - coz we deletng recs ahead!!!
-  while (bookingArr[i + 1] && bookingArr[i + 1][timeCol] == curTime) {
-    curFTimeVal += bookingArr[i + 1][timeValCol];
-    bookingArr[i][timeValCol] = curFTimeVal;
-    for (let iSum = restRecStCol; iSum < colCnt; iSum++) {
-      bookingArr[i][iSum] += '<br>' + bookingArr[i + 1][iSum];
-    }
-    bookingArr.splice(i + 1, 1); // Deleting rec ahead after sum!
-  } //End grouping same timeslots
-  return curFTimeVal;
-}
 
 
 
@@ -145,3 +118,14 @@ function showTableState() {
 //     console.log(arg+'-'+testVal);
 //   }
 // }
+
+
+// let options = {
+//   title: "Меню",
+//   width: 100,
+//   height: 200
+// };
+
+// let {width, title,  height} = options;
+
+// console.log(width, title,  height);
