@@ -84,7 +84,7 @@ function timeStrToMS(str) {
 }// end parse FTime
 
 function dateMsToDateN(dateMs) {
-  let dateN = dateMs / 86400000;
+  let dateN = Math.trunc( dateMs / 86400000 );
   return dateN;
 }// end parse FTime
 

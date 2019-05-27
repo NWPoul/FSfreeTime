@@ -56,19 +56,22 @@ function proceedBookingArrToObj( bookingArr ) {
   let colCnt = bookingArr[0].length;
 
   let bookingObj = {};
-  let curDateBookingObj = {};
+  let curDateBookingObj = [];
   let curDateN = stDateN;
 
-  bookingObj.[d + curDateN] = curDateBookingObj;
+  bookingObj['' + curDateN] = curDateBookingObj;
   for (let i = 0; bookingArr[i+1] ; i++) {
-    let curTime = bookingArr[i][timeCol];
-    let curDateN = dateMsToDateN(curTime);
-    if (curTime != curDateN) {
-      curDateBookingObj = {};
-      bookingObj.[d + curDateN] = curDateBookingObj;
+    let iTime = bookingArr[i][timeCol];
+    let iDateN = dateMsToDateN(iTime);
+    if (iDateN != curDateN) {
+      curDateN = iDateN;
+      curDateBookingObj = [];
+      bookingObj['' + curDateN] = curDateBookingObj;
     }
-
-
+    curDateBookingObj.push( bookingArr[i] );
+  };
+console.log(bookingObj);
+/*
     let curFTimeVal = bookingArr[i][timeValCol];
 
 
@@ -81,10 +84,13 @@ function proceedBookingArrToObj( bookingArr ) {
     if (curFTimeVal > 30) curFTimeVal = spreadExceedTime(bookingArr, i, timeValCol, curFTimeVal, curTime, block30, timeCol, colCnt, restRecStCol);
     //End spreading exceeded
 
+
 //bookingArr[i][dateStrCol] = ( msToCustomDateObj(curTime) );
   }//END for bookings rec
-
+*/
   return bookingObj;
+
+
 }// END proceedBookingArrToObj
 
 

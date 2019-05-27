@@ -41,7 +41,7 @@ function start() {
     GVAR.bookingArr = proceedBookingData(bookingData);
     Global(GVAR.bookingArr);
 
-
+  let bookingObj = proceedBookingArrToObj( GVAR.bookingArr );
 
 
 }// end start
