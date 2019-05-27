@@ -153,7 +153,8 @@ function simpleTable2(Arr, tbody) {
                dateStr.dayName + ', ' +
                dateStr.dayN + '/' +
                dateStr.monthN + ' ' +
-               dateStr.time +
+               dateStr.time + ' ' +
+               dateStr.dateN +
               '</th>';
 
     for (let ci = 1; ci < colsN; ci++) {
@@ -176,11 +177,81 @@ function simpleTable2(Arr, tbody) {
 /////                           END SECOND STEP for result table                                     /////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+function proceedBookingArrToObj( bookingArr ) {
+  let block30m = 30*60*1000;
+  let block24hr = 24*60*60*1000;
+  // let stDateMs = Date.parse( GVAR.stDate );
+  // let stDateN = dateMsToDateN( stDateMs );
+
+  let timeCol = 0,
+    timeValCol = 1,
+    restRecStCol = 2;
+  let colCnt = bookingArr[0].length;
+
+  let bookingObj = {};
+  let curDateBookingObj = [];
+  let curDateN = dateMsToDateN( bookingArr[0][timeCol] );
+
+  bookingObj['' + curDateN] = curDateBookingObj;
+  for (let i = 0; bookingArr[i+1] ; i++) {
+    let iTime = bookingArr[i][timeCol];
+    let iDateN = dateMsToDateN(iTime);
+    if (iDateN != curDateN) {
+      curDateN = iDateN;
+      curDateBookingObj = [];
+      bookingObj['' + curDateN] = curDateBookingObj;
+    }
+    curDateBookingObj.push( bookingArr[i] );
+  } //end for bookings rec
+
+  return bookingObj;
+}// END proceedBookingArrToObj
 
 
 
 
 
+
+
+
+function setBookingObjTable(bookingObj, tbody) {
+  tbody = tbody || document.createElement('tbody');
+  let timeValCol = 1;
+  let days = Object.keys(bookingObj),
+    daysN = days.length;
+
+  let firstRow = document.createElement('tr');
+  let tr1 = '<th id="r0c0">' + 'Time \\ Date' + '</th>';
+
+  days.forEach(day => {
+    tr1 += '<td>' + day + '</td>';
+  });
+  firstRow.innerHTML = tr1;
+  tbody.appendChild(firstRow);
+
+  let trStrArr = [];
+  days.forEach( (day, iDay) => {
+    let curDayBookings = bookingObj[day];
+    for(let ri = 0, rowsN = curDayBookings.length; ri < rowsN ; ri++) {
+      if(!trStrArr[ri]) {
+        trStrArr.push('<th id="r' +ri +'c0">');
+      }
+      let tdID = 'r' +ri +'c' +iDay;
+      trStrArr[ri] +=
+                '<td id="' +tdID +'">' +
+                  curDayBookings[ri][timeValCol] +
+                '</td>';
+    }// end for rows
+  });//end for cols
+
+  trStrArr.forEach( (trStr) => {
+    let tr = document.createElement('tr');
+    tr.innerHTML = trStr;
+    tbody.appendChild(tr);
+  });
+
+  return(tbody);
+}//=====END simpleTable2==================
 
 
 
@@ -209,7 +280,8 @@ function Global(bookingData) {
   // TDconcat(bookingData, tbody);
   // condFormat(tbody);
 
-  simpleTable2(bookingData, tbody);
+  // simpleTable2(bookingData, tbody);
+  setBookingObjTable(bookingData, tbody);
 
   mainTable.appendChild(tbody);
 }//=====END GLOBAL================================

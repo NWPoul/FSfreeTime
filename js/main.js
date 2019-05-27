@@ -9,7 +9,9 @@ const GVAR = {
   bookingData: {},
   stDate: '',
   endDate: '',
-  mainTableState: {}
+  mainTableState: {},
+
+  GMToffset: new Date().getTimezoneOffset() * 60000
 };
 /* global
  setUser,
@@ -28,20 +30,23 @@ function start() {
 
   setUser();
   getDates();
-  // getBookingData(GVAR.stDate, GVAR.endDate)
-  //   .then( bookingData => {
-  //     GVAR.bookingArr = proceedBookingData(bookingData);
-  //     Global(GVAR.bookingArr);
-  //   });
+  getBookingData(GVAR.stDate, GVAR.endDate)
+    .then( bookingData => {
+      GVAR.bookingArr = proceedBookingData(bookingData);
+      Global2(GVAR.bookingArr, 1);
+      let bookingObj = proceedBookingArrToObj( GVAR.bookingArr );
+      Global2(bookingObj, 2);
+    });
 
   mainTableStatus.innerHTML = '<tr><td>Loading data...</td></tr>';
 
     //testing
-    let bookingData = getTestData('newCSV');
-    GVAR.bookingArr = proceedBookingData(bookingData);
-    Global(GVAR.bookingArr);
 
-  let bookingObj = proceedBookingArrToObj( GVAR.bookingArr );
+    // let bookingData = getTestData('newCSV');
+    // GVAR.bookingArr = proceedBookingData(bookingData);
+    // Global(GVAR.bookingArr);
+
+
 
 
 }// end start

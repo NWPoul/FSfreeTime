@@ -1,3 +1,9 @@
+/* global
+ GVAR
+
+ dateMsToDateN
+*/
+
 function getTestData(dataReq) {
   var testDataStoage = {
     ShortBookingsArrHor: [
@@ -41,57 +47,23 @@ function getTestData(dataReq) {
 }// END GET test Data
 
 
+function Global2(bookingData, toggle) {
+  var mainTable = document.getElementById('mainTable');
+  mainTable.innerHTML = '';
+  var tbody = document.createElement('tbody');
+
+  switch (toggle) {
+  case 1:
+    simpleTable2(bookingData, tbody);
+    break;
+  case 2:
+    setBookingObjTable(bookingData, tbody);
+    break;
+  }
 
 
-
-function proceedBookingArrToObj( bookingArr ) {
-  let block30m = 30*60*1000;
-  let block24hr = 24*60*60*1000;
-  let stDateMs = Date.parse( GVAR.stDate );
-  let stDateN = dateMsToDateN( stDateMs );
-
-  let timeCol = 0,
-    timeValCol = 1,
-    restRecStCol = 2;
-  let colCnt = bookingArr[0].length;
-
-  let bookingObj = {};
-  let curDateBookingObj = [];
-  let curDateN = stDateN;
-
-  bookingObj['' + curDateN] = curDateBookingObj;
-  for (let i = 0; bookingArr[i+1] ; i++) {
-    let iTime = bookingArr[i][timeCol];
-    let iDateN = dateMsToDateN(iTime);
-    if (iDateN != curDateN) {
-      curDateN = iDateN;
-      curDateBookingObj = [];
-      bookingObj['' + curDateN] = curDateBookingObj;
-    }
-    curDateBookingObj.push( bookingArr[i] );
-  };
-console.log(bookingObj);
-/*
-    let curFTimeVal = bookingArr[i][timeValCol];
-
-
-    // 1 GROUPING same TIMESLOTS
-    curFTimeVal = groupTimeSlots(bookingArr, i, timeCol, curTime, curFTimeVal, timeValCol, restRecStCol, colCnt);
-    //End grouping same timeslots
-
-
-    // 2 SPREADING EXCEEDED TIME on next slots (insert slots if needed)
-    if (curFTimeVal > 30) curFTimeVal = spreadExceedTime(bookingArr, i, timeValCol, curFTimeVal, curTime, block30, timeCol, colCnt, restRecStCol);
-    //End spreading exceeded
-
-
-//bookingArr[i][dateStrCol] = ( msToCustomDateObj(curTime) );
-  }//END for bookings rec
-*/
-  return bookingObj;
-
-
-}// END proceedBookingArrToObj
+  mainTable.appendChild(tbody);
+}//=====END GLOBAL================================
 
 
 

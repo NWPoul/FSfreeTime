@@ -59,7 +59,6 @@ function tuneResult(resultsArr, tIndex) {
   });
 }//end tuneResult
 
-
 function extractDateTime(rec, tIndex) {
   var dateTime = rec[tIndex].split(' ');
   var dateArr = dateTime[0].split('.');
@@ -75,10 +74,11 @@ function extractDateTime(rec, tIndex) {
 function timeStrToMS(str) {
   //'24.01.2019 08:00';
   var timeArr = str.split(/[.:\s]/);
-  var FTime_ms = Date.UTC( +timeArr[2],
+  var FTime_ms = Date.UTC(
+    +timeArr[2],
     +timeArr[1]-1, // Month in JS starts from 0 !!!
     +timeArr[0],
-    +timeArr[3]-3, // hours => per UTC !
+    +timeArr[3],//-3, // hours => per UTC !
     +timeArr[4] );
   return FTime_ms;
 }// end parse FTime
@@ -109,15 +109,17 @@ function msToCustomDateObj(msTime) {
 
 function customDate ( date ) {
   let timeMS = date.getTime();
-  let monthN = date.getMonth();
-  let dayN = date.getDate();
-  let time = date.getHours() + ':' + ( (+date.getMinutes() == 30) ? '30' : '00' );
-  let dayWeekN = date.getDay();
+  let dateN = dateMsToDateN(timeMS);
+  let monthN = date.getUTCMonth();
+  let dayN = date.getUTCDate();
+  let time = date.getUTCHours() + ':' + ( (+date.getUTCMinutes() == 30) ? '30' : '00' );
+  let dayWeekN = date.getUTCDay();
   let HDay = isHoliday(monthN, dayN, dayWeekN);
 
   let dayName = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
   let dateObj = {
     time: time,
+    dateN: dateN,
     monthN: +monthN+1,
     dayN: dayN,
     dayName: dayName[dayWeekN],
