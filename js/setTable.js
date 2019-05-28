@@ -216,33 +216,65 @@ function proceedBookingArrToObj( bookingArr ) {
 
 function setBookingObjTable(bookingObj, tbody) {
   tbody = tbody || document.createElement('tbody');
+  let block30m = 30*60*1000;
+  let block24hr = 24*60*60*1000;
+  let timeCol = 0;
   let timeValCol = 1;
+
   let days = Object.keys(bookingObj),
     daysN = days.length;
 
-  let firstRow = document.createElement('tr');
-  let tr1 = '<th id="r0c0">' + 'Time \\ Date' + '</th>';
 
+  let tr1 = '<th id="r0c0">' + 'Time \\ Date' + '</th>';
   days.forEach(day => {
     tr1 += '<td>' + day + '</td>';
   });
+  let firstRow = document.createElement('tr');
   firstRow.innerHTML = tr1;
   tbody.appendChild(firstRow);
 
+
+  let timeSlots = setTimeSlotArr();
   let trStrArr = [];
-  days.forEach( (day, iDay) => {
-    let curDayBookings = bookingObj[day];
-    for(let ri = 0, rowsN = curDayBookings.length; ri < rowsN ; ri++) {
-      if(!trStrArr[ri]) {
-        trStrArr.push('<th id="r' +ri +'c0">');
-      }
-      let tdID = 'r' +ri +'c' +iDay;
-      trStrArr[ri] +=
-                '<td id="' +tdID +'">' +
-                  curDayBookings[ri][timeValCol] +
-                '</td>';
-    }// end for rows
+  timeSlots.forEach( (slot, iSlot) => {
+    let initContent = timeSlots[iSlot][2];
+    initRow(trStrArr, iSlot, timeSlots[iSlot][2]);
+    // rowsCycle(day, iDay);
   });//end for cols
+
+  days.forEach( (day, iDay) => {
+    rowsCycle(day, iDay);
+  });//end for cols
+
+  function rowsCycle(day, iDay) {
+    let curDayBookings = bookingObj[day];
+
+    for (let sri = 0, rowsN = curDayBookings.length; sri < rowsN; sri++) {
+      let sriTime = curDayBookings[sri][timeCol] - day * block24hr;
+      let sriTimeIndex = sriTime / block30m;
+        let sriDate = new Date(curDayBookings[sri][timeCol]);
+        let sriTimeStr = sriDate.getUTCHours() + ':' + sriDate.getUTCMinutes();
+      let iCorr = sriTimeIndex - sri;
+      let ri = sri + iCorr;
+
+
+      let riFreeTime = 30 - curDayBookings[sri][timeValCol];
+      fillRow(trStrArr, ri, iDay, (sriTimeIndex + ' ' + sriTimeStr + ' ' + iCorr));
+    }
+  }// end for rows
+
+  function initRow(rowsArr, ri, content) {
+    rowsArr[ri] ='<th id="r' +ri +'c0">'
+                  +content +'</th>';
+  }
+
+  function fillRow(rowsArr, ri, ci, content) {
+    let tdID = 'r' +ri +'c' +ci;
+    rowsArr[ri] += '<td id="' +tdID +'">'
+                    +content +'</td>';
+  }
+
+
 
   trStrArr.forEach( (trStr) => {
     let tr = document.createElement('tr');

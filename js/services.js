@@ -149,34 +149,40 @@ function isHoliday(monthN, dayN, dayWeekN){
   return false;
 }//end isHoliday
 
-// function setTimeSlotArr() {
-//   var timeSlotArr = [];
-//   for (var i = 0; i <= 23; i++ ) {
-//     timeSlotArr.push([i*100+0,0]);
-//     timeSlotArr.push([i*100+30,0]);
-//   }
-//   return(timeSlotArr);
-// }//end setTimeSlotArr
 
 
-// function timeIndexFunc(arg, mode) {
-//   arg = +arg;
-//   var result;
 
-//   switch (mode) {
-//   case 'index':
-//     result = Math.ceil( (arg / 100)*2 );
-//     break;
-//   case 'time':
-//     result = arg*50 - (arg%2*20);
-//     break;
-//   case 'next':
-//     result = (arg > 2300) ? 0 :
-//       arg + ( (arg%100) ? 70 : 30 );
-//     break;
-//   }
-//   return(result);
-// }//end timeIndexFunc
+
+
+function setTimeSlotArr() {
+  let block30 = 30*60*1000;
+  let timeSlotArr = [];
+  for (let i = 0; i <= 23; i++ ) {
+    timeSlotArr.push([i*2*block30, i*100+0, i + ':00' ]);
+    timeSlotArr.push([i*2*block30 + block30, i*100+30, i + ':30']);
+  }
+  return(timeSlotArr);
+}//end setTimeSlotArr
+
+
+function timeIndexFunc(arg, mode) {
+  arg = +arg;
+  var result;
+
+  switch (mode) {
+  case 'index':
+    result = Math.ceil( (arg / 100)*2 );
+    break;
+  case 'time':
+    result = arg*50 - (arg%2*20);
+    break;
+  case 'next':
+    result = (arg > 2300) ? 0 :
+      arg + ( (arg%100) ? 70 : 30 );
+    break;
+  }
+  return(result);
+}//end timeIndexFunc
 
 
 function promisedPOST(url, params) {

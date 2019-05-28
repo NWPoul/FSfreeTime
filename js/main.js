@@ -33,7 +33,7 @@ function start() {
   getBookingData(GVAR.stDate, GVAR.endDate)
     .then( bookingData => {
       GVAR.bookingArr = proceedBookingData(bookingData);
-      Global2(GVAR.bookingArr, 1);
+      // Global2(GVAR.bookingArr, 1);
       let bookingObj = proceedBookingArrToObj( GVAR.bookingArr );
       Global2(bookingObj, 2);
     });
