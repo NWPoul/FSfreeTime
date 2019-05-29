@@ -1,7 +1,6 @@
 /* global
  GVAR
-
- dateMsToDateN
+_date
 */
 
 function getTestData(dataReq) {
@@ -60,10 +59,80 @@ function Global2(bookingData, toggle) {
     setBookingObjTable(bookingData, tbody);
     break;
   }
-
-
   mainTable.appendChild(tbody);
 }//=====END GLOBAL================================
+
+
+
+
+
+
+
+
+
+
+function bookingArrToFreeTimeArr( bookingArr ) {
+  let stDateMs = Date.parse( GVAR.stDate );
+  let stDateN = _date.dateMsToDateN( stDateMs );
+
+  let {timeCol, timeValCol, restRecStCol} = GVAR.bookingDataMap;
+  let timeSlots = setTimeSlotArr();
+  let rowsCnt = timeSlots.length;
+
+  let freeTimeArr = [];
+
+  let curDateN = stDateN;
+  let curDateRec = new Array(rowsCnt + 1).fill(30);
+
+  for (const booking of bookingArr) {
+    let iBookDateN = _date.dateMsToDateN( booking[timeCol] );
+    let iBookTime = booking[timeCol] - iBookDateN * _date.hr24;
+
+    if (iBookDateN != curDateN) {
+      curDateRec[0] = curDateN;
+      freeTimeArr.push( curDateRec );
+      curDateN = iBookDateN;
+    let curDate = new Date( booking[timeCol] );
+      curDateRec = new Array(rowsCnt).fill(30);
+    }
+    let BTi = iBookTime / _date.m30; //iBookTimeIndex
+    curDateRec[BTi+1] -= booking[timeValCol]; //BTi+1 coz 1 elem for header (date)
+
+    console.log(iBookDateN);
+  }
+}
+
+
+
+
+
+  // let bookingObj = {};
+  // let curDateBookingObj = [];
+  // let curDateN = _date.dateMsToDateN( bookingArr[0][timeCol] );
+
+  // bookingObj['' + curDateN] = curDateBookingObj;
+  // for (let i = 0; bookingArr[i+1] ; i++) {
+  //   let iTime = bookingArr[i][timeCol];
+  //   let iDateN = _date.dateMsToDateN(iTime);
+  //   if (iDateN != curDateN) {
+  //     curDateN = iDateN;
+  //     curDateBookingObj = [];
+  //     bookingObj['' + curDateN] = curDateBookingObj;
+  //   }
+  //   curDateBookingObj.push( bookingArr[i] );
+  // } //end for bookings rec
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

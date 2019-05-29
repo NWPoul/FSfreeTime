@@ -6,7 +6,12 @@ const GVAR = {
   user: '',
   userPs: '',
   userData: {},
+
   bookingData: {},
+  bookingDataMap: {
+    timeCol: 0, timeValCol: 1, restRecStCol: 2
+  },
+
   stDate: '',
   endDate: '',
   mainTableState: {},
@@ -35,16 +40,17 @@ function start() {
       GVAR.bookingArr = proceedBookingData(bookingData);
       // Global2(GVAR.bookingArr, 1);
       let bookingObj = proceedBookingArrToObj( GVAR.bookingArr );
+      // let freeTimeArr = bookingArrToFreeTimeArr( GVAR.bookingArr );
       Global2(bookingObj, 2);
     });
 
   mainTableStatus.innerHTML = '<tr><td>Loading data...</td></tr>';
 
-    //testing
+  //testing
 
-    // let bookingData = getTestData('newCSV');
-    // GVAR.bookingArr = proceedBookingData(bookingData);
-    // Global(GVAR.bookingArr);
+  // let bookingData = getTestData('newCSV');
+  // GVAR.bookingArr = proceedBookingData(bookingData);
+  // Global(GVAR.bookingArr);
 
 
 

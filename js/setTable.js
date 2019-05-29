@@ -1,8 +1,8 @@
 /*global
  mainTableState,
+ GVAR
 
  parseCSV
- msToCustomDateObj
  _date
  setTimeSlotArr
 
@@ -16,10 +16,7 @@
 //-----------------------------------------------------------------------------------------------
 
 function proceedBookingData( bookingData ) {
-
-  let timeCol = 0,
-    timeValCol = 1,
-    restRecStCol = 2;
+  let {timeCol, timeValCol, restRecStCol} = GVAR.bookingDataMap;
 
   let bookingArr = bookingDataToArr( bookingData, timeCol );
   let colCnt = bookingArr[0].length;
@@ -129,7 +126,7 @@ function simpleTable2(Arr, tbody) {
   tbody = tbody || document.createElement('tbody');
   let rowsN = Arr.length,
     colsN = Arr[0].length;
-  let timeCol = 0;
+  let {timeCol} = GVAR.bookingDataMap;
 
   let firstRow = document.createElement('tr');
   firstRow.innerHTML = '<th id="r0c0">' + 'Date/Time' + '</th>' +
@@ -145,7 +142,7 @@ function simpleTable2(Arr, tbody) {
   tbody.appendChild(firstRow);
 
   for(let ri = 0; ri < rowsN; ri++) {
-    let dateStr = msToCustomDateObj( Arr[ri][timeCol] );
+    let dateStr =  _date.msToCustomDateObj( Arr[ri][timeCol] );
 
     let tr = document.createElement('tr');
     let rowStr = '';
@@ -179,29 +176,28 @@ function simpleTable2(Arr, tbody) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function proceedBookingArrToObj( bookingArr ) {
-  // let stDateMs = Date.parse( GVAR.stDate );
-  // let stDateN = dateMsToDateN( stDateMs );
-
-  let timeCol = 0,
-    timeValCol = 1,
-    restRecStCol = 2;
-  let colCnt = bookingArr[0].length;
-
   let bookingObj = {};
-  let curDateBookingObj = [];
+  let {timeCol, timeValCol} = GVAR.bookingDataMap;
+  // let curDateBookingSet = [];
   let curDateN = _date.dateMsToDateN( bookingArr[0][timeCol] );
 
-  bookingObj['' + curDateN] = curDateBookingObj;
-  for (let i = 0; bookingArr[i+1] ; i++) {
-    let iTime = bookingArr[i][timeCol];
-    let iDateN = _date.dateMsToDateN(iTime);
-    if (iDateN != curDateN) {
-      curDateN = iDateN;
-      curDateBookingObj = [];
-      bookingObj['' + curDateN] = curDateBookingObj;
+  let timeSlots = setTimeSlotArr();
+  let rowsCnt = timeSlots.length;
+
+  let curDateRec = new Array(rowsCnt).fill(30);
+  for (const booking of bookingArr) {
+    let iBookDateN = _date.dateMsToDateN( booking[timeCol] );
+    let iBookTime = booking[timeCol] - iBookDateN * _date.hr24;
+
+    if (iBookDateN != curDateN) {
+      bookingObj[curDateN] = curDateRec;
+      curDateN = iBookDateN;
+    // let curDate = new Date( booking[timeCol] );
+      curDateRec = new Array(rowsCnt).fill(30);
     }
-    curDateBookingObj.push( bookingArr[i] );
-  } //end for bookings rec
+    let BTi = iBookTime / _date.m30; //iBookTimeIndex
+    curDateRec[BTi] -= booking[timeValCol];
+  }
 
   return bookingObj;
 }// END proceedBookingArrToObj
@@ -216,16 +212,14 @@ function proceedBookingArrToObj( bookingArr ) {
 function setBookingObjTable(bookingObj, tbody) {
   tbody = tbody || document.createElement('tbody');
 
-  let timeCol = 0;
-  let timeValCol = 1;
-
-  let days = Object.keys(bookingObj),
-    daysN = days.length;
+  let days = Object.keys(bookingObj);
 
 
   let tr1 = '<th id="r0c0">' + 'Time \\ Date' + '</th>';
   days.forEach(day => {
-    tr1 += '<td>' + day + '</td>';
+    let testDayVal = new Date( +day * _date.hr24 );
+    testDayVal = (testDayVal.getUTCDate() +'/' +(testDayVal.getUTCMonth()+1) );
+    tr1 += '<td>' +day +' ' +testDayVal +'</td>';
   });
   let firstRow = document.createElement('tr');
   firstRow.innerHTML = tr1;
@@ -236,8 +230,7 @@ function setBookingObjTable(bookingObj, tbody) {
   let trStrArr = [];
   timeSlots.forEach( (slot, iSlot) => {
     let initContent = timeSlots[iSlot][2];
-    initRow(trStrArr, iSlot, timeSlots[iSlot][2]);
-    // rowsCycle(day, iDay);
+    initRow(trStrArr, iSlot, initContent);
   });//end for cols
 
   days.forEach( (day, iDay) => {
@@ -245,20 +238,14 @@ function setBookingObjTable(bookingObj, tbody) {
   });//end for cols
 
   function rowsCycle(day, iDay) {
-    let curDayBookings = bookingObj[day];
+    let curDayTimeSlots = bookingObj[day];
 
-    for (let sri = 0, rowsN = curDayBookings.length; sri < rowsN; sri++) {
-      let sriTime = curDayBookings[sri][timeCol] - day * _date.hr24;
-      let sriTimeIndex = sriTime / _date.m30;
-        let sriDate = new Date(curDayBookings[sri][timeCol]);
-        let sriTimeStr = sriDate.getUTCHours() + ':' + sriDate.getUTCMinutes();
-      let iCorr = sriTimeIndex - sri;
-      let ri = sri + iCorr;
+    curDayTimeSlots.forEach( (freeTimeVal, iSlot) => {
+      fillRow(trStrArr, iSlot, iDay, freeTimeVal);
+    });
 
 
-      let riFreeTime = 30 - curDayBookings[sri][timeValCol];
-      fillRow(trStrArr, ri, iDay, (sriTimeIndex + ' ' + sriTimeStr + ' ' + iCorr));
-    }
+
   }// end for rows
 
   function initRow(rowsArr, ri, content) {
