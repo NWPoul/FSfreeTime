@@ -3,7 +3,7 @@
  GVAR,
 
  promisedPOST,
- dateToYYYYMMDD,
+ _date,
 
 */
 
@@ -17,7 +17,7 @@ function getDates(buttonCall) {
   endDate.setDate(endDate.getDate() + 3);
   //endDate.setMonth(endDate.getMonth() + 1);
   //   stDate = dateToYYYYMMDD(stDate);
-  GVAR.endDate = dateToYYYYMMDD(endDate);
+  GVAR.endDate = _date.dateToYYYYMMDD(endDate);
 
   setDateButtonText(GVAR.stDate);
 

@@ -10,7 +10,7 @@ function parseCSV(strCSV, delimiter) {
   for (var i = 1, rowsCnt = rows.length - 1; i < rowsCnt; i++) {  //length - 1 => remoove last empty row
     var preRow = rows[i].split(';');
     var row = [
-      timeStrToMS(preRow[7]),// FlyTime
+      _date.timeStrToMS(preRow[7]),// FlyTime
       // '', // empty for DateString
       +preRow[8], // Minutes
       +preRow[8], // Minutes (for further individual meter)
@@ -70,84 +70,98 @@ function extractDateTime(rec, tIndex) {
 
 
 
+var _date = {
+  m30: 1800000, //30*60*1000
+  hr24: 86400000, //24*60*60*1000
 
-function timeStrToMS(str) {
-  //'24.01.2019 08:00';
-  var timeArr = str.split(/[.:\s]/);
-  var FTime_ms = Date.UTC(
-    +timeArr[2],
-    +timeArr[1]-1, // Month in JS starts from 0 !!!
-    +timeArr[0],
-    +timeArr[3],//-3, // hours => per UTC !
-    +timeArr[4] );
-  return FTime_ms;
-}// end parse FTime
+  timeStrToMS: function timeStrToMS(str) {
+    //'24.01.2019 08:00';
+    var timeArr = str.split(/[.:\s]/);
+    var FTime_ms = Date.UTC(
+      +timeArr[2],
+      +timeArr[1]-1, // Month in JS starts from 0 !!!
+      +timeArr[0],
+      +timeArr[3],//-3, // hours => per UTC !
+      +timeArr[4] );
+    return FTime_ms;
+  },
 
-function dateMsToDateN(dateMs) {
-  let dateN = Math.trunc( dateMs / 86400000 );
-  return dateN;
-}// end parse FTime
+  dateMsToDateN: function dateMsToDateN(dateMs) {
+    let dateN = Math.trunc( dateMs / 86400000 );
+    return dateN;
+  },
 
-function dateToYYYYMMDD(srcDate, delimeter) {
-  delimeter = delimeter || '-';
-  var year =   srcDate.getFullYear(),
-    month = (+srcDate.getMonth()+1),
-    day =    +srcDate.getDate();
-  var resDate = year + delimeter
+  dateToYYYYMMDD: function dateToYYYYMMDD(srcDate, delimeter) {
+    delimeter = delimeter || '-';
+    var year =   srcDate.getFullYear(),
+      month = (+srcDate.getMonth()+1),
+      day =    +srcDate.getDate();
+    var resDate = year + delimeter
                + ( (month>9) ? month : ('0' + month) ) + delimeter
                + ( (day>9)   ? day   : ('0' + day)   );
-  return resDate;
-}// end dateToYYYYMMDD
+    return resDate;
+  },
 
-
-function msToCustomDateObj(msTime) {
+  msToCustomDateObj: function msToCustomDateObj(msTime) {
   // var SSTime = (jsTime+3*60*60*1000)/1000/60/60/24+25569;
-  let date = new Date(msTime);
-  let dateObj = customDate(date);
-  return dateObj;
-}// end parse msToCustomDateObj
+    let date = new Date(msTime);
+    let dateObj = _date.customDate(date);
+    return dateObj;
+  },// end parse msToCustomDateObj
 
-function customDate ( date ) {
-  let timeMS = date.getTime();
-  let dateN = dateMsToDateN(timeMS);
-  let monthN = date.getUTCMonth();
-  let dayN = date.getUTCDate();
-  let time = date.getUTCHours() + ':' + ( (+date.getUTCMinutes() == 30) ? '30' : '00' );
-  let dayWeekN = date.getUTCDay();
-  let HDay = isHoliday(monthN, dayN, dayWeekN);
+  customDate: function customDate ( date ) {
+    let timeMS = date.getTime();
+    let dateN = _date.dateMsToDateN(timeMS);
+    let monthN = date.getUTCMonth();
+    let dayN = date.getUTCDate();
+    let time = date.getUTCHours() + ':' + ( (+date.getUTCMinutes() == 30) ? '30' : '00' );
+    let dayWeekN = date.getUTCDay();
+    let HDay = _date.isHoliday(monthN, dayN, dayWeekN);
 
-  let dayName = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
-  let dateObj = {
-    time: time,
-    dateN: dateN,
-    monthN: +monthN+1,
-    dayN: dayN,
-    dayName: dayName[dayWeekN],
-    HDay: HDay
-  };
-  // let JSONdateObj = JSON.stringify(dateObj)
-  return dateObj;//[time, monthN, dayN, dayName[dayWeekN], HDay];
-}//end customDate
+    let dayName = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+    let dateObj = {
+      time: time,
+      dateN: dateN,
+      monthN: +monthN+1,
+      dayN: dayN,
+      dayName: dayName[dayWeekN],
+      HDay: HDay
+    };
+    // let JSONdateObj = JSON.stringify(dateObj)
+    return dateObj;//[time, monthN, dayN, dayName[dayWeekN], HDay];
+  },//end customDate
 
-function isHoliday(monthN, dayN, dayWeekN){
-  var holidays2019 = [
-    [1,2,3,4,7,8], //[0]JAN 2019
-    [],            //[1]FEB
-    [8],           //[2]MAR
-    [],            //[3]ARP
-    [1,2,3,9,10],  //[4]MAY
-    [12],          //[5]JUN
-    [],[],[],[],   //JUL//AUG//SEP//OKT
-    [4], []        //[10]NOV//DEC
-  ];
+  isHoliday: function isHoliday(monthN, dayN, dayWeekN){
+    var holidays2019 = [
+      [1,2,3,4,7,8], //[0]JAN 2019
+      [],            //[1]FEB
+      [8],           //[2]MAR
+      [],            //[3]ARP
+      [1,2,3,9,10],  //[4]MAY
+      [12],          //[5]JUN
+      [],[],[],[],   //JUL//AUG//SEP//OKT
+      [4], []        //[10]NOV//DEC
+    ];
 
-  if (dayWeekN == 0 || dayWeekN == 6) {
-    return true;
-  } else if (holidays2019[monthN].indexOf(dayN)!= -1) {
-    return true;
-  }
-  return false;
-}//end isHoliday
+    if (dayWeekN == 0 || dayWeekN == 6) {
+      return true;
+    } else if (holidays2019[monthN].indexOf(dayN)!= -1) {
+      return true;
+    }
+    return false;
+  }//end isHoliday
+
+
+}; // ===== END custom DATE OBJ ===== custom DATE OBJ ===== custom DATE OBJ ===== custom DATE OBJ =====
+
+
+
+
+
+// end dateToYYYYMMDD
+
+
+
 
 
 
@@ -155,11 +169,11 @@ function isHoliday(monthN, dayN, dayWeekN){
 
 
 function setTimeSlotArr() {
-  let block30 = 30*60*1000;
+
   let timeSlotArr = [];
   for (let i = 0; i <= 23; i++ ) {
-    timeSlotArr.push([i*2*block30, i*100+0, i + ':00' ]);
-    timeSlotArr.push([i*2*block30 + block30, i*100+30, i + ':30']);
+    timeSlotArr.push([i*2*_date.m30, i*100+0, i + ':00' ]);
+    timeSlotArr.push([i*2*_date.m30 + _date.m30, i*100+30, i + ':30']);
   }
   return(timeSlotArr);
 }//end setTimeSlotArr
