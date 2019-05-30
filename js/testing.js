@@ -46,14 +46,18 @@ function getTestData(dataReq) {
 }// END GET test Data
 
 
-function Global2(bookingData, toggle) {
+
+
+
+
+function testingGlobal(bookingData, toggle) {
   var mainTable = document.getElementById('mainTable');
   mainTable.innerHTML = '';
   var tbody = document.createElement('tbody');
 
   switch (toggle) {
   case 1:
-    simpleTable2(bookingData, tbody);
+    setBookingTable(bookingData, tbody);
     break;
   case 2:
     setBookingObjTable(bookingData, tbody);
@@ -62,15 +66,7 @@ function Global2(bookingData, toggle) {
   mainTable.appendChild(tbody);
 }//=====END GLOBAL================================
 
-
-
-
-
-
-
-
-
-
+/*
 function bookingArrToFreeTimeArr( bookingArr ) {
   let stDateMs = Date.parse( GVAR.stDate );
   let stDateN = _date.dateMsToDateN( stDateMs );
@@ -98,36 +94,10 @@ function bookingArrToFreeTimeArr( bookingArr ) {
     let BTi = iBookTime / _date.m30; //iBookTimeIndex
     curDateRec[BTi+1] -= booking[timeValCol]; //BTi+1 coz 1 elem for header (date)
 
-    console.log(iBookDateN);
+    return freeTimeArr;
   }
-}
-
-
-
-
-
-  // let bookingObj = {};
-  // let curDateBookingObj = [];
-  // let curDateN = _date.dateMsToDateN( bookingArr[0][timeCol] );
-
-  // bookingObj['' + curDateN] = curDateBookingObj;
-  // for (let i = 0; bookingArr[i+1] ; i++) {
-  //   let iTime = bookingArr[i][timeCol];
-  //   let iDateN = _date.dateMsToDateN(iTime);
-  //   if (iDateN != curDateN) {
-  //     curDateN = iDateN;
-  //     curDateBookingObj = [];
-  //     bookingObj['' + curDateN] = curDateBookingObj;
-  //   }
-  //   curDateBookingObj.push( bookingArr[i] );
-  // } //end for bookings rec
-
-
-
-
-
-
-
+}// END bookingArrToFreeTimeArr
+*/
 
 
 

@@ -38,10 +38,10 @@ function start() {
   getBookingData(GVAR.stDate, GVAR.endDate)
     .then( bookingData => {
       GVAR.bookingArr = proceedBookingData(bookingData);
-      // Global2(GVAR.bookingArr, 1);
+      // testingGlobal(GVAR.bookingArr, 1);
       let bookingObj = proceedBookingArrToObj( GVAR.bookingArr );
       // let freeTimeArr = bookingArrToFreeTimeArr( GVAR.bookingArr );
-      Global2(bookingObj, 2);
+      testingGlobal(bookingObj, 2);
     });
 
   mainTableStatus.innerHTML = '<tr><td>Loading data...</td></tr>';

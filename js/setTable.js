@@ -78,13 +78,13 @@ function bookingDataToArr( bookingData, sortCol ) {
 /////                           END first dtep for booking data                                      /////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function setDatesRow( stDate, endDate ) {
-  var datesRow = [];
-  for (let i = 0, datesCount = endDate - stDate; i <= datesCount; i++) {
-    datesRow[i] = stDate + 1;
-  }
-  return setDatesRow;
-}
+// function setDatesRow( stDate, endDate ) {
+//   var datesRow = [];
+//   for (let i = 0, datesCount = endDate - stDate; i <= datesCount; i++) {
+//     datesRow[i] = stDate + 1;
+//   }
+//   return setDatesRow;
+// }
 
 
 
@@ -122,7 +122,7 @@ function simpleTable(Arr, tbody) {
 
 
 
-function simpleTable2(Arr, tbody) {
+function setBookingTable(Arr, tbody) {
   tbody = tbody || document.createElement('tbody');
   let rowsN = Arr.length,
     colsN = Arr[0].length;
@@ -166,7 +166,7 @@ function simpleTable2(Arr, tbody) {
   }//end for rows
 
   return(tbody);
-}//=====END simpleTable2==================
+}//=====END setBookingTable==================
 
 
 
@@ -178,7 +178,7 @@ function simpleTable2(Arr, tbody) {
 function proceedBookingArrToObj( bookingArr ) {
   let bookingObj = {};
   let {timeCol, timeValCol} = GVAR.bookingDataMap;
-  // let curDateBookingSet = [];
+  
   let curDateN = _date.dateMsToDateN( bookingArr[0][timeCol] );
 
   let timeSlots = setTimeSlotArr();
@@ -214,12 +214,12 @@ function setBookingObjTable(bookingObj, tbody) {
 
   let days = Object.keys(bookingObj);
 
-
   let tr1 = '<th id="r0c0">' + 'Time \\ Date' + '</th>';
   days.forEach(day => {
     let testDayVal = new Date( +day * _date.hr24 );
     testDayVal = (testDayVal.getUTCDate() +'/' +(testDayVal.getUTCMonth()+1) );
-    tr1 += '<td>' +day +' ' +testDayVal +'</td>';
+    
+    tr1 += '<td>' +testDayVal +'</td>';
   });
   let firstRow = document.createElement('tr');
   firstRow.innerHTML = tr1;
@@ -237,15 +237,12 @@ function setBookingObjTable(bookingObj, tbody) {
     rowsCycle(day, iDay);
   });//end for cols
 
+
   function rowsCycle(day, iDay) {
     let curDayTimeSlots = bookingObj[day];
-
     curDayTimeSlots.forEach( (freeTimeVal, iSlot) => {
       fillRow(trStrArr, iSlot, iDay, freeTimeVal);
     });
-
-
-
   }// end for rows
 
   function initRow(rowsArr, ri, content) {
@@ -260,7 +257,6 @@ function setBookingObjTable(bookingObj, tbody) {
   }
 
 
-
   trStrArr.forEach( (trStr) => {
     let tr = document.createElement('tr');
     tr.innerHTML = trStr;
@@ -268,14 +264,14 @@ function setBookingObjTable(bookingObj, tbody) {
   });
 
   return(tbody);
-}//=====END simpleTable2==================
+}//=====END setBookingTable==================
 
 
 
 
 
 //--------------------------------------------------------------------------------------------------------
-//           FINALLY SET the result table                                                            -----
+//           FINALLY SET and SHOW table                                                            -----
 //--------------------------------------------------------------------------------------------------------
 
 // eslint-disable-next-line no-unused-vars
@@ -297,7 +293,7 @@ function Global(bookingData) {
   // TDconcat(bookingData, tbody);
   // condFormat(tbody);
 
-  // simpleTable2(bookingData, tbody);
+  // setBookingTable(bookingData, tbody);
   setBookingObjTable(bookingData, tbody);
 
   mainTable.appendChild(tbody);
