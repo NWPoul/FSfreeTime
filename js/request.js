@@ -14,7 +14,7 @@ function getDates(buttonCall) {
   if (!GVAR.stDate) { GVAR.stDate = '2019-05-21'; }
 
   let endDate = new Date(GVAR.stDate);
-  endDate.setDate(endDate.getDate() + 3);
+  endDate.setDate(endDate.getDate() + 15);
   //endDate.setMonth(endDate.getMonth() + 1);
   //   stDate = dateToYYYYMMDD(stDate);
   GVAR.endDate = _date.dateToYYYYMMDD(endDate);
