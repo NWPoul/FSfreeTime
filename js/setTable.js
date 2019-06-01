@@ -178,7 +178,7 @@ function setBookingTable(Arr, tbody) {
 function proceedBookingArrToObj( bookingArr ) {
   let bookingObj = {};
   let {timeCol, timeValCol} = GVAR.bookingDataMap;
-  
+
   let curDateN = _date.dateMsToDateN( bookingArr[0][timeCol] );
 
   let timeSlots = setTimeSlotArr();
@@ -214,12 +214,14 @@ function setBookingObjTable(bookingObj, tbody) {
 
   let days = Object.keys(bookingObj);
 
-  let tr1 = '<th id="r0c0">' + 'Time \\ Date' + '</th>';
+  let tr1 = '<th id="r0c0">' + 'Slot' + '</th>';
   days.forEach(day => {
     let testDayVal = new Date( +day * _date.hr24 );
+    let hDayStr = ( _date.isHoliday( testDayVal.getUTCMonth(), testDayVal.getUTCDate(), testDayVal.getUTCDay() ) ) ?
+      ' class = "hDay"' : '';
     testDayVal = (testDayVal.getUTCDate() +'/' +(testDayVal.getUTCMonth()+1) );
-    
-    tr1 += '<td>' +testDayVal +'</td>';
+
+    tr1 += '<td' +hDayStr +' >' +testDayVal +'</td>';
   });
   let firstRow = document.createElement('tr');
   firstRow.innerHTML = tr1;
@@ -355,6 +357,7 @@ function TDconcat(Arr, tbody) {
 function condFormat(tbody) {
   var rowsCollection = tbody.rows;
   var colsCnt = rowsCollection[0].cells.length;
+  let minTime = GVAR.minTime || 15;
 
   // первая строка с датами
   for (let ci = colsCnt; --ci > 0;) {
@@ -368,38 +371,26 @@ function condFormat(tbody) {
     let tr = rowsCollection[ri];
     let groupName;
     switch (true) {
-    case (ri <= 4):
-      groupName = 'group1';
+    case (ri <= 17):
+      groupName = 'groupN';
       break;
-    case (ri <= 8):
-      groupName = 'group2';
-      break;
-    case (ri <= 12):
-      groupName = 'group3';
-      break;
-    case (ri <= 16):
-      groupName = 'group4';
-      break;
-    case (ri > 16):
-      groupName = 'group5';
+
+    default:
+      groupName = 'groupD';
       break;
     }
-
     tr.classList.add(groupName);
-    tr.cells[0].classList.add(groupName + '-day');
+    // tr.cells[0].classList.add(groupName + '-day');
 
     for (let ci = colsCnt; --ci > 0;) {
       let td = rowsCollection[ri].cells[ci];
-      if (/[-vwsx]/i.test(td.innerHTML) ) {
-        td.classList.add('zam0');
-      } else if (/[ДЖ]/i.test(td.innerHTML) ) {
-        td.classList.add(groupName + '-day');
-      } if (/[Н]/i.test(td.innerHTML) ) {
-        td.classList.add(groupName + '-night');
-      } if (/[Ж]/i.test(td.innerHTML) ) {
-        td.classList.add('joker');
-      } if (/[*]/i.test(td.innerHTML) ) {
-        td.classList.add('zam1');
+      let freeTimeVal = +td.innerHTML;
+      if (freeTimeVal > 28 ) {
+        td.classList.add('fullTime');
+      } else if(freeTimeVal < 2 ) {
+        td.classList.add('noTime');
+      } else if (freeTimeVal < minTime ) {
+        td.classList.add('lessTime');
       }
     }//endfor ci
   }//endfor ri

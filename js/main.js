@@ -14,6 +14,7 @@ const GVAR = {
 
   stDate: '',
   endDate: '',
+  minTime: 16,
   mainTableState: {},
 
   GMToffset: new Date().getTimezoneOffset() * 60000
@@ -36,6 +37,7 @@ function start() {
   setUser();
   getDates();
   getBookingData(GVAR.stDate, GVAR.endDate)
+  // asyncGetTestData()
     .then( bookingData => {
       GVAR.bookingArr = proceedBookingData(bookingData);
       // testingGlobal(GVAR.bookingArr, 1);
@@ -48,7 +50,7 @@ function start() {
 
   //testing
 
-  // let bookingData = getTestData('newCSV');
+  // let bookingData = getTestData('CSV0106');
   // GVAR.bookingArr = proceedBookingData(bookingData);
   // Global(GVAR.bookingArr);
 

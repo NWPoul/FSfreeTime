@@ -131,7 +131,7 @@ var _date = {
     return dateObj;//[time, monthN, dayN, dayName[dayWeekN], HDay];
   },//end customDate
 
-  isHoliday: function isHoliday(monthN, dayN, dayWeekN){
+  isHoliday: function isHoliday(monthN, dayN, dayWeekN) {
     var holidays2019 = [
       [1,2,3,4,7,8], //[0]JAN 2019
       [],            //[1]FEB
@@ -153,17 +153,6 @@ var _date = {
 
 
 }; // ===== END custom DATE OBJ ===== custom DATE OBJ ===== custom DATE OBJ ===== custom DATE OBJ =====
-
-
-
-
-
-// end dateToYYYYMMDD
-
-
-
-
-
 
 
 
@@ -198,6 +187,24 @@ function timeIndexFunc(arg, mode) {
   return(result);
 }//end timeIndexFunc
 
+
+function setButtonText(buttonId, text) {
+  if (!text || !buttonId) return;
+  let button = document.getElementById(buttonId);
+  button.innerText = text;
+}
+
+
+
+
+
+
+
+/*
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+POST REQUEST ----- POST REQUEST ----- POST REQUEST ----- POST REQUEST
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
 
 function promisedPOST(url, params) {
   return new Promise(function(resolve, reject) {

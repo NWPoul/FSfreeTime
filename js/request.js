@@ -9,17 +9,26 @@
 
 
 function getDates(buttonCall) {
-  if (buttonCall) { GVAR.stDate = prompt('Start Date YYYY-MM-DD:', '2019-05-21'); }
+  let today = new Date();
+  let todayStr = _date.dateToYYYYMMDD(today);
+  let startDateInput = document.getElementById('startDate');
 
-  if (!GVAR.stDate) { GVAR.stDate = '2019-05-21'; }
+  if (!GVAR.stDate) {
+    GVAR.stDate = todayStr;
+  }
+
+  if (buttonCall) {
+    GVAR.stDate = startDateInput.value;
+    start();
+  } else {
+    startDateInput.value = GVAR.stDate;
+  }
+
+
 
   let endDate = new Date(GVAR.stDate);
   endDate.setDate(endDate.getDate() + 15);
-  //endDate.setMonth(endDate.getMonth() + 1);
-  //   stDate = dateToYYYYMMDD(stDate);
   GVAR.endDate = _date.dateToYYYYMMDD(endDate);
-
-  setDateButtonText(GVAR.stDate);
 
   return {
     stDate: GVAR.stDate,
@@ -27,11 +36,6 @@ function getDates(buttonCall) {
   };
 }// end getDatesFromSS
 
-function setDateButtonText(text) {
-  if (!text) return;
-  var dateButton = document.getElementById('dateButton');
-  dateButton.innerText = text;
-}
 
 
 async function getBookingData (stDate, endDate) {
@@ -64,7 +68,11 @@ async function getBookingData (stDate, endDate) {
 }//end getBookingData
 
 
-
+function setMinTime() {
+  GVAR.minTime = prompt('Looking for ... (min)', 15);
+  setButtonText('minTimeButton', GVAR.minTime +' min');
+  start();
+}
 
 
 

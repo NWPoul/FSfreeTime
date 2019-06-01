@@ -27,12 +27,12 @@
 
   <div class="buttonBar">
         <button onClick="lookButton()">Look</button>
-          <span style="width: 3em"></span>
-        <button onClick="setMin()">min</button>
           <span style="width: 1em"></span>
-        <button id="dateButton" onClick="getDates(true)">start Date</button>
+        <input type="date" id="startDate" name="startDate" onChange="getDates(true)">
           <span style="width: 1em"></span>
-        <button id="loginButton" onClick="loginButtonClick(this)" style="min-width: 5em">Log in</button>
+        <button id="minTimeButton" onClick="setMinTime()">15 min</button>
+          <span style="width: 1em"></span>
+        <button id="loginButton" onClick="loginButtonClick(this)" style="min-width: 3em">Log in</button>
           <span style="width: 1em"></span>
         <button id="helpButton" onClick="helpButtonClick(this)" style="min-width: 2em"><b> ? </b></button>
           <span style="width: 1em"></span>
