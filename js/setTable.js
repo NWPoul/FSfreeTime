@@ -1,10 +1,14 @@
 /*global
  mainTableState,
  GVAR
+ toggle
 
  parseCSV
  _date
  setTimeSlotArr
+ setBookingTable
+ setFreeTimeTable
+ condFormatFreetime
 
 */
 
@@ -14,6 +18,67 @@
 //-----------------------------------------------------------------------------------------------
 //First step - prepare booking data------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
+function parseCSV(strCSV, delimiter) {
+  delimiter = delimiter || ';';
+  var parsedArr = [];
+  var regexp = new RegExp(delimiter+'\n', 'mg');
+  var rows = strCSV.split(regexp);
+
+  for (var i = 1, rowsCnt = rows.length - 1; i < rowsCnt; i++) {  //length - 1 => remoove last empty row
+    var preRow = rows[i].split(';');
+    var row = [
+      _date.timeStrToMS(preRow[7]),// FlyTime
+      // '', // empty for DateString
+      +preRow[8], // Minutes
+      +preRow[8], // Minutes (for further individual meter)
+      preRow[10], // Name
+      preRow[13], // Comment
+      preRow[1], // BookingNo
+      preRow[5], // Status
+      preRow[9], // Tariff
+      preRow[11], // Email
+      preRow[12]  // Phone
+    ];
+    parsedArr.push(row);
+  }
+  return parsedArr;
+}//end parseCSV
+
+
+function sortBookingData( bookingArr, colIndex ) {
+  bookingArr.sort(function(a,b){
+    var date1 = a[colIndex],
+      time1 = a[colIndex+1];
+    var date2 = b[colIndex],
+      time2 = b[colIndex+1];
+
+    var dateDiff = date1-date2;
+    if (dateDiff === 0) {
+      return time1 - time2;
+    } else {
+      return dateDiff;
+    }
+  });
+}// end sortBookingData
+
+
+function tuneResult(resultsArr, tIndex) {
+  tIndex = tIndex || 0;
+
+  resultsArr.forEach(function(rec) {
+    var extractedDateTimeValues = extractDateTime(rec, tIndex);
+    rec.splice(tIndex, 1, extractedDateTimeValues[0], extractedDateTimeValues[1]);
+  });
+  function extractDateTime(rec, tIndex) {
+    var dateTime = rec[tIndex].split(' ');
+    var dateArr = dateTime[0].split('.');
+    var dateVal = +dateArr[0] + dateArr[1]*100 + dateArr[2]*10000;
+    var timeVal = +dateTime[1].replace(':','');
+    return([+dateVal, +timeVal]);
+  }//end extractDateTime
+}//end tuneResult
+
+
 
 function proceedBookingData( bookingData ) {
   let {timeCol, timeValCol, restRecStCol} = GVAR.bookingDataMap;
@@ -74,24 +139,8 @@ function bookingDataToArr( bookingData, sortCol ) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////                           END first dtep for booking data                                      /////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// function setDatesRow( stDate, endDate ) {
-//   var datesRow = [];
-//   for (let i = 0, datesCount = endDate - stDate; i <= datesCount; i++) {
-//     datesRow[i] = stDate + 1;
-//   }
-//   return setDatesRow;
-// }
 
 
-
-
-//--------------------------------------------------------------------------------------------------------
-//           SECOND STEP - prepare data for result table                                             -----
-//--------------------------------------------------------------------------------------------------------
 
 function simpleTable(Arr, tbody) {
   tbody = tbody || document.createElement('tbody');
@@ -120,60 +169,6 @@ function simpleTable(Arr, tbody) {
 }//=====END simpleTable==================
 
 
-
-
-function setBookingTable(Arr, tbody) {
-  tbody = tbody || document.createElement('tbody');
-  let rowsN = Arr.length,
-    colsN = Arr[0].length;
-  let {timeCol} = GVAR.bookingDataMap;
-
-  let firstRow = document.createElement('tr');
-  firstRow.innerHTML = '<th id="r0c0">' + 'Date/Time' + '</th>' +
-                       '<td>' + 'Tmin' + '</td>' +
-                       '<td>' + 'Emin' + '</td>' +
-                       '<td>' + 'Flyers' + '</td>' +
-                       '<td>' + 'Notes' + '</td>' +
-                       '<td>' + 'Booking №' + '</td>' +
-                       '<td>' + 'Status' + '</td>' +
-                       '<td>' + 'Tariff' + '</td>' +
-                       '<td>' + 'mail' + '</td>' +
-                       '<td>' + 'phone' + '</td>';
-  tbody.appendChild(firstRow);
-
-  for(let ri = 0; ri < rowsN; ri++) {
-    let dateStr =  _date.msToCustomDateObj( Arr[ri][timeCol] );
-
-    let tr = document.createElement('tr');
-    let rowStr = '';
-    rowStr += '<th id="r' +ri +'c0">' +
-               dateStr.dayName + ', ' +
-               dateStr.dayN + '/' +
-               dateStr.monthN + ' ' +
-               dateStr.time + ' ' +
-               dateStr.dateN +
-              '</th>';
-
-    for (let ci = 1; ci < colsN; ci++) {
-      let tdID = 'r' +ri +'c' +ci;
-      rowStr += '<td id="' +tdID +'">' +
-                 Arr[ri][ci] +
-                '</td>';
-    }// end for cols
-
-    tr.innerHTML = rowStr;
-    tbody.appendChild(tr);
-  }//end for rows
-
-  return(tbody);
-}//=====END setBookingTable==================
-
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////                           END SECOND STEP for result table                                     /////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function proceedBookingArrToObj( bookingArr ) {
   let bookingObj = {};
@@ -205,101 +200,32 @@ function proceedBookingArrToObj( bookingArr ) {
 
 
 
-
-
-
-
-function setBookingObjTable(bookingObj, tbody) {
-  tbody = tbody || document.createElement('tbody');
-
-  let days = Object.keys(bookingObj);
-
-  let tr1 = '<th id="r0c0">' + 'Slot' + '</th>';
-  days.forEach(day => {
-    let testDayVal = new Date( +day * _date.hr24 );
-    let hDayStr = ( _date.isHoliday( testDayVal.getUTCMonth(), testDayVal.getUTCDate(), testDayVal.getUTCDay() ) ) ?
-      ' class = "hDay"' : '';
-    testDayVal = (testDayVal.getUTCDate() +'/' +(testDayVal.getUTCMonth()+1) );
-
-    tr1 += '<td' +hDayStr +' >' +testDayVal +'</td>';
-  });
-  let firstRow = document.createElement('tr');
-  firstRow.innerHTML = tr1;
-  tbody.appendChild(firstRow);
-
-
-  let timeSlots = setTimeSlotArr();
-  let trStrArr = [];
-  timeSlots.forEach( (slot, iSlot) => {
-    let initContent = timeSlots[iSlot][2];
-    initRow(trStrArr, iSlot, initContent);
-  });//end for cols
-
-  days.forEach( (day, iDay) => {
-    rowsCycle(day, iDay);
-  });//end for cols
-
-
-  function rowsCycle(day, iDay) {
-    let curDayTimeSlots = bookingObj[day];
-    curDayTimeSlots.forEach( (freeTimeVal, iSlot) => {
-      fillRow(trStrArr, iSlot, iDay, freeTimeVal);
-    });
-  }// end for rows
-
-  function initRow(rowsArr, ri, content) {
-    rowsArr[ri] ='<th id="r' +ri +'c0">'
-                  +content +'</th>';
-  }
-
-  function fillRow(rowsArr, ri, ci, content) {
-    let tdID = 'r' +ri +'c' +ci;
-    rowsArr[ri] += '<td id="' +tdID +'">'
-                    +content +'</td>';
-  }
-
-
-  trStrArr.forEach( (trStr) => {
-    let tr = document.createElement('tr');
-    tr.innerHTML = trStr;
-    tbody.appendChild(tr);
-  });
-
-  return(tbody);
-}//=====END setBookingTable==================
-
-
-
-
-
-//--------------------------------------------------------------------------------------------------------
-//           FINALLY SET and SHOW table                                                            -----
-//--------------------------------------------------------------------------------------------------------
-
 // eslint-disable-next-line no-unused-vars
-function Global(bookingData) {
+function runTable(bookingData) {
+
   var mainTable = document.getElementById('mainTable');
   mainTable.innerHTML = '';
-  // mainTable.onclick = ;
-  // mainTable.oncontextmenu = ;
 
-  mainTableState = {
-    checkMute: false,
-    checkCnt: 0,
-    tdChecked: {}, // { tdId:_, ...}
-    tdChanged: []  // [{ tdId:_, prevShift:_, newShift:_}, ...]
-  };
+  // mainTableState = {
+  //   checkMute: false,
+  //   checkCnt: 0,
+  //   tdChecked: {}, // { tdId:_, ...}
+  //   tdChanged: []  // [{ tdId:_, prevShift:_, newShift:_}, ...]
+  // };
 
   var tbody = document.createElement('tbody');
 
-  // TDconcat(bookingData, tbody);
-  // condFormat(tbody);
-
-  // setBookingTable(bookingData, tbody);
-  setBookingObjTable(bookingData, tbody);
-
+  switch (toggle) {
+  case 1:
+    setBookingTable(bookingData, tbody);
+    break;
+  case 2:
+    setFreeTimeTable(bookingData, tbody);
+    condFormatFreetime(tbody);
+    break;
+  }
   mainTable.appendChild(tbody);
-}//=====END GLOBAL================================
+}//=====END runTable================================
 
 
 
@@ -347,52 +273,3 @@ function TDconcat(Arr, tbody) {
 
   return(tbody);
 }//=====END TDconcat==================
-
-
-
-
-
-
-
-function condFormat(tbody) {
-  var rowsCollection = tbody.rows;
-  var colsCnt = rowsCollection[0].cells.length;
-  let minTime = GVAR.minTime || 15;
-
-  // первая строка с датами
-  for (let ci = colsCnt; --ci > 0;) {
-    let td = rowsCollection[0].cells[ci];
-    if (td.HDay) {
-      td.classList.add('HDay');
-    }
-  }//endfor ci
-
-  for (let ri=rowsCollection.length; --ri > 0;) {
-    let tr = rowsCollection[ri];
-    let groupName;
-    switch (true) {
-    case (ri <= 17):
-      groupName = 'groupN';
-      break;
-
-    default:
-      groupName = 'groupD';
-      break;
-    }
-    tr.classList.add(groupName);
-    // tr.cells[0].classList.add(groupName + '-day');
-
-    for (let ci = colsCnt; --ci > 0;) {
-      let td = rowsCollection[ri].cells[ci];
-      let freeTimeVal = +td.innerHTML;
-      if (freeTimeVal > 28 ) {
-        td.classList.add('fullTime');
-      } else if(freeTimeVal < 2 ) {
-        td.classList.add('noTime');
-      } else if (freeTimeVal < minTime ) {
-        td.classList.add('lessTime');
-      }
-    }//endfor ci
-  }//endfor ri
-
-}//=====END condFormat===============================

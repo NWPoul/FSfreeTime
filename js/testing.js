@@ -583,7 +583,7 @@ async function asyncGetTestData(dataNeed) {
 
 
 
-function testingGlobal(bookingData, toggle) {
+function testingrunTable(bookingData, toggle) {
   var mainTable = document.getElementById('mainTable');
   mainTable.innerHTML = '';
   var tbody = document.createElement('tbody');
@@ -593,8 +593,8 @@ function testingGlobal(bookingData, toggle) {
     setBookingTable(bookingData, tbody);
     break;
   case 2:
-    setBookingObjTable(bookingData, tbody);
-    condFormat(tbody);
+    setFreeTimeTable(bookingData, tbody);
+    condFormatFreetime(tbody);
     break;
   }
   mainTable.appendChild(tbody);

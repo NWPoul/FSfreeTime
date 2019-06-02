@@ -1,9 +1,11 @@
 
 /*global
- GVAR,
+ GVAR
+ _date
 
- promisedPOST,
- _date,
+ promisedPOST
+ start
+ setButtonText
 
 */
 
