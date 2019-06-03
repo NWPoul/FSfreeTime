@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 var DEVMOD = false; // toggle for dev mode links/res on dev pages or not
-var MODE = 'freetime'; //'bookings'
+var MODE = 'bookings'; //'freetime' or 'bookings'
 
 //GLOBAL NAME SPACE
 const GVAR = {
@@ -48,7 +48,8 @@ function start() {
     .then( bookingData => {
       GVAR.bookingArr = proceedBookingData(bookingData);
       GVAR.bookingObj = proceedBookingArrToObj( GVAR.bookingArr );
-      testingrunTable(GVAR.bookingObj, 'freetime');
+      // testingrunTable(GVAR.bookingObj, 'freetime');
+      testingrunTable(GVAR.bookingArr, 'bookings');
     });
 
   mainTableStatus.innerHTML = '<tr><td>Loading data...</td></tr>';

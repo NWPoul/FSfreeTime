@@ -31,8 +31,8 @@ function parseCSV(strCSV, delimiter) {
       // '', // empty for DateString
       +preRow[8], // Minutes
       +preRow[8], // Minutes (for further individual meter)
-      preRow[10], // Name
       preRow[9], // Tariff
+      preRow[10], // Name
       preRow[13], // Comment
       preRow[1], // BookingNo
       preRow[5], // Status
@@ -83,13 +83,32 @@ function tuneResult(resultsArr, tIndex) {
 
 function proceedBookingData( bookingData ) {
   let {timeCol, timeValCol, restRecStCol} = GVAR.bookingDataMap;
-
+  let timeSlots = setTimeSlotArr();
   let bookingArr = bookingDataToArr( bookingData, timeCol );
   let colCnt = bookingArr[0].length;
 
   for (let i = 0; bookingArr[i+1] ; i++) {
     let curTime = bookingArr[i][timeCol];
     let curFTimeVal = bookingArr[i][timeValCol];
+
+    // 0 normalize arr (insert missed timeslots)
+    // let nextStepCnt = (bookingArr[i+1][timeCol] - curTime) / _date.m30;
+    // if (nextStepCnt > 1) {
+    //   let addRec = new Array(nextStepCnt).fill('');
+
+    // }
+
+    while (bookingArr[i+1][timeCol] - curTime > _date.m30) {
+  let testv = bookingArr[i+1][timeCol] - curTime;
+      let addRec = new Array(colCnt).fill('');//bookingArr[i].slice();
+      addRec[timeCol] = curTime + _date.m30;
+      addRec[timeValCol] = 0;
+      addRec[restRecStCol+1] = 'empty slot';
+
+      bookingArr.splice(i+1, 0, addRec);
+      curTime += _date.m30;
+      i++;
+    }
 
 
     // 1 GROUPING same TIMESLOTS
@@ -188,7 +207,7 @@ function proceedBookingArrToObj( bookingArr ) {
     if (iBookDateN != curDateN) {
       bookingObj[curDateN] = curDateRec;
       curDateN = iBookDateN;
-    // let curDate = new Date( booking[timeCol] );
+      // let curDate = new Date( booking[timeCol] );
       curDateRec = new Array(rowsCnt).fill(30);
     }
     let BTi = iBookTime / _date.m30; //iBookTimeIndex
