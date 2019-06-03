@@ -20,10 +20,10 @@ function setBookingTable(Arr, tbody) {
                        '<td>' + 'Tmin' + '</td>' +
                        '<td>' + 'Emin' + '</td>' +
                        '<td>' + 'Flyers' + '</td>' +
+                       '<td>' + 'Tariff' + '</td>' +
                        '<td>' + 'Notes' + '</td>' +
                        '<td>' + 'Booking №' + '</td>' +
                        '<td>' + 'Status' + '</td>' +
-                       '<td>' + 'Tariff' + '</td>' +
                        '<td>' + 'mail' + '</td>' +
                        '<td>' + 'phone' + '</td>';
   tbody.appendChild(firstRow);
@@ -34,11 +34,13 @@ function setBookingTable(Arr, tbody) {
     let tr = document.createElement('tr');
     let rowStr = '';
     rowStr += '<th id="r' +ri +'c0">' +
+    +'<spantdSpan class=tdSpan>'+
                dateStr.dayName + ', ' +
                dateStr.dayN + '/' +
                dateStr.monthN + ' ' +
+    +'</span>'+
                dateStr.time + ' ' +
-               dateStr.dateN +
+              //  dateStr.dateN +
               '</th>';
 
     for (let ci = 1; ci < colsN; ci++) {

@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
-var devMode = false; // toggle for dev mode links/res on dev pages or not
+var DEVMOD = false; // toggle for dev mode links/res on dev pages or not
+var MODE = 'freetime'; //'bookings'
 
 //GLOBAL NAME SPACE
 const GVAR = {
@@ -11,6 +12,9 @@ const GVAR = {
   bookingDataMap: {
     timeCol: 0, timeValCol: 1, restRecStCol: 2
   },
+
+  bookingArr: [],
+  bookingObj: {},
 
   stDate: '',
   endDate: '',
@@ -43,10 +47,8 @@ function start() {
   // asyncGetTestData()
     .then( bookingData => {
       GVAR.bookingArr = proceedBookingData(bookingData);
-      // testingrunTable(GVAR.bookingArr, 1);
-      let bookingObj = proceedBookingArrToObj( GVAR.bookingArr );
-      // let freeTimeArr = bookingArrToFreeTimeArr( GVAR.bookingArr );
-      testingrunTable(bookingObj, 2);
+      GVAR.bookingObj = proceedBookingArrToObj( GVAR.bookingArr );
+      testingrunTable(GVAR.bookingObj, 'freetime');
     });
 
   mainTableStatus.innerHTML = '<tr><td>Loading data...</td></tr>';
@@ -61,6 +63,21 @@ function start() {
 
 
 }// end start
+
+function changeMode(callMode) {
+  let dataForTable = GVAR.bookingObj; //default mode
+  if (callMode) MODE = callMode;
+
+  if (MODE == 'freetime') {
+    MODE = 'bookings';
+    dataForTable = GVAR.bookingArr;
+  } else {
+    MODE = 'freetime';
+  }
+
+  testingrunTable(dataForTable, MODE);
+
+} // end changeMode
 
 
 

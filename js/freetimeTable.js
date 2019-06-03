@@ -40,7 +40,7 @@ function setFreeTimeTable(bookingObj, tbody) {
 
 
   function rowsCycle(day, iDay) {
-    let curDayTimeSlots = bookingObj[day];
+    let curDayTimeSlots = GVAR.bookingObj[day];
     curDayTimeSlots.forEach( (freeTimeVal, iSlot) => {
       fillRow(trStrArr, iSlot, iDay, freeTimeVal);
     });

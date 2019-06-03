@@ -32,10 +32,11 @@ function parseCSV(strCSV, delimiter) {
       +preRow[8], // Minutes
       +preRow[8], // Minutes (for further individual meter)
       preRow[10], // Name
+      preRow[9], // Tariff
       preRow[13], // Comment
       preRow[1], // BookingNo
       preRow[5], // Status
-      preRow[9], // Tariff
+
       preRow[11], // Email
       preRow[12]  // Phone
     ];

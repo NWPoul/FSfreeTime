@@ -583,18 +583,18 @@ async function asyncGetTestData(dataNeed) {
 
 
 
-function testingrunTable(bookingData, toggle) {
+function testingrunTable(data, toggle) {
   var mainTable = document.getElementById('mainTable');
   mainTable.innerHTML = '';
   var tbody = document.createElement('tbody');
 
   switch (toggle) {
-  case 1:
-    setBookingTable(bookingData, tbody);
-    break;
-  case 2:
-    setFreeTimeTable(bookingData, tbody);
+  case 'freetime': case 1:
+    setFreeTimeTable(data, tbody);
     condFormatFreetime(tbody);
+    break;
+  case 'bookings': case 2:
+    setBookingTable(data, tbody);
     break;
   }
   mainTable.appendChild(tbody);
