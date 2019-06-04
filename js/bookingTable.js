@@ -33,7 +33,7 @@ let freeTime = 30 - Arr[ri][timeValCol];
 let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
 
     let tr = document.createElement('tr');
-    
+
     if (curTimeslotN <= 17) {
       tr.classList.add('groupN');
     } else {
@@ -97,7 +97,6 @@ function condFormatBooking(tbody) {
     case (ri <= 17):
       groupName = 'groupN';
       break;
-
     default:
       groupName = 'groupD';
       break;
@@ -119,3 +118,53 @@ function condFormatBooking(tbody) {
   }//endfor ri
 
 }//=====END condFormat===============================
+
+
+
+function parseTariff(tariffStr) {
+  let resStr;
+  switch (true) {
+  case (tariffStr == '1.5 минуты'):
+    resStr = 'ПР доп. 1.5';
+    break;
+  case /Серт/i.test(tariffStr):
+    resStr = 'ПР Серт.';
+    break;
+  case /Спорт*Лик*Борз/i.test(tariffStr):
+    resStr = 'Спорт БЛЮ кэмп';
+    break;
+
+  case /Спорт/i.test(tariffStr):
+    resStr = 'Спорт ';
+    resStr += /\d+.*\d+/.exec(tariffStr);
+    if ( /ночн/.test(tariffStr) ) {
+      resStr += ' ночь';
+    } else if ( /прайм/.test(tariffStr) ) {
+      resStr += ' прайм';
+    }
+    break;
+
+  case /Pro /i.test(tariffStr):
+    resStr = 'Sport ';
+    resStr += /\d+/.exec(tariffStr);
+    if ( /night/.test(tariffStr) ) {
+      resStr += ' night';
+    } else if ( /peak/.test(tariffStr) ) {
+      resStr += ' prime';
+    }
+    break;
+
+  case /^\d+/.test(tariffStr):
+    resStr = 'ПР ';
+    break;
+  case /-\s*20%$/i.test(tariffStr):
+    resStr = 'ПР -20%';
+    break;
+
+  default:
+    resStr = tariffStr.substr(0, 15);
+    break;
+  }
+
+  return resStr;
+}

@@ -20,10 +20,11 @@ button {
 
     margin: 0.5vw;
 
-    width: 98vw;
+    width: 97vw;
     height: 90vh;
 
     border-style: solid;
+    border-width: 3px;
     border-color: black;
     border-radius: 5px
 }
@@ -140,7 +141,7 @@ tr:nth-child(n+20):nth-child(odd),
 }
 .groupN.odd {
     background-color: #83bbdc;
-} 
+}
  .groupD {
     background-color: #29d214;
 }
@@ -167,8 +168,8 @@ tr:nth-child(n+20):nth-child(odd),
     color: #ffffff21 !important;
 }
 .noTime-book th,
-.noTime-book td {
-    background-color: #565656b8 !important;
+.noTime-book td:nth-child(2) {
+    background-color: #56565657 !important;
 }
 
 

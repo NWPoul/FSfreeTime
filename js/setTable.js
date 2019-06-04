@@ -31,7 +31,7 @@ function parseCSV(strCSV, delimiter) {
       // '', // empty for DateString
       +preRow[8], // Minutes
       +preRow[8], // Minutes (for further individual meter)
-      preRow[9], // Tariff
+      parseTariff(preRow[9]),// + ' (' + preRow[9] +')', // Tariff
       preRow[10], // Name
       preRow[13], // Comment
       preRow[1], // BookingNo
@@ -128,7 +128,7 @@ function proceedBookingData( bookingData ) {
 
     // LAST ----- NORMALIZE ARR (insert missed timeslots) --------------------------------
     // !!! SHOULD BE LAST!!! or some bloks can be lost !
-    
+
     // let curTimeStr = new Date(curTime);
     // let nextTimeStr = new Date(bookingArr[i+1][timeCol]);
     // let testv = bookingArr[i+1][timeCol] - curTime;
