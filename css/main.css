@@ -166,9 +166,9 @@ tr:nth-child(n+20):nth-child(odd),
     background-color: #ffffffc4;
     color: #ffffff21 !important;
 }
-.noTime-book {
-    background-color: #717171cf !important;
-    color: #3e3e3e !important;
+.noTime-book th,
+.noTime-book td {
+    background-color: #565656b8 !important;
 }
 
 
