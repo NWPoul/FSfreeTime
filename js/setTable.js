@@ -115,7 +115,7 @@ function proceedBookingData( bookingData ) {
         let addRec = new Array(colCnt).fill('');//bookingArr[i].slice();
         addRec[timeCol] = nextTime;
         addRec[timeValCol] = curFTimeVal;
-        addRec[restRecStCol+1] = '(from prev slot)';
+        addRec[restRecStCol+1] = ' ^ ^ ^ ';
 
         bookingArr.splice(i+1, 0, addRec);
       } else {
@@ -137,7 +137,6 @@ function proceedBookingData( bookingData ) {
       let addRec = new Array(colCnt).fill('');//bookingArr[i].slice();
       addRec[timeCol] = curTime + _date.m30;
       addRec[timeValCol] = 0;
-      addRec[restRecStCol+1] = 'empty slot';
 
       bookingArr.splice(i+1, 0, addRec);
       curTime += _date.m30;

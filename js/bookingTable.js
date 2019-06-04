@@ -11,6 +11,7 @@
 
 function setBookingTable(Arr, tbody) {
   tbody = tbody || document.createElement('tbody');
+  tbody.classList.add('bookingTbody');
   let rowsN = Arr.length,
     colsN = Arr[0].length;
   let {timeCol, timeValCol} = GVAR.bookingDataMap;

@@ -134,6 +134,17 @@ tr:nth-child(n+20):nth-child(odd),
     color: #0000ff5c;
 }
 
+.bookingTbody td {
+    color: #000000a8;
+    font-weight: normal;
+}
+.bookingTbody td:nth-child(2) {
+    text-align: right;
+}
+.bookingTbody td:nth-child(3),
+.bookingTbody td:nth-child(4) {
+    text-align: left;
+}
 
 
 .groupN {
