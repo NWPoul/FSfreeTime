@@ -91,26 +91,6 @@ function proceedBookingData( bookingData ) {
     let curTime = bookingArr[i][timeCol];
     let curFTimeVal = bookingArr[i][timeValCol];
 
-    // 0 normalize arr (insert missed timeslots)
-    // let nextStepCnt = (bookingArr[i+1][timeCol] - curTime) / _date.m30;
-    // if (nextStepCnt > 1) {
-    //   let addRec = new Array(nextStepCnt).fill('');
-
-    // }
-
-    while (bookingArr[i+1][timeCol] - curTime > _date.m30) {
-  let testv = bookingArr[i+1][timeCol] - curTime;
-      let addRec = new Array(colCnt).fill('');//bookingArr[i].slice();
-      addRec[timeCol] = curTime + _date.m30;
-      addRec[timeValCol] = 0;
-      addRec[restRecStCol+1] = 'empty slot';
-
-      bookingArr.splice(i+1, 0, addRec);
-      curTime += _date.m30;
-      i++;
-    }
-
-
     // 1 GROUPING same TIMESLOTS
     // !!! Checking bookingArr[i+1] again - coz we deletng recs ahead!!!
     while (bookingArr[i+1] && bookingArr[i+1][timeCol] == curTime) {
@@ -141,10 +121,30 @@ function proceedBookingData( bookingData ) {
       } else {
         bookingArr[i+1][timeValCol] += curFTimeVal;
       }
-
       //bookingArr[i+1][timeValCol+1] = '(+...)<br>' + bookingArr[i+1][timeValCol+1];
-
     }//End spreading exceeded
+
+
+
+    // LAST ----- NORMALIZE ARR (insert missed timeslots) --------------------------------
+    // !!! SHOULD BE LAST!!! or some bloks can be lost !
+    
+    // let curTimeStr = new Date(curTime);
+    // let nextTimeStr = new Date(bookingArr[i+1][timeCol]);
+    // let testv = bookingArr[i+1][timeCol] - curTime;
+    // let excSteps = testv / _date.m30;
+    while (bookingArr[i+1][timeCol] - curTime > _date.m30) {
+      let addRec = new Array(colCnt).fill('');//bookingArr[i].slice();
+      addRec[timeCol] = curTime + _date.m30;
+      addRec[timeValCol] = 0;
+      addRec[restRecStCol+1] = 'empty slot';
+
+      bookingArr.splice(i+1, 0, addRec);
+      curTime += _date.m30;
+      i++;
+    } //END normalize arr
+
+
   }//END for bookings rec
 
   return bookingArr;

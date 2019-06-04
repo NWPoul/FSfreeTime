@@ -34,6 +34,11 @@ var _date = {
     return resDate;
   },
 
+  msToSlotN: function name(msTime) {
+    let slotN = ( msTime - _date.dateMsToDateN(msTime) * _date.hr24 ) / _date.m30;
+    return slotN;
+  },
+
   msToCustomDateObj: function msToCustomDateObj(msTime) {
   // var SSTime = (jsTime+3*60*60*1000)/1000/60/60/24+25569;
     let date = new Date(msTime);

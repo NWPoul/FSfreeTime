@@ -94,8 +94,8 @@ function condFormatFreetime(tbody) {
       break;
     }
     tr.classList.add(groupName);
-    // tr.cells[0].classList.add(groupName + '-day');
-
+    if (ri % 2) { tr.classList.add('odd'); }
+    
     for (let ci = colsCnt; --ci > 0;) {
       let td = rowsCollection[ri].cells[ci];
       let freeTimeVal = +td.innerHTML;

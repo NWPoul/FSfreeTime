@@ -13,7 +13,7 @@ function setBookingTable(Arr, tbody) {
   tbody = tbody || document.createElement('tbody');
   let rowsN = Arr.length,
     colsN = Arr[0].length;
-  let {timeCol} = GVAR.bookingDataMap;
+  let {timeCol, timeValCol} = GVAR.bookingDataMap;
 
   let firstRow = document.createElement('tr');
   firstRow.innerHTML = '<th id="r0c0">' + 'Date/Time' + '</th>' +
@@ -29,8 +29,25 @@ function setBookingTable(Arr, tbody) {
 
   for(let ri = 0; ri < rowsN; ri++) {
     let dateStr =  _date.msToCustomDateObj( Arr[ri][timeCol] );
+let freeTime = 30 - Arr[ri][timeValCol];
+let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
 
     let tr = document.createElement('tr');
+    
+    if (curTimeslotN <= 17) {
+      tr.classList.add('groupN');
+    } else {
+      tr.classList.add('groupD');
+    }
+    if (curTimeslotN % 2) {
+      tr.classList.add('odd');
+    }
+
+    if(freeTime <= 0) {
+      tr.classList.add('noTime-book');
+    }
+
+
     let rowStr = '';
     rowStr += '<th id="r' +ri +'c0">' +
             '<span class="tdSpan">'+
