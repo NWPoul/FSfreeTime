@@ -70,11 +70,7 @@ async function getBookingData (stDate, endDate) {
 }//end getBookingData
 
 
-function setMinTime() {
-  GVAR.minTime = prompt('Looking for ... (min)', 15);
-  setButtonText('minTimeButton', GVAR.minTime +' min');
-  start();
-}
+
 
 
 

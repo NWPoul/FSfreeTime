@@ -14,18 +14,25 @@ function setBookingTable(Arr, tbody) {
   tbody.classList.add('bookingTbody');
   let rowsN = Arr.length,
     colsN = Arr[0].length;
+
+
   let {timeCol, timeValCol} = GVAR.bookingDataMap;
 
   let firstRow = document.createElement('tr');
   firstRow.innerHTML = '<th id="r0c0">' + 'Date/Time' + '</th>' +
-                       '<td>' + 'min' + '</td>' +
+                       '<td>' + getSVGicon('stopwatch') + '</td>' +
                        '<td>' + 'Tariff' + '</td>' +
                        '<td>' + 'Flyers' + '</td>' +
                        '<td>' + 'Notes' + '</td>' +
                        '<td>' + 'Booking №' + '</td>' +
-                       '<td>' + 'Status' + '</td>' +
-                       '<td>' + 'mail' + '</td>' +
-                       '<td>' + 'phone' + '</td>';
+                       '<td>' + 'Status' + '</td>';
+
+if (GVAR.user.toLowerCase() == 'tst') {
+  firstRow.innerHTML += '<td>' + 'mail' + '</td>' + '<td>' + 'phone' + '</td>';
+} else {
+  colsN -= 2; // !!! DEV - cut off phones & e-mails
+}                       
+
   tbody.appendChild(firstRow);
 
   for(let ri = 0; ri < rowsN; ri++) {
@@ -139,9 +146,9 @@ function parseTariff(tariffStr) {
     resStr = 'Спорт ';
     resStr += /\d+.*\d+/.exec(tariffStr);
     if ( /ночн/.test(tariffStr) ) {
-      resStr += ' ночь';
+      resStr += ' Н';
     } else if ( /прайм/.test(tariffStr) ) {
-      resStr += ' прайм';
+      resStr += ' PR';
     }
     break;
 
@@ -149,9 +156,9 @@ function parseTariff(tariffStr) {
     resStr = 'Sport ';
     resStr += /\d+/.exec(tariffStr);
     if ( /night/.test(tariffStr) ) {
-      resStr += ' night';
+      resStr += ' N';
     } else if ( /peak/.test(tariffStr) ) {
-      resStr += ' prime';
+      resStr += ' PR';
     }
     break;
 
@@ -161,6 +168,11 @@ function parseTariff(tariffStr) {
   case /-\s*20%$/i.test(tariffStr):
     resStr = 'ПР -20%';
     break;
+  
+  case /благотв/i.test(tariffStr):
+    resStr = 'Бл-ть';
+    break;
+
 
   default:
     resStr = tariffStr.substr(0, 15);

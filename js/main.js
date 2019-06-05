@@ -67,13 +67,16 @@ function start() {
 
 function changeMode(callMode) {
   let dataForTable = GVAR.bookingObj; //default mode
+  
   if (callMode) MODE = callMode;
 
   if (MODE == 'freetime') {
     MODE = 'bookings';
     dataForTable = GVAR.bookingArr;
+    setButtonText('servButton', '*');
   } else {
     MODE = 'freetime';
+    setButtonText('servButton', GVAR.minTime +' min');;
   }
 
   testingrunTable(dataForTable, MODE);
@@ -95,6 +98,23 @@ function changeMode(callMode) {
 
 function lookButton() {
   start();
+}
+
+function servButtonClick(servButton) {
+  switch (MODE) {
+  case 'freetime':
+    setMinTime();
+    break;
+  case 'bookings':
+    console.log('servButton in bookings mode') ;
+    break;
+  }
+}
+
+function setMinTime() {
+  GVAR.minTime = prompt('Looking for ... (min)', 15);
+  setButtonText('servButton', GVAR.minTime +' min');
+  testingrunTable(GVAR.bookingObj, 'freetime');
 }
 
 function checkTD(actTD) {
