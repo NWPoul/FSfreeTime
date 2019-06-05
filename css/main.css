@@ -4,7 +4,7 @@
     } */
 
 button {
-    height: 2em
+    height: 2em;
 }
 
 .buttonBar {
@@ -130,33 +130,19 @@ tr:nth-child(n+20):nth-child(odd),
     font-style: italic;
 }
 
-.tdSpan {
-    color: #0000ff5c;
-}
 
-.bookingTbody td {
-    color: #000000a8;
-    font-weight: normal;
-}
-.bookingTbody td:nth-child(2) {
-    text-align: right;
-}
-.bookingTbody td:nth-child(3),
-.bookingTbody td:nth-child(4) {
-    text-align: left;
-}
 
 
 .groupN {
     background-color: #6daae6;
 }
-.groupN.odd {
+.groupN-odd {
     background-color: #83bbdc;
 }
  .groupD {
     background-color: #29d214;
 }
-.groupD.odd {
+.groupD-odd {
     background-color: #63d666;
 }
 
@@ -178,12 +164,6 @@ tr:nth-child(n+20):nth-child(odd),
     background-color: #ffffffc4;
     color: #ffffff21 !important;
 }
-.noTime-book th,
-.noTime-book td:nth-child(2) {
-    background-color: #56565657 !important;
-}
-
-
 .lessTime {
     background-color: #ffffffc4;
     color: #ffffff !important;
@@ -229,6 +209,69 @@ tr:nth-child(n+20):nth-child(odd),
 
 
 
+
+
+
+
+/*BOOKINGS TABLE STYLES*/
+
+.bookingTbody {
+    font-size: 1.7vh;
+    vertical-align: top;
+}
+
+.bookingTbody td {
+    color: #000000a8;
+    font-weight: normal;
+}
+
+.bookingTbody tr:first-child td {
+    vertical-align: middle;
+    font-size: 2vh;
+    text-align: center;
+}
+
+.bookingTbody td:nth-child(2) {
+    text-align: right;
+    min-width: 1em;
+}
+.bookingTbody td:nth-child(3),
+.bookingTbody td:nth-child(4) {
+    text-align: left;
+}
+
+.noTime-book th,
+.noTime-book td:nth-child(2) {
+    background-color: #56565680 !important;
+}
+
+
+.tdSpan {
+    color: #0000ff5c;
+}
+
+.bookingTbody .groupN {
+    background-color: #bfddf9;
+}
+.bookingTbody .groupN-odd {
+    background-color: #cfedff;
+}
+.bookingTbody .groupD {
+    background-color: #a8ff9e;
+}
+.bookingTbody .groupD-odd {
+    background-color: #c9ffcb;
+}
+
+
+
+
+
+
+
+
+
+/* SWEET ALERT STYLES
 .swal-modal {
     width: 90%;
 }
@@ -266,3 +309,4 @@ tr:nth-child(n+20):nth-child(odd),
     border: 1px solid;
     text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.3);
 }
+*/

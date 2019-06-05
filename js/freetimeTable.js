@@ -93,19 +93,23 @@ function condFormatFreetime(tbody) {
       groupName = 'groupD';
       break;
     }
+    if (ri % 2) { groupName+='-odd'; }
+
     tr.classList.add(groupName);
-    if (ri % 2) { tr.classList.add('odd'); }
-    
+    tr.cells[0].classList.add(groupName);
+
     for (let ci = colsCnt; --ci > 0;) {
       let td = rowsCollection[ri].cells[ci];
       let freeTimeVal = +td.innerHTML;
+      let tdClass;
       if (freeTimeVal > 28 ) {
-        td.classList.add('fullTime');
+        tdClass = 'fullTime';
       } else if(freeTimeVal < 2 ) {
-        td.classList.add('noTime');
+        tdClass = 'noTime';
       } else if (freeTimeVal < minTime ) {
-        td.classList.add('lessTime');
+        tdClass = 'lessTime';
       }
+      td.classList.add(tdClass);
     }//endfor ci
   }//endfor ri
 

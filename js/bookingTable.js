@@ -19,7 +19,7 @@ function setBookingTable(Arr, tbody) {
   let {timeCol, timeValCol} = GVAR.bookingDataMap;
 
   let firstRow = document.createElement('tr');
-  firstRow.innerHTML = '<th id="r0c0">' + 'Date/Time' + '</th>' +
+  firstRow.innerHTML = '<th id="r0c0" class="th0" >' + 'Date/Time' + '</th>' +
                        '<td>' + getSVGicon('stopwatch') + '</td>' +
                        '<td>' + 'Tariff' + '</td>' +
                        '<td>' + 'Flyers' + '</td>' +
@@ -27,11 +27,12 @@ function setBookingTable(Arr, tbody) {
                        '<td>' + 'Booking №' + '</td>' +
                        '<td>' + 'Status' + '</td>';
 
+// !!! DEV - cut off phones & e-mails
 if (GVAR.user.toLowerCase() == 'tst') {
   firstRow.innerHTML += '<td>' + 'mail' + '</td>' + '<td>' + 'phone' + '</td>';
 } else {
   colsN -= 2; // !!! DEV - cut off phones & e-mails
-}                       
+}
 
   tbody.appendChild(firstRow);
 
@@ -41,15 +42,16 @@ let freeTime = 30 - Arr[ri][timeValCol];
 let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
 
     let tr = document.createElement('tr');
-
+    let groupName;
     if (curTimeslotN <= 17) {
-      tr.classList.add('groupN');
+      groupName = 'groupN';
     } else {
-      tr.classList.add('groupD');
+      groupName = 'groupD';
     }
     if (curTimeslotN % 2) {
-      tr.classList.add('odd');
+      groupName += '-odd';
     }
+    tr.classList.add(groupName);
 
     if(freeTime <= 0) {
       tr.classList.add('noTime-book');
@@ -57,8 +59,8 @@ let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
 
 
     let rowStr = '';
-    rowStr += '<th id="r' +ri +'c0">' +
-            '<span class="tdSpan">'+
+    rowStr += '<th ' + ('id="r' +ri +'c0" ') +'>' + // +('class="' +groupName +'"')
+            '<span class="tdSpan">' +
                dateStr.dayName + ', ' +
                dateStr.dayN + '/' +
                dateStr.monthN + ' ' +
@@ -84,7 +86,7 @@ let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
 
 
 
-
+/* condFormatBooking
 function condFormatBooking(tbody) {
   var rowsCollection = tbody.rows;
   var colsCnt = rowsCollection[0].cells.length;
@@ -126,7 +128,7 @@ function condFormatBooking(tbody) {
   }//endfor ri
 
 }//=====END condFormat===============================
-
+*/
 
 
 function parseTariff(tariffStr) {
@@ -168,7 +170,7 @@ function parseTariff(tariffStr) {
   case /-\s*20%$/i.test(tariffStr):
     resStr = 'ПР -20%';
     break;
-  
+
   case /благотв/i.test(tariffStr):
     resStr = 'Бл-ть';
     break;

@@ -594,44 +594,14 @@ function testingrunTable(data, toggle) {
     condFormatFreetime(tbody);
     break;
   case 'bookings': case 2:
-    setBookingTable(data, tbody);
+    // setBookingTable(data, tbody);
+    TESTsetBookingTable(data, tbody);
     break;
   }
   mainTable.appendChild(tbody);
 }//=====END GLOBAL================================
 
-/*
-function bookingArrToFreeTimeArr( bookingArr ) {
-  let stDateMs = Date.parse( GVAR.stDate );
-  let stDateN = _date.dateMsToDateN( stDateMs );
 
-  let {timeCol, timeValCol, restRecStCol} = GVAR.bookingDataMap;
-  let timeSlots = setTimeSlotArr();
-  let rowsCnt = timeSlots.length;
-
-  let freeTimeArr = [];
-
-  let curDateN = stDateN;
-  let curDateRec = new Array(rowsCnt + 1).fill(30);
-
-  for (const booking of bookingArr) {
-    let iBookDateN = _date.dateMsToDateN( booking[timeCol] );
-    let iBookTime = booking[timeCol] - iBookDateN * _date.hr24;
-
-    if (iBookDateN != curDateN) {
-      curDateRec[0] = curDateN;
-      freeTimeArr.push( curDateRec );
-      curDateN = iBookDateN;
-    let curDate = new Date( booking[timeCol] );
-      curDateRec = new Array(rowsCnt).fill(30);
-    }
-    let BTi = iBookTime / _date.m30; //iBookTimeIndex
-    curDateRec[BTi+1] -= booking[timeValCol]; //BTi+1 coz 1 elem for header (date)
-
-    return freeTimeArr;
-  }
-}// END bookingArrToFreeTimeArr
-*/
 
 
 
@@ -660,7 +630,6 @@ function showTableState() {
 } // end showTableState
 
 
-
 // function test() {
 //   var testVal;
 //   for (var i = 0; i <= 47; i++) {
@@ -671,12 +640,107 @@ function showTableState() {
 // }
 
 
-// let options = {
-//   title: "Меню",
-//   width: 100,
-//   height: 200
-// };
 
-// let {width, title,  height} = options;
 
-// console.log(width, title,  height);
+
+function bench(testF, times) {
+
+  var t = new Date();
+  for (var i = 0; i < times; i++) {
+    // testingrunTable(GVAR.bookingArr, 'bookings');
+    // testingrunTable(GVAR.bookingObj, 'freetime');
+    proceedBookingData(GVAR.bookingData)
+  }
+  var result = (new Date() - t) / times;
+  console.log(result);
+  return result;
+}
+
+
+
+
+
+
+
+
+
+
+function TESTsetBookingTable(Arr, tbody) {
+  tbody = tbody || document.createElement('tbody');
+  tbody.classList.add('bookingTbody');
+  let tbodyInnerHtmlStr = '';
+
+  let rowsN = Arr.length,
+    colsN = Arr[0].length;
+
+
+  let {timeCol, timeValCol} = GVAR.bookingDataMap;
+
+  let firstRowStr = '<th id="r0c0">' + 'Date/Time' + '</th>' +
+                    '<td>' + getSVGicon('stopwatch') + '</td>' +
+                    '<td>' + 'Tariff' + '</td>' +
+                    '<td>' + 'Flyers' + '</td>' +
+                    '<td>' + 'Notes' + '</td>' +
+                    '<td>' + 'Booking №' + '</td>' +
+                    '<td>' + 'Status' + '</td>';
+
+// !!! DEV - cut off phones & e-mails
+if (GVAR.user.toLowerCase() == 'tst') {
+  firstRowStr += '<td>' + 'mail' + '</td>' + '<td>' + 'phone' + '</td>';
+} else {
+  colsN -= 2; // !!! DEV - cut off phones & e-mails
+}
+  tbodyInnerHtmlStr += firstRowStr;
+
+
+  for(let ri = 0; ri < rowsN; ri++) {
+    let dateStr = _date.msToCustomDateObj( Arr[ri][timeCol] );
+let freeTime = 30 - Arr[ri][timeValCol];
+let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
+
+    let trClassList = [];
+
+    let groupName;
+    if (curTimeslotN <= 17) {
+      groupName = 'groupN';
+    } else {
+      groupName = 'groupD';
+    }
+    if (curTimeslotN % 2) {
+      groupName += '-odd';
+    }
+    trClassList.push(groupName);
+
+    if(freeTime <= 0) {
+      trClassList.push('noTime-book');
+    }
+    let trClassStr = trClassList.join(' ');
+
+    let trStrStart = '<tr ' +('class="' +trClassStr +'"') +'>';
+    let trStrEnd = '</tr>';
+
+    let trInnerHtmlStr = '<th ' + ('id="r' +ri +'c0" ') +'>' + // +('class="' +groupName +'"')
+            '<span class="tdSpan">' +
+               dateStr.dayName + ', ' +
+               dateStr.dayN + '/' +
+               dateStr.monthN + ' ' +
+            '</span><br />'+
+               dateStr.time + ' ' +
+            //  dateStr.dateN +
+            '</th>';
+
+    for (let ci = 2; ci < colsN; ci++) {
+      let tdID = 'r' +ri +'c' +ci;
+      trInnerHtmlStr += '<td id="' +tdID +'">' +
+                 Arr[ri][ci] +
+                '</td>';
+    }// end for cols
+
+    let trStr = trStrStart + trInnerHtmlStr + trStrEnd;
+    tbodyInnerHtmlStr += trStr;
+  }//end for rows
+  tbody.innerHTML = tbodyInnerHtmlStr;
+  return(tbody);
+}//=====END setBookingTable==================
+
+

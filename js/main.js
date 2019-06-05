@@ -46,7 +46,8 @@ function start() {
   getBookingData(GVAR.stDate, GVAR.endDate)
   // asyncGetTestData()
     .then( bookingData => {
-      GVAR.bookingArr = proceedBookingData(bookingData);
+      GVAR.bookingData = bookingData;
+      GVAR.bookingArr = proceedBookingData( GVAR.bookingData );
       GVAR.bookingObj = proceedBookingArrToObj( GVAR.bookingArr );
       // testingrunTable(GVAR.bookingObj, 'freetime');
       testingrunTable(GVAR.bookingArr, 'bookings');
@@ -67,13 +68,13 @@ function start() {
 
 function changeMode(callMode) {
   let dataForTable = GVAR.bookingObj; //default mode
-  
+
   if (callMode) MODE = callMode;
 
   if (MODE == 'freetime') {
     MODE = 'bookings';
     dataForTable = GVAR.bookingArr;
-    setButtonText('servButton', '*');
+    setButtonText('servButton', ' ');
   } else {
     MODE = 'freetime';
     setButtonText('servButton', GVAR.minTime +' min');;
@@ -97,7 +98,9 @@ function changeMode(callMode) {
 
 
 function lookButton() {
-  start();
+  // start();
+  let res = bench( null, 100)
+  alert(res);
 }
 
 function servButtonClick(servButton) {
