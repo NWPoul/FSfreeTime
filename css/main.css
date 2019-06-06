@@ -250,6 +250,10 @@ tr:nth-child(n+20):nth-child(odd),
     color: #0000ff5c;
 }
 
+.blinkElem {
+    background-color: #ff0000 !important;
+}
+
 .bookingTbody .groupN {
     background-color: #bfddf9;
 }
