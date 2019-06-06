@@ -595,7 +595,7 @@ function testingrunTable(data, toggle) {
     break;
   case 'bookings': case 2:
     // setBookingTable(data, tbody);
-    TESTsetBookingTable(data, tbody);
+    testarr_setBookingTable(data, tbody);
     break;
   }
   mainTable.appendChild(tbody);
@@ -647,9 +647,9 @@ function bench(testF, times) {
 
   var t = new Date();
   for (var i = 0; i < times; i++) {
-    // testingrunTable(GVAR.bookingArr, 'bookings');
+    testingrunTable(GVAR.bookingArr, 'bookings');
     // testingrunTable(GVAR.bookingObj, 'freetime');
-    proceedBookingData(GVAR.bookingData)
+    // proceedBookingData(GVAR.bookingData)
   }
   var result = (new Date() - t) / times;
   console.log(result);
@@ -744,3 +744,81 @@ let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
 }//=====END setBookingTable==================
 
 
+
+function testarr_setBookingTable(Arr, tbody) {
+  tbody = tbody || document.createElement('tbody');
+  tbody.classList.add('bookingTbody');
+  let tbodyInnerHtmlArr = [];
+
+  let rowsN = Arr.length,
+    colsN = Arr[0].length;
+
+
+  let {timeCol, timeValCol} = GVAR.bookingDataMap;
+
+  let firstRowStr = '<th id="r0c0">' + 'Date/Time' + '</th>' +
+                    '<td>' + getSVGicon('stopwatch') + '</td>' +
+                    '<td>' + 'Tariff' + '</td>' +
+                    '<td>' + 'Flyers' + '</td>' +
+                    '<td>' + 'Notes' + '</td>' +
+                    '<td>' + 'Booking №' + '</td>' +
+                    '<td>' + 'Status' + '</td>';
+
+// !!! DEV - cut off phones & e-mails
+if (GVAR.user.toLowerCase() == 'tst') {
+  firstRowStr += '<td>' + 'mail' + '</td>' + '<td>' + 'phone' + '</td>';
+} else {
+  colsN -= 2; // !!! DEV - cut off phones & e-mails
+}
+tbodyInnerHtmlArr.push(firstRowStr);
+
+
+  for(let ri = 0; ri < rowsN; ri++) {
+    let dateStr = _date.msToCustomDateObj( Arr[ri][timeCol] );
+let freeTime = 30 - Arr[ri][timeValCol];
+let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
+
+    let trClassList = [];
+
+    let groupName;
+    if (curTimeslotN <= 17) {
+      groupName = 'groupN';
+    } else {
+      groupName = 'groupD';
+    }
+    if (curTimeslotN % 2) {
+      groupName += '-odd';
+    }
+    trClassList.push(groupName);
+
+    if(freeTime <= 0) {
+      trClassList.push('noTime-book');
+    }
+    let trClassStr = trClassList.join(' ');
+
+    let trStrStart = '<tr ' +('class="' +trClassStr +'"') +'>';
+    let trStrEnd = '</tr>';
+
+    let trInnerHtmlStr = '<th ' + ('id="r' +ri +'c0" ') +'>' + // +('class="' +groupName +'"')
+            '<span class="tdSpan">' +
+               dateStr.dayName + ', ' +
+               dateStr.dayN + '/' +
+               dateStr.monthN + ' ' +
+            '</span><br />'+
+               dateStr.time + ' ' +
+            //  dateStr.dateN +
+            '</th>';
+
+    for (let ci = 2; ci < colsN; ci++) {
+      let tdID = 'r' +ri +'c' +ci;
+      trInnerHtmlStr += '<td id="' +tdID +'">' +
+                 Arr[ri][ci] +
+                '</td>';
+    }// end for cols
+
+    let trStr = trStrStart + trInnerHtmlStr + trStrEnd;
+    tbodyInnerHtmlArr.push(trStr);
+  }//end for rows
+  tbody.innerHTML = tbodyInnerHtmlArr.join('');
+  return(tbody);
+}//=====END setBookingTable==================

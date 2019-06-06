@@ -2,6 +2,7 @@
  mainTableState,
  GVAR
 
+ getSVGicon
 
  _date
 
