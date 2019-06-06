@@ -56,15 +56,11 @@ function start() {
   mainTableStatus.innerHTML = '<tr><td>Loading data...</td></tr>';
 
   //testing
-
   // let bookingData = getTestData('CSV0106');
   // GVAR.bookingArr = proceedBookingData(bookingData);
   // runTable(GVAR.bookingArr);
-
-
-
-
 }// end start
+
 
 function changeMode(callMode) {
   let dataForTable = GVAR.bookingObj; //default mode
@@ -77,11 +73,10 @@ function changeMode(callMode) {
     setButtonText('servButton', ' ');
   } else {
     MODE = 'freetime';
-    setButtonText('servButton', GVAR.minTime +' min');;
+    setButtonText('servButton', GVAR.minTime + '\'') ;
   }
 
   testingrunTable(dataForTable, MODE);
-
 } // end changeMode
 
 
@@ -99,8 +94,10 @@ function changeMode(callMode) {
 
 function lookButton() {
   // start();
-  let res = bench( null, 100)
-  alert(res);
+  // let res = bench( null, 100)
+  // alert(res);
+
+  scrollToCurrentTime();
 }
 
 function servButtonClick(servButton) {
@@ -112,37 +109,10 @@ function servButtonClick(servButton) {
     console.log('servButton in bookings mode') ;
     break;
   }
-}
+}// end servButtonClick
 
 function setMinTime() {
   GVAR.minTime = prompt('Looking for ... (min)', 15);
-  setButtonText('servButton', GVAR.minTime +' min');
+  setButtonText('servButton', GVAR.minTime + '\'');
   testingrunTable(GVAR.bookingObj, 'freetime');
-}
-
-function checkTD(actTD) {
-  if( actTD.classList.contains('check') ) {return;}
-
-  var actTDiD = actTD.id;
-  actTD.classList.add('check');
-  GVAR.mainTableState.tdChecked[actTDiD] = true;
-  GVAR.mainTableState.checkCnt++;
-  // showTableState();//debug
-}  // ======================= end check td
-
-function uncheckTD(actTD) {
-  if( !actTD.classList.contains('check') ) {return;}
-
-  var actTDiD = actTD.id;
-  actTD.classList.remove('check');
-  delete GVAR.mainTableState.tdChecked[actTDiD];
-  GVAR.mainTableState.checkCnt--;
-  // showTableState();//debug
-}  // ===================== end uncheck td
-
-function closeDialog() {
-  var dialogDiv = document.getElementById('swapDialog');
-  dialogDiv.innerHTML = '';
-  dialogDiv.style.display = 'none';
-  GVAR.mainTableState.checkMute = false;
-} //===== END closeDialog  ============================================ closeDialog
+}// end setMinTime

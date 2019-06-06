@@ -43,6 +43,8 @@ let freeTime = 30 - Arr[ri][timeValCol];
 let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
 
     let tr = document.createElement('tr');
+    tr.setAttribute( 'id', (dateStr.dateN + '_' + dateStr.time) );
+
     let groupName;
     if (curTimeslotN <= 17) {
       groupName = 'groupN';

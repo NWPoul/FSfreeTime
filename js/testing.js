@@ -661,10 +661,6 @@ function bench(testF, times) {
 
 
 
-
-
-
-
 function TESTsetBookingTable(Arr, tbody) {
   tbody = tbody || document.createElement('tbody');
   tbody.classList.add('bookingTbody');
@@ -697,6 +693,7 @@ if (GVAR.user.toLowerCase() == 'tst') {
     let dateStr = _date.msToCustomDateObj( Arr[ri][timeCol] );
 let freeTime = 30 - Arr[ri][timeValCol];
 let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
+let trId = (dateStr.dateN + '_' + dateStr.time);
 
     let trClassList = [];
 
@@ -716,7 +713,7 @@ let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
     }
     let trClassStr = trClassList.join(' ');
 
-    let trStrStart = '<tr ' +('class="' +trClassStr +'"') +'>';
+    let trStrStart = '<tr ' +('id="' +trId +'" ') +('class="' +trClassStr +'"') +'>';
     let trStrEnd = '</tr>';
 
     let trInnerHtmlStr = '<th ' + ('id="r' +ri +'c0" ') +'>' + // +('class="' +groupName +'"')
@@ -730,8 +727,8 @@ let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
             '</th>';
 
     for (let ci = 2; ci < colsN; ci++) {
-      let tdID = 'r' +ri +'c' +ci;
-      trInnerHtmlStr += '<td id="' +tdID +'">' +
+      //let tdID = 'r' +ri +'c' +ci;
+      trInnerHtmlStr += '<td>' +
                  Arr[ri][ci] +
                 '</td>';
     }// end for cols
@@ -822,3 +819,43 @@ let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
   tbody.innerHTML = tbodyInnerHtmlArr.join('');
   return(tbody);
 }//=====END setBookingTable==================
+
+
+function scrollToCurrentTime() {
+  if (MODE != 'bookings') return;
+  let currentTime = Date.now();
+  let dateStr = _date.msToCustomDateObj(currentTime - GVAR.GMToffset); // - offset for UTC!!!
+  let targetTrId = (dateStr.dateN + '_' + dateStr.time);
+  console.log(targetTrId);
+  scrollToElement(targetTrId);
+  blinkElem(targetTrId, (dateStr.dayName + ', ' +dateStr.dayN + '/' +dateStr.monthN +'_' +dateStr.time) );
+}
+
+function scrollToElement(theElement) {
+  if (typeof theElement === 'string') {
+    theElement = document.getElementById(theElement);
+  }
+  theElement.scrollIntoView(
+    {
+      block: 'center',
+      behavior: 'smooth'
+    }
+  );
+}// end scrollToElement
+
+function blinkElem(elem, text='HERE!)') {
+  if (typeof(elem) === 'string') {
+    elem = document.getElementById(elem);
+  }
+
+  // let sourceVal = elem.innerHTML;
+  // let tempVal = '<span class="blinkElem">' +text + '</span>';
+
+  elem.classList.toggle( 'blinkElem' );
+
+  // setTimeout( (elem) => {
+  //   elem.classList.toggle( 'blinkElem' );
+  // }, 500);
+}
+
+
