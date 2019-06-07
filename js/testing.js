@@ -695,28 +695,13 @@ let freeTime = 30 - Arr[ri][timeValCol];
 let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
 let trId = (dateStr.dateN + '_' + dateStr.time);
 
-    let trClassList = [];
 
-    let groupName;
-    if (curTimeslotN <= 17) {
-      groupName = 'groupN';
-    } else {
-      groupName = 'groupD';
-    }
-    if (curTimeslotN % 2) {
-      groupName += '-odd';
-    }
-    trClassList.push(groupName);
-
-    if(freeTime <= 0) {
-      trClassList.push('noTime-book');
-    }
-    let trClassStr = trClassList.join(' ');
-
-    let trStrStart = '<tr ' +('id="' +trId +'" ') +('class="' +trClassStr +'"') +'>';
+    let trClassStr = condFormatBookingTable(freeTime, curTimeslotN);
+    let rowSpan = ( freeTime > 0 && freeTime < 30) ? 'rowspan="2"' : '' ;
+    let trStrStart = '<tr ' +('id="' +trId +'" ') +('class="' +trClassStr +'" ') +' >';
     let trStrEnd = '</tr>';
 
-    let trInnerHtmlStr = '<th ' + ('id="r' +ri +'c0" ') +'>' + // +('class="' +groupName +'"')
+    let trInnerHtmlStr = '<th ' + ('id="r' +ri +'c0" ') +rowSpan +' >' + // +('class="' +groupName +'"')
             '<span class="tdSpan">' +
                dateStr.dayName + ', ' +
                dateStr.dayN + '/' +
@@ -735,10 +720,42 @@ let trId = (dateStr.dateN + '_' + dateStr.time);
 
     let trStr = trStrStart + trInnerHtmlStr + trStrEnd;
     tbodyInnerHtmlStr += trStr;
+
+    if(rowSpan) {
+      let adTrStr = '<tr ' +('class="' +trClassStr +'" ') +' >' +
+      '<td colspan="10" class="freeTimeTd">' +' -- свободно ' +freeTime +' мин. --' +'</td>' +
+      '<tr>';
+      tbodyInnerHtmlStr += adTrStr;
+    }
   }//end for rows
+
   tbody.innerHTML = tbodyInnerHtmlStr;
   return(tbody);
+
+  function condFormatBookingTable(freeTime, timeslotN) {
+    let trClassList = [];
+    let groupName;
+    if (timeslotN <= 17) {
+      groupName = 'groupN';
+    } else {
+      groupName = 'groupD';
+    }
+
+    if (timeslotN % 2) {
+      groupName += '-odd';
+    }
+    trClassList.push(groupName);
+
+    if(freeTime <= 0) {
+      trClassList.push('noTime-book');
+    }
+    let trClassStr = trClassList.join(' ');
+    return trClassStr;
+  }
+
 }//=====END setBookingTable==================
+
+
 
 
 

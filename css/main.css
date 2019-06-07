@@ -246,8 +246,17 @@ min-width: 7em;
     text-align: left;
 }
 
+.bookingTbody .freeTimeTd {
+    text-align: left;
+    padding: 0;
+    font-style: italic;
+    color: #252dbf;
+}
+
+
 .noTime-book th,
-.noTime-book td:nth-child(2) {
+.noTime-book td/*:nth-child(2)*/
+ {
     background-color: #56565680 !important;
 }
 
@@ -259,14 +268,7 @@ min-width: 7em;
     color: #0000ff5c;
 }
 
-.blinkElem {
-    background-color: #0600ff !important;
-    animation: change-background 1s linear infinite;
-}
-    @keyframes change-background {
-      0%, 100% { background: #a8ff9e; }
-      50% { background: #00a507c7; }
-    }
+
 
 .bookingTbody .groupN {
     background-color: #bfddf9;
@@ -282,7 +284,14 @@ min-width: 7em;
 }
 
 
-
+.blinkElem {
+    background-color: #0600ff !important;
+    animation: change-background 1s linear infinite;
+}
+    @keyframes change-background {
+      0%, 100% { background: #a8ff9e; }
+      50% { background: #00a507c7; }
+    }
 
 
 
