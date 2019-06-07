@@ -664,6 +664,7 @@ function bench(testF, times) {
 function TESTsetBookingTable(Arr, tbody) {
   tbody = tbody || document.createElement('tbody');
   tbody.classList.add('bookingTbody');
+  let minFreeTime = 2;
   let tbodyInnerHtmlStr = '';
 
   let rowsN = Arr.length,
@@ -696,8 +697,8 @@ let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
 let trId = (dateStr.dateN + '_' + dateStr.time);
 
 
-    let trClassStr = condFormatBookingTable(freeTime, curTimeslotN);
-    let rowSpan = ( freeTime > 0 && freeTime < 30) ? 'rowspan="2"' : '' ;
+    let trClassStr = condFormatBookingTable(freeTime, minFreeTime, curTimeslotN);
+    let rowSpan = ( freeTime >= minFreeTime && freeTime < 30) ? 'rowspan="2"' : '' ;
     let trStrStart = '<tr ' +('id="' +trId +'" ') +('class="' +trClassStr +'" ') +' >';
     let trStrEnd = '</tr>';
 
@@ -710,13 +711,15 @@ let trId = (dateStr.dateN + '_' + dateStr.time);
                dateStr.time + ' ' +
             //  dateStr.dateN +
             '</th>';
-
-    for (let ci = 2; ci < colsN; ci++) {
+    if (freeTime < 30) {
+      for (let ci = 2; ci < colsN; ci++) {
       //let tdID = 'r' +ri +'c' +ci;
-      trInnerHtmlStr += '<td>' +
-                 Arr[ri][ci] +
-                '</td>';
-    }// end for cols
+        trInnerHtmlStr += '<td>' +Arr[ri][ci] +'</td>';
+      }// end for cols
+    } else {
+      trInnerHtmlStr += '<td colspan="10" class="freeTimeTd"> -- свободно -- </td>';
+    }
+
 
     let trStr = trStrStart + trInnerHtmlStr + trStrEnd;
     tbodyInnerHtmlStr += trStr;
@@ -732,7 +735,7 @@ let trId = (dateStr.dateN + '_' + dateStr.time);
   tbody.innerHTML = tbodyInnerHtmlStr;
   return(tbody);
 
-  function condFormatBookingTable(freeTime, timeslotN) {
+  function condFormatBookingTable(freeTime, minFreeTime, timeslotN) {
     let trClassList = [];
     let groupName;
     if (timeslotN <= 17) {
@@ -746,7 +749,7 @@ let trId = (dateStr.dateN + '_' + dateStr.time);
     }
     trClassList.push(groupName);
 
-    if(freeTime <= 0) {
+    if(freeTime <= minFreeTime) {
       trClassList.push('noTime-book');
     }
     let trClassStr = trClassList.join(' ');

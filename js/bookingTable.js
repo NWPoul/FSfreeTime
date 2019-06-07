@@ -13,6 +13,7 @@
 function setBookingTable(Arr, tbody) {
   tbody = tbody || document.createElement('tbody');
   tbody.classList.add('bookingTbody');
+  let minFreeTime = 2;
   let rowsN = Arr.length,
     colsN = Arr[0].length;
 
@@ -56,7 +57,7 @@ let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
     }
     tr.classList.add(groupName);
 
-    if(freeTime <= 0) {
+    if(freeTime <= minFreeTime) {
       tr.classList.add('noTime-book');
     }
 
