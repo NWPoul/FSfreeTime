@@ -672,7 +672,7 @@ function TESTsetBookingTable(Arr, tbody) {
 
   let {timeCol, timeValCol} = GVAR.bookingDataMap;
 
-  let firstRowStr = '<th id="r0c0">' + 'Date/Time' + '</th>' +
+  let firstRowStr = '<th id="r0c0" class="th0">' + 'Date/Time' + '</th>' +
                     '<td>' + getSVGicon('stopwatch') + '</td>' +
                     '<td>' + 'Tariff' + '</td>' +
                     '<td>' + 'Flyers' + '</td>' +
@@ -834,6 +834,10 @@ function scrollToCurrentTime() {
   scrollToElement(targetTr);
   blinkElem(targetTr);
 
+  setTimeout( () => {
+    scrollToElement('servButton');
+  }, 5000);
+
   function getTarget(timeMs) {
     let dateStr = _date.msToCustomDateObj(timeMs - GVAR.GMToffset); // - offset for UTC!!!
     let targetTrId = (dateStr.dateN + '_' + dateStr.time);
@@ -841,6 +845,8 @@ function scrollToCurrentTime() {
     return targetTr;
   }
 }
+
+
 
 function scrollToElement(theElement) {
   if (typeof theElement === 'string') {
@@ -854,7 +860,7 @@ function scrollToElement(theElement) {
   );
 }// end scrollToElement
 
-function blinkElem(elem, text='HERE!)') {
+function blinkElem(elem) {
   if (typeof(elem) === 'string') {
     elem = document.getElementById(elem);
   }
