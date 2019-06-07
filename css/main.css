@@ -251,7 +251,14 @@ tr:nth-child(n+20):nth-child(odd),
 }
 
 .blinkElem {
-    background-color: #ff0000 !important;
+    background-color: #1d00ff !important;
+    animation: opacity 2s linear infinite;
+}
+@keyframes opacity {
+  0% {opacity: 0.2}
+  20%, 80% {opacity: 0.5}
+  50% {opacity: 1}
+  100% {opacity: 0.1}
 }
 
 .bookingTbody .groupN {

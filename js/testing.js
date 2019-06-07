@@ -595,7 +595,7 @@ function testingrunTable(data, toggle) {
     break;
   case 'bookings': case 2:
     // setBookingTable(data, tbody);
-    testarr_setBookingTable(data, tbody);
+    TESTsetBookingTable(data, tbody);
     break;
   }
   mainTable.appendChild(tbody);
@@ -824,11 +824,22 @@ let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
 function scrollToCurrentTime() {
   if (MODE != 'bookings') return;
   let currentTime = Date.now();
-  let dateStr = _date.msToCustomDateObj(currentTime - GVAR.GMToffset); // - offset for UTC!!!
-  let targetTrId = (dateStr.dateN + '_' + dateStr.time);
-  console.log(targetTrId);
-  scrollToElement(targetTrId);
-  blinkElem(targetTrId, (dateStr.dayName + ', ' +dateStr.dayN + '/' +dateStr.monthN +'_' +dateStr.time) );
+  let targetTr = getTarget( currentTime );
+
+  if( !targetTr ) {
+    let targetTime = new Date(GVAR.stDate);
+    targetTr = getTarget( targetTime );
+  }
+
+  scrollToElement(targetTr);
+  blinkElem(targetTr);
+
+  function getTarget(timeMs) {
+    let dateStr = _date.msToCustomDateObj(timeMs - GVAR.GMToffset); // - offset for UTC!!!
+    let targetTrId = (dateStr.dateN + '_' + dateStr.time);
+    let targetTr = document.getElementById(targetTrId);
+    return targetTr;
+  }
 }
 
 function scrollToElement(theElement) {
@@ -847,15 +858,10 @@ function blinkElem(elem, text='HERE!)') {
   if (typeof(elem) === 'string') {
     elem = document.getElementById(elem);
   }
-
-  // let sourceVal = elem.innerHTML;
-  // let tempVal = '<span class="blinkElem">' +text + '</span>';
-
   elem.classList.toggle( 'blinkElem' );
-
-  // setTimeout( (elem) => {
-  //   elem.classList.toggle( 'blinkElem' );
-  // }, 500);
-}
+  setTimeout( () => {
+    elem.classList.toggle( 'blinkElem' );
+  }, 4000);
+}// end blinkElem
 
 
