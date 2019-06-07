@@ -227,6 +227,7 @@ min-width: 7em;
 }
 
 .bookingTbody td {
+    padding: 2px 2px 7px 2px;
     color: #000000a8;
     font-weight: normal;
 }
@@ -242,13 +243,15 @@ min-width: 7em;
     min-width: 1em;
 }
 .bookingTbody td:nth-child(3),
-.bookingTbody td:nth-child(4) {
+.bookingTbody td:nth-child(4),
+.bookingTbody td:nth-child(5)
+ {
     text-align: left;
 }
 
 .bookingTbody .freeTimeTd {
     text-align: left;
-    padding: 0;
+    padding: 0 0 0 10px;
     font-style: italic;
     color: #252dbf;
 }
