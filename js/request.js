@@ -34,7 +34,7 @@ function getDates(buttonCall) {
   }
 
   let endDate = new Date(GVAR.stDate);
-  endDate.setDate(endDate.getDate() + 5);
+  endDate.setDate(endDate.getDate() + 15);
   GVAR.endDate = _date.dateToYYYYMMDD(endDate);
 
   return {
@@ -91,7 +91,7 @@ function setUser() {
     GVAR.user = localStorage.getItem('user');
     GVAR.userPs = localStorage.getItem('userPs');
     GVAR.userData = localStorage.getItem('userData');
-    setLoginButtonText(GVAR.user);
+    setButtonText('loginButton', GVAR.user);
   } else {
     logIn();
   }
@@ -105,7 +105,7 @@ function logIn () {
     return;
   }
   storeUser(user, ps);
-  setLoginButtonText(user);
+  setButtonText('loginButton', user);
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -121,13 +121,7 @@ function logOut() {
   localStorage.removeItem('userPs');
   GVAR.user = null;
   GVAR.userPs = null;
-  setLoginButtonText('Log in');
-}
-
-function setLoginButtonText(text) {
-  if (!text) return;
-  var loginButton = document.getElementById('loginButton');
-  loginButton.innerText = text;
+  setButtonText('loginButton', 'Log in');
 }
 
 // eslint-disable-next-line no-unused-vars

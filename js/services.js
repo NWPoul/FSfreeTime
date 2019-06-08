@@ -127,8 +127,9 @@ function timeIndexFunc(arg, mode) {
 
 function setButtonText(buttonId, text) {
   if (!text || !buttonId) return;
+  let trimedText = text.slice(0, 6);
   let button = document.getElementById(buttonId);
-  button.innerText = text;
+  button.innerText = trimedText;
 }
 
 
