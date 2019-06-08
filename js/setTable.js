@@ -133,7 +133,7 @@ function proceedBookingData( bookingData ) {
     // let nextTimeStr = new Date(bookingArr[i+1][timeCol]);
     // let testv = bookingArr[i+1][timeCol] - curTime;
     // let excSteps = testv / _date.m30;
-    while (bookingArr[i+1][timeCol] - curTime > _date.m30) {
+    while (bookingArr[i+1] && bookingArr[i+1][timeCol] - curTime > _date.m30) {
       let addRec = new Array(colCnt).fill('');//bookingArr[i].slice();
       addRec[timeCol] = curTime + _date.m30;
       addRec[timeValCol] = 0;
