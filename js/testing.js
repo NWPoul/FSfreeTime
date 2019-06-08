@@ -758,7 +758,7 @@ let trId = (dateStr.dateN + '_' + dateStr.time);
       trClassList.push('noTime-book');
     }
 
-    if ( curTime < nowTime ) {
+    if ( curTime < (nowTime - GVAR.GMToffset) ) { // - offset for UTC!!! ) {
       trClassList.push('pastSlot');
     }
 
