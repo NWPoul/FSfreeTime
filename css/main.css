@@ -257,6 +257,12 @@ min-width: 7em;
     color: #252dbf;
 }
 
+.bookingTbody .pastSlot *:not(span){
+    color: #ffffff8c;
+    font-style: italic;
+    font-weight: bold;
+    background-color: #00000026;
+}
 
 .noTime-book th,
 .noTime-book td/*:nth-child(2)*/

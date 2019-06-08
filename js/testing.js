@@ -665,6 +665,8 @@ function TESTsetBookingTable(Arr, tbody) {
   tbody = tbody || document.createElement('tbody');
   tbody.classList.add('bookingTbody');
   let minFreeTime = 2;
+  let nowTime = Date.now();
+  // let curDateStr = _date.msToCustomDateObj(curDateTime - GVAR.GMToffset);
   let tbodyInnerHtmlStr = '';
 
   let rowsN = Arr.length,
@@ -693,8 +695,11 @@ if (GVAR.user.toLowerCase() == 'tst') {
   for(let ri = 0; ri < rowsN; ri++) {
     let dateStr = _date.msToCustomDateObj( Arr[ri][timeCol] );
 let freeTime = 30 - Arr[ri][timeValCol];
-let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
+var curTime = Arr[ri][timeCol];
+let curTimeslotN = _date.msToSlotN( curTime );
 let trId = (dateStr.dateN + '_' + dateStr.time);
+
+
 
 
     let trClassStr = condFormatBookingTable(freeTime, minFreeTime, curTimeslotN);
@@ -752,6 +757,11 @@ let trId = (dateStr.dateN + '_' + dateStr.time);
     if(freeTime <= minFreeTime) {
       trClassList.push('noTime-book');
     }
+
+    if ( curTime < nowTime ) {
+      trClassList.push('pastSlot');
+    }
+
     let trClassStr = trClassList.join(' ');
     return trClassStr;
   }
@@ -889,5 +899,3 @@ function blinkElem(elem) {
     elem.classList.toggle( 'blinkElem' );
   }, 4000);
 }// end blinkElem
-
-
