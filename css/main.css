@@ -250,7 +250,7 @@ min-width: 7em;
 }
 
 .bookingTbody .freeTimeTd {
-    text-align: left;
+    text-align: left !important;
     padding: 0 0 0 10px;
     font-style: italic;
     color: #252dbf;
