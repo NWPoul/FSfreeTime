@@ -8,25 +8,30 @@
  setButtonText
 
 */
-
-
-function getDates(buttonCall) {
-  let today = new Date();
-  let todayStr = _date.dateToYYYYMMDD(today);
+function inputDate() {
   let startDateInput = document.getElementById('startDate');
 
-  if (!GVAR.stDate) {
-    GVAR.stDate = todayStr;
-  }
+  let stDate = startDateInput.value;
+  stDate = new Date(stDate);
+  stDate.setDate(stDate.getDate() - 1); //also take data for prev day
+  let stDateStr = _date.dateToYYYYMMDD(stDate);
+  GVAR.stDate = stDateStr;
 
-  if (buttonCall) {
-    GVAR.stDate = startDateInput.value;
-    start();
-  } else {
+  getDates();
+  start();
+}
+
+function getDates(buttonCall) {
+  if (!GVAR.stDate) {
+    let stDate = new Date();
+
+    stDate.setDate(stDate.getDate() - 1); //also take data for prev day
+    let stDateStr = _date.dateToYYYYMMDD(stDate);
+    GVAR.stDate = stDateStr;
+
+    let startDateInput = document.getElementById('startDate');
     startDateInput.value = GVAR.stDate;
   }
-
-
 
   let endDate = new Date(GVAR.stDate);
   endDate.setDate(endDate.getDate() + 15);

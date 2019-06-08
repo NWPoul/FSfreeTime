@@ -50,7 +50,13 @@ function start() {
       GVAR.bookingArr = proceedBookingData( GVAR.bookingData );
       GVAR.bookingObj = proceedBookingArrToObj( GVAR.bookingArr );
       // testingrunTable(GVAR.bookingObj, 'freetime');
-      testingrunTable(GVAR.bookingArr, 'bookings');
+      switch (MODE) {
+      case 'freetime':
+        testingrunTable(GVAR.bookingObj, 'freetime');
+        break;
+      default: //'bookings'
+        testingrunTable(GVAR.bookingArr, 'bookings');
+      }//end swich
     });
 
   mainTableStatus.innerHTML = '<tr><td>Loading data...</td></tr>';
