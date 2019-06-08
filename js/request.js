@@ -34,7 +34,7 @@ function getDates(buttonCall) {
   }
 
   let endDate = new Date(GVAR.stDate);
-  endDate.setDate(endDate.getDate() + 15);
+  endDate.setDate(endDate.getDate() + 5);
   GVAR.endDate = _date.dateToYYYYMMDD(endDate);
 
   return {
