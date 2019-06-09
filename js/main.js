@@ -76,7 +76,8 @@ function changeMode(callMode) {
   if (MODE == 'freetime') {
     MODE = 'bookings';
     dataForTable = GVAR.bookingArr;
-    setButtonText('servButton', ' ');
+    setButtonText('servButton', '♺');
+
   } else {
     MODE = 'freetime';
     setButtonText('servButton', GVAR.minTime + '\'') ;
@@ -112,7 +113,7 @@ function servButtonClick(servButton) {
     setMinTime();
     break;
   case 'bookings':
-    console.log('servButton in bookings mode') ;
+    start();
     break;
   }
 }// end servButtonClick

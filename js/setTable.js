@@ -248,16 +248,6 @@ function runTable(bookingData) {
 
 
 
-
-function reset() {
-  localStorage.removeItem('mainTableState');
-  console.log('reset ' + this);
-  proceedBookingData();
-}//End reset
-
-
-
-
 //-----TDconcat------------------------------------------------------------------------
 function TDconcat(Arr, tbody) {
   tbody.innerHTML = '';

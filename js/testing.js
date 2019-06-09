@@ -596,9 +596,29 @@ function testingrunTable(data, toggle) {
   case 'bookings': case 2:
     // setBookingTable(data, tbody);
     TESTsetBookingTable(data, tbody);
+
+    var noScrollToggle = !isNeedScroll();
+    setTimeout(() => {
+      scrollToCurrentTime( noScrollToggle );
+    }, 100);
+
+
     break;
   }
   mainTable.appendChild(tbody);
+
+
+  function isNeedScroll() {
+    let today = new Date();
+    let stDate = new Date( GVAR.stDate );
+
+    let todayN = _date.dateMsToDateN(today);
+    let stDateN = _date.dateMsToDateN(stDate);
+
+    if (stDateN == todayN - 1) {
+      return true;
+    }
+  }
 }//=====END GLOBAL================================
 
 
@@ -851,14 +871,14 @@ let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
 }//=====END setBookingTable==================
 
 
-function scrollToCurrentTime() {
+function scrollToCurrentTime(noScrollToggle) {
   if (MODE != 'bookings') return;
   let currentTime = Date.now();
   let targetTr = getTarget( currentTime );
 
-  if( !targetTr ) {
-    let targetTime = new Date(GVAR.stDate);
-    targetTr = getTarget( targetTime );
+  if( !targetTr || noScrollToggle ) {
+    let targetTime = new Date(GVAR.stDate).getTime();
+    targetTr = getTarget( targetTime + _date.hr24);
   }
 
   scrollToElement(targetTr);

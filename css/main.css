@@ -252,22 +252,22 @@ min-width: 7em;
 .bookingTbody .freeTimeTd {
     text-align: left !important;
     vertical-align: middle;
-    padding: 0 0 0 10px;
+    padding: 0 0 0 0px;
     font-style: italic;
     color: #252dbf;
 }
 
-.bookingTbody .pastSlot *:not(span){
-    color: #ffffff8c;
+.bookingTbody .pastSlot th,
+.bookingTbody .pastSlot td {
+    color: #0000006e;
     font-style: italic;
-    font-weight: bold;
-    background-color: #00000026;
+    background-color: #ffffffb5;
 }
 
 .noTime-book th,
 .noTime-book td/*:nth-child(2)*/
  {
-    background-color: #56565680 !important;
+    background-color: #56565680;
 }
 
 .th0 {
