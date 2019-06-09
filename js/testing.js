@@ -595,10 +595,13 @@ function testingrunTable(data, toggle) {
     break;
   case 'bookings': case 2:
     // setBookingTable(data, tbody);
-    TESTsetBookingTable(data, tbody);
+    var initArr = data.slice(0,100);
+    var restArr = data.slice(100);
+    TESTsetBookingTable(initArr, tbody);
 
     var noScrollToggle = !isNeedScroll();
     setTimeout(() => {
+      TESTsetBookingTable(restArr, tbody, true);
       scrollToCurrentTime( noScrollToggle );
     }, 100);
 
@@ -681,17 +684,16 @@ function bench(testF, times) {
 
 
 
-function TESTsetBookingTable(Arr, tbody) {
+function TESTsetBookingTable(Arr, tbody, appendToggle) {
   tbody = tbody || document.createElement('tbody');
   tbody.classList.add('bookingTbody');
+
   let minFreeTime = 2;
   let nowTime = Date.now();
-  // let curDateStr = _date.msToCustomDateObj(curDateTime - GVAR.GMToffset);
+
   let tbodyInnerHtmlStr = '';
 
-  let rowsN = Arr.length,
-    colsN = Arr[0].length;
-
+  let colsN = Arr[0].length;
 
   let {timeCol, timeValCol} = GVAR.bookingDataMap;
 
@@ -701,7 +703,7 @@ function TESTsetBookingTable(Arr, tbody) {
                     '<td>' + 'Flyers' + '</td>' +
                     '<td>' + 'Notes' + '</td>' +
                     '<td>' + 'Booking №' + '</td>' +
-                    '<td>' + 'Status' + '</td>';
+                    '<td>' + 'paid' + '</td>';
 
 // !!! DEV - cut off phones & e-mails
 if (GVAR.user.toLowerCase() == 'tst') {
@@ -709,58 +711,79 @@ if (GVAR.user.toLowerCase() == 'tst') {
 } else {
   colsN -= 2; // !!! DEV - cut off phones & e-mails
 }
+
+if (appendToggle) {
+  tbody.insertAdjacentHTML('beforeEnd', doRowsStr(Arr));
+  return;
+}
+
   tbodyInnerHtmlStr += firstRowStr;
 
 
-  for(let ri = 0; ri < rowsN; ri++) {
-    let dateStr = _date.msToCustomDateObj( Arr[ri][timeCol] );
-let freeTime = 30 - Arr[ri][timeValCol];
-var curTime = Arr[ri][timeCol];
-let curTimeslotN = _date.msToSlotN( curTime );
-let trId = (dateStr.dateN + '_' + dateStr.time);
-
-
-
-
-    let trClassStr = condFormatBookingTable(freeTime, minFreeTime, curTimeslotN);
-    let rowSpan = ( freeTime >= minFreeTime && freeTime < 30) ? 'rowspan="2"' : '' ;
-    let trStrStart = '<tr ' +('id="' +trId +'" ') +('class="' +trClassStr +'" ') +' >';
-    let trStrEnd = '</tr>';
-
-    let trInnerHtmlStr = '<th ' + ('id="r' +ri +'c0" ') +rowSpan +' >' + // +('class="' +groupName +'"')
-            '<span class="tdSpan">' +
-               dateStr.dayName + ', ' +
-               dateStr.dayN + '/' +
-               dateStr.monthN + ' ' +
-            '</span><br />'+
-               dateStr.time + ' ' +
-            //  dateStr.dateN +
-            '</th>';
-    if (freeTime < 30) {
-      for (let ci = 2; ci < colsN; ci++) {
-      //let tdID = 'r' +ri +'c' +ci;
-        trInnerHtmlStr += '<td>' +Arr[ri][ci] +'</td>';
-      }// end for cols
-    } else {
-      trInnerHtmlStr += '<td colspan="10" class="freeTimeTd"> -- свободно -- </td>';
-    }
-
-
-    let trStr = trStrStart + trInnerHtmlStr + trStrEnd;
-    tbodyInnerHtmlStr += trStr;
-
-    if(rowSpan) {
-      let adTrStr = '<tr ' +('class="' +trClassStr +'" ') +' >' +
-      '<td colspan="10" class="freeTimeTd">' +' -- свободно ' +freeTime +' мин. --' +'</td>' +
-      '<tr>';
-      tbodyInnerHtmlStr += adTrStr;
-    }
-  }//end for rows
-
+  tbodyInnerHtmlStr += doRowsStr(Arr);
   tbody.innerHTML = tbodyInnerHtmlStr;
   return(tbody);
 
-  function condFormatBookingTable(freeTime, minFreeTime, timeslotN) {
+
+  function doRowsStr(Arr) {
+    let rowsN = Arr.length;
+
+    let RowsStr = '';
+    for(let ri = 0; ri < rowsN; ri++) {
+      let dateStr = _date.msToCustomDateObj( Arr[ri][timeCol] );
+      let freeTime = 30 - Arr[ri][timeValCol];
+      var curTime = Arr[ri][timeCol]; // !var - coz need scope!
+      let curTimeslotN = _date.msToSlotN( curTime );
+
+      let trId = (dateStr.dateN + '_' + dateStr.time);
+
+      let trClassStr = condFormatBookingTable(freeTime, minFreeTime, curTimeslotN, curTime);
+      let rowSpan = ( freeTime >= minFreeTime && freeTime < 30) ? 'rowspan="2"' : '' ;
+
+      let trStrStart = '<tr ' +('id="' +trId +'" ') +('class="' +trClassStr +'" ') +' >';
+      let thStr = doThStr(ri, rowSpan, dateStr);
+      let tdStr = doTdStr(freeTime, ri);
+
+      let trStr = trStrStart +thStr +tdStr +'</tr>';
+      RowsStr += trStr;
+
+      if(rowSpan) {
+        let adTrStr = '<tr ' +('class="' +trClassStr +'" ') +' >' +
+        '<td colspan="10" class="freeTimeTd">' +' -- свободно ' +freeTime +' мин. --' +'</td>' +
+        '<tr>';
+        RowsStr += adTrStr;
+      }
+    }//end for rows
+    return RowsStr;
+  }//END doRowsStr
+
+  function doThStr(ri, rowSpan, dateStr) {
+    let ThStr = '<th ' + ('id="r' + ri + 'c0" ') + rowSpan + ' >' + // +('class="' +groupName +'"')
+      '<span class="tdSpan">' +
+      dateStr.dayName + ', ' +
+      dateStr.dayN + '/' +
+      dateStr.monthN + ' ' +
+      '</span><br />' +
+      dateStr.time + ' ' +
+      //  dateStr.dateN +
+      '</th>';
+    return ThStr;
+  }// end doThStr
+  function doTdStr(freeTime, ri) {
+    let tdStr = '';
+    if (freeTime < 30) {
+      for (let ci = 2; ci < colsN; ci++) {
+        //let tdID = 'r' +ri +'c' +ci;
+        tdStr += '<td>' + Arr[ri][ci] + '</td>';
+      } // end for cols
+    }
+    else {
+      tdStr += '<td colspan="10" class="freeTimeTd"> -- свободно -- </td>';
+    }
+    return tdStr;
+  }//end doTdStr
+
+  function condFormatBookingTable(freeTime, minFreeTime, timeslotN, curTime) {
     let trClassList = [];
     let groupName;
     if (timeslotN <= 17) {
@@ -785,6 +808,8 @@ let trId = (dateStr.dateN + '_' + dateStr.time);
     let trClassStr = trClassList.join(' ');
     return trClassStr;
   }
+
+
 
 }//=====END setBookingTable==================
 
@@ -871,6 +896,10 @@ let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
 }//=====END setBookingTable==================
 
 
+
+
+
+
 function scrollToCurrentTime(noScrollToggle) {
   if (MODE != 'bookings') return;
   let currentTime = Date.now();
@@ -896,12 +925,11 @@ function scrollToCurrentTime(noScrollToggle) {
   }
 }
 
-
-
 function scrollToElement(theElement) {
   if (typeof theElement === 'string') {
     theElement = document.getElementById(theElement);
   }
+
   theElement.scrollIntoView(
     {
       block: 'center',
