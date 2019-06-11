@@ -23,14 +23,14 @@ function inputDate() {
 
 function getDates(buttonCall) {
   if (!GVAR.stDate) {
+    let startDateInput = document.getElementById('startDate');
     let stDate = new Date();
+
+    startDateInput.value = _date.dateToYYYYMMDD(stDate);
 
     stDate.setDate(stDate.getDate() - 1); //also take data for prev day
     let stDateStr = _date.dateToYYYYMMDD(stDate);
     GVAR.stDate = stDateStr;
-
-    let startDateInput = document.getElementById('startDate');
-    startDateInput.value = GVAR.stDate;
   }
 
   let endDate = new Date(GVAR.stDate);

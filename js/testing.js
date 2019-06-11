@@ -612,11 +612,11 @@ function testingrunTable(data, toggle) {
 
 
   function isNeedScroll() {
-    let today = new Date();
-    let stDate = new Date( GVAR.stDate );
+    let todayRu = new Date();
+    let stDateRu = new Date( GVAR.stDate );
 
-    let todayN = _date.dateMsToDateN(today);
-    let stDateN = _date.dateMsToDateN(stDate);
+    let todayN = _date.dateMsToDateN(todayRu);
+    let stDateN = _date.dateMsToDateN(stDateRu);
 
     if (stDateN == todayN - 1) {
       return true;
@@ -668,13 +668,13 @@ function showTableState() {
 
 function bench(testF, times) {
 
-  var t = new Date();
+  var t = Date.now();
   for (var i = 0; i < times; i++) {
     testingrunTable(GVAR.bookingArr, 'bookings');
     // testingrunTable(GVAR.bookingObj, 'freetime');
     // proceedBookingData(GVAR.bookingData)
   }
-  var result = (new Date() - t) / times;
+  var result = (Date.now() - t) / times;
   console.log(result);
   return result;
 }
@@ -689,7 +689,7 @@ function TESTsetBookingTable(Arr, tbody, appendToggle) {
   tbody.classList.add('bookingTbody');
 
   let minFreeTime = 2;
-  let nowTime = Date.now();
+  let nowTimeUTC = Date.now();
 
   let tbodyInnerHtmlStr = '';
 
@@ -801,7 +801,7 @@ if (appendToggle) {
       trClassList.push('noTime-book');
     }
 
-    if ( curTime < (nowTime - GVAR.GMToffset) ) { // - offset for UTC!!! ) {
+    if ( curTime < (nowTimeUTC - GVAR.GMToffset) ) { // - offset for UTC!!! ) {
       trClassList.push('pastSlot');
     }
 
@@ -902,12 +902,12 @@ let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
 
 function scrollToCurrentTime(noScrollToggle) {
   if (MODE != 'bookings') return;
-  let currentTime = Date.now();
-  let targetTr = getTarget( currentTime );
+  let currentTimeRU = Date.now() - GVAR.GMToffset ;
+  let targetTr = getTarget( currentTimeRU );
 
   if( !targetTr || noScrollToggle ) {
-    let targetTime = new Date(GVAR.stDate).getTime();
-    targetTr = getTarget( targetTime + _date.hr24);
+    let targetTimeRU = Date.parse(GVAR.stDate) - GVAR.GMToffset ;
+    targetTr = getTarget( targetTimeRU + _date.hr24);
   }
 
   scrollToElement(targetTr);
@@ -917,8 +917,8 @@ function scrollToCurrentTime(noScrollToggle) {
     scrollToElement('servButton');
   }, 5000);
 
-  function getTarget(timeMs) {
-    let dateStr = _date.msToCustomDateObj(timeMs - GVAR.GMToffset); // - offset for UTC!!!
+  function getTarget(timeMsRU) {
+    let dateStr = _date.msToCustomDateObj(timeMsRU + GVAR.GMToffset); // - offset for UTC!!!  - GVAR.GMToffset
     let targetTrId = (dateStr.dateN + '_' + dateStr.time);
     let targetTr = document.getElementById(targetTrId);
     return targetTr;
