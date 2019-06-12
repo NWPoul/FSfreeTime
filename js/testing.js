@@ -638,19 +638,6 @@ function testingrunTable(data, toggle) {
 
 
 
-// eslint-disable-next-line no-unused-vars
-function showTableState() {
-  // var stateList = document.getElementById('tableState');
-  // stateList.innerHTML = '';
-  // var stateValues = ['checkCnt: ' + mainTableState.checkCnt,
-  //   'changedCnt: ' + mainTableState.tdChanged.length];
-
-  // stateValues.forEach( function(val, i) {
-  //   var li = document.createElement('li');
-  //   li.innerHTML = val;
-  //   stateList.appendChild(li);
-  // });
-} // end showTableState
 
 
 // function test() {
@@ -902,12 +889,12 @@ let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
 
 function scrollToCurrentTime(noScrollToggle) {
   if (MODE != 'bookings') return;
-  let currentTimeRU = Date.now() - GVAR.GMToffset ;
-  let targetTr = getTarget( currentTimeRU );
+  let currentTime = Date.now();
+  let targetTr = getTarget( currentTime, true );
 
   if( !targetTr || noScrollToggle ) {
-    let targetTimeRU = Date.parse(GVAR.stDate) - GVAR.GMToffset ;
-    targetTr = getTarget( targetTimeRU + _date.hr24);
+    let targetTime = Date.parse(GVAR.stDate);
+    targetTr = getTarget( targetTime + _date.hr24, false);
   }
 
   scrollToElement(targetTr);
@@ -917,8 +904,9 @@ function scrollToCurrentTime(noScrollToggle) {
     scrollToElement('servButton');
   }, 5000);
 
-  function getTarget(timeMsRU) {
-    let dateStr = _date.msToCustomDateObj(timeMsRU + GVAR.GMToffset); // - offset for UTC!!!  - GVAR.GMToffset
+  function getTarget(timeMs, toggleGMT) {
+
+    let dateStr = _date.msToCustomDateObj(timeMs, toggleGMT);
     let targetTrId = (dateStr.dateN + '_' + dateStr.time);
     let targetTr = document.getElementById(targetTrId);
     return targetTr;
