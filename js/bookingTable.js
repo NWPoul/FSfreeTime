@@ -144,8 +144,8 @@ function parseTariff(tariffStr) {
   case /Серт/i.test(tariffStr):
     resStr = 'ПР Серт.';
     break;
-  case /Спорт*Лик*Борз/i.test(tariffStr):
-    resStr = 'Спорт БЛЮ кэмп';
+  case /Спорт.*Лик.*Борз/i.test(tariffStr):
+    resStr = 'Спорт БЛЮкэмп';
     break;
 
   case /Спорт/i.test(tariffStr):

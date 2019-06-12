@@ -935,3 +935,12 @@ function blinkElem(elem) {
     elem.classList.toggle( 'blinkElem' );
   }, 4000);
 }// end blinkElem
+
+
+
+function testDateInput(params) {
+  let input = document.getElementById('inputDate');
+  input.focus();
+  input.click()
+
+}
