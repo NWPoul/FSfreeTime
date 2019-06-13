@@ -86,7 +86,7 @@ function condFormatFreetime(tbody) {
     let tr = rowsCollection[ri];
     let groupName;
     switch (true) {
-    case (ri <= 17):
+    case (ri <= 18):
       groupName = 'groupN';
       break;
     default:

@@ -938,9 +938,12 @@ function blinkElem(elem) {
 
 
 
-function testDateInput(params) {
+function testB2(e) {
+  console.log(e);
   let input = document.getElementById('inputDate');
-  input.focus();
-  input.click()
+  var o = document.createEvent('MouseEvents');  // Создаём объект события, выбран модуль событий мыши
+  o.initMouseEvent( 'click', true, true, window, 1, 12, 345, 7, 220, false, false, true, false, 0, null ); // Инициализируем объект события
+  input.dispatchEvent(o);  // Запускаем событие на элементе
+
 
 }
