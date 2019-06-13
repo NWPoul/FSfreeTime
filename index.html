@@ -26,25 +26,29 @@
 
 
   <div class="buttonBar">
-        <button onClick="lookButton()" ><b>⌂</b></button>
-          <span style="width: .5em"></span>
 
 
-          <input type="date" id="startDate" name="startDate" onChange="inputDate(true)">
-          <span style="width: .1em"></span>
-        <button id="servButton" onClick="servButtonClick(this)" style="font-weight: 500">&#08635;</button>
-        </button>
-          <span style="width: .5em"></span>
+        <input type="date" id="startDate" name="startDate" onChange="inputDate(true)">
+          <span style="width: 1em"></span>
+
+        <button id="homeButton" onClick="homeButtonClick()" style="font-weight: 800"><b>⌂</b></button>
+
+        <button id="setMintimeButton" onClick="setMintime(this)"></button>
+          <span style="width: 1em"></span>
+
+        <button id="reloadButton" onClick="reloadButtonClick(this)" style="font-weight: 800"><b>&#08635;</b></button>
+          <span style="width: 1em"></span>
+
         <button id="changeModeButton" onClick="changeMode()" style="min-width: 2em">&#10059;</button>
-          <span style="width: .5em"></span>
+          <span style="width: 1em"></span>
         <button id="loginButton" onClick="loginButtonClick(this)" style="min-width: 3em">Log in</button>
 
-        <span style="width: .5em"></span>
+        <!-- <span style="width: .5em"></span>
         <button id="newDateButton" class="myBeautifulIcon">
             <label label for="inputDate">2019-06-12 📅<input id="inputDate" class="dateInputBox" type="date" /></label>
-        </button>
-        <span style="width: 1em"></span>
-        <button id="testB2" onClick="testB2(this)" style="min-width: 2em"><b> test </b></button>
+        </button> -->
+        <!-- <span style="width: 1em"></span>
+        <button id="testB2" onClick="testB2(this)" style="min-width: 2em"><b> test </b></button> -->
 
     </div>
 

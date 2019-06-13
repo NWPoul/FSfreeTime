@@ -1,4 +1,6 @@
-
+/* global
+ GVAR
+*/
 
 
 
@@ -41,7 +43,7 @@ var _date = {
 
   msToCustomDateObj: function msToCustomDateObj(msTime, toggleGMT) {
   // var SSTime = (jsTime+3*60*60*1000)/1000/60/60/24+25569;
-    if(toggleGMT === true) {msTime -= GVAR.GMToffset};
+    if(toggleGMT === true) {msTime -= GVAR.GMToffset;}
     let date = new Date(msTime);
     let dateObj = _date.customDate(date);
     return dateObj;
@@ -131,6 +133,16 @@ function setButtonText(buttonId, text) {
   let trimedText = text.slice(0, 6);
   let button = document.getElementById(buttonId);
   button.innerText = trimedText;
+}
+
+function setButtonVis(buttonId, visible) {
+  let button = document.getElementById(buttonId);
+  // let ButtonClasses = button.classList;
+  if (visible) {
+    button.style.display = '';
+  } else {
+    button.style.display = 'none';
+  }
 }
 
 

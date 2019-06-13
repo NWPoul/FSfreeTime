@@ -30,7 +30,10 @@ const GVAR = {
  getBookingData
  proceedBookingData
  proceedBookingArrToObj
- testingrunTable
+ runTable
+ setButtonText
+ setButtonVis
+ scrollToCurrentTime
 */
 
 // ===== END GLOBAL NAME SPACE =====
@@ -49,14 +52,8 @@ function start() {
       GVAR.bookingData = bookingData;
       GVAR.bookingArr = proceedBookingData( GVAR.bookingData );
       GVAR.bookingObj = proceedBookingArrToObj( GVAR.bookingArr );
-      // testingrunTable(GVAR.bookingObj, 'freetime');
-      switch (MODE) {
-      case 'freetime':
-        testingrunTable(GVAR.bookingObj, 'freetime');
-        break;
-      default: //'bookings'
-        testingrunTable(GVAR.bookingArr, 'bookings');
-      }//end swich
+      // runTable (GVAR.bookingObj, 'freetime');
+      initMode();
     });
 
   mainTableStatus.innerHTML = '<tr><td>Loading data...</td></tr>';
@@ -69,25 +66,35 @@ function start() {
 
 
 function changeMode(callMode) {
-  let dataForTable = GVAR.bookingObj; //default mode
-
-  if (callMode) MODE = callMode;
-
-  if (MODE == 'freetime') {
+  if (callMode) {
+    MODE = callMode;
+  } else if (MODE == 'freetime') {
     MODE = 'bookings';
-    dataForTable = GVAR.bookingArr;
-    setButtonText('servButton', '↻' );
-
   } else {
     MODE = 'freetime';
-    setButtonText('servButton', GVAR.minTime + '\'') ;
   }
-
-  testingrunTable(dataForTable, MODE);
+  initMode();
 } // end changeMode
 
 
 
+function initMode() {
+  switch (MODE) {
+  case 'freetime':
+    setButtonText('setMintimeButton', GVAR.minTime + '\'') ;
+    setButtonVis('setMintimeButton', true);
+    setButtonVis('homeButton', false);
+
+    runTable(GVAR.bookingObj, 'freetime');
+    break;
+
+  default: //'bookings'
+    setButtonVis('homeButton', true);
+    setButtonVis('setMintimeButton', false);
+
+    runTable(GVAR.bookingArr, 'bookings');
+  }//end swich
+}
 
 
 
@@ -98,28 +105,18 @@ function changeMode(callMode) {
 
 
 
-
-function lookButton() {
-  // start();
-  // let res = bench( null, 100)
-  // alert(res);
-
+function homeButtonClick() {
   scrollToCurrentTime();
 }
 
-function servButtonClick(servButton) {
-  switch (MODE) {
-  case 'freetime':
-    setMinTime();
-    break;
-  case 'bookings':
-    start();
-    break;
-  }
-}// end servButtonClick
-
-function setMinTime() {
+function setMintime() {
   GVAR.minTime = prompt('Looking for ... (min)', 15);
-  setButtonText('servButton', GVAR.minTime + '\'');
-  testingrunTable(GVAR.bookingObj, 'freetime');
+  setButtonText('setMintimeButton', GVAR.minTime + '\'');
+  runTable (GVAR.bookingObj, 'freetime');
 }// end setMinTime
+
+function reloadButtonClick() {
+  start();
+  // let res = bench( null, 100)
+  // alert(res);
+}

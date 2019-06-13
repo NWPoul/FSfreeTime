@@ -583,46 +583,6 @@ async function asyncGetTestData(dataNeed) {
 
 
 
-function testingrunTable(data, toggle) {
-  var mainTable = document.getElementById('mainTable');
-  mainTable.innerHTML = '';
-  var tbody = document.createElement('tbody');
-
-  switch (toggle) {
-  case 'freetime': case 1:
-    setFreeTimeTable(data, tbody);
-    condFormatFreetime(tbody);
-    break;
-  case 'bookings': case 2:
-    // setBookingTable(data, tbody);
-    var initArr = data.slice(0,100);
-    var restArr = data.slice(100);
-    TESTsetBookingTable(initArr, tbody);
-
-    var noScrollToggle = !isNeedScroll();
-    setTimeout(() => {
-      TESTsetBookingTable(restArr, tbody, true);
-      scrollToCurrentTime( noScrollToggle );
-    }, 100);
-
-
-    break;
-  }
-  mainTable.appendChild(tbody);
-
-
-  function isNeedScroll() {
-    let todayRu = new Date();
-    let stDateRu = new Date( GVAR.stDate );
-
-    let todayN = _date.dateMsToDateN(todayRu);
-    let stDateN = _date.dateMsToDateN(stDateRu);
-
-    if (stDateN == todayN - 1) {
-      return true;
-    }
-  }
-}//=====END GLOBAL================================
 
 
 
@@ -630,24 +590,6 @@ function testingrunTable(data, toggle) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-// function test() {
-//   var testVal;
-//   for (var i = 0; i <= 47; i++) {
-//     var arg = timeIndexFunc(i, 'time');
-//     testVal =  timeIndexFunc(arg, 'next');
-//     console.log(arg+'-'+testVal);
-//   }
-// }
 
 
 
@@ -657,148 +599,14 @@ function bench(testF, times) {
 
   var t = Date.now();
   for (var i = 0; i < times; i++) {
-    testingrunTable(GVAR.bookingArr, 'bookings');
-    // testingrunTable(GVAR.bookingObj, 'freetime');
+    runTable (GVAR.bookingArr, 'bookings');
+    // runTable (GVAR.bookingObj, 'freetime');
     // proceedBookingData(GVAR.bookingData)
   }
   var result = (Date.now() - t) / times;
   console.log(result);
   return result;
 }
-
-
-
-
-
-
-function TESTsetBookingTable(Arr, tbody, appendToggle) {
-  tbody = tbody || document.createElement('tbody');
-  tbody.classList.add('bookingTbody');
-
-  let minFreeTime = 2;
-  let nowTimeUTC = Date.now();
-
-  let tbodyInnerHtmlStr = '';
-
-  let colsN = Arr[0].length;
-
-  let {timeCol, timeValCol} = GVAR.bookingDataMap;
-
-  let firstRowStr = '<th id="r0c0" class="th0">' + 'Date/Time' + '</th>' +
-                    '<td>' + getSVGicon('stopwatch') + '</td>' +
-                    '<td>' + 'Tariff' + '</td>' +
-                    '<td>' + 'Flyers' + '</td>' +
-                    '<td>' + 'Notes' + '</td>' +
-                    '<td>' + 'Booking №' + '</td>' +
-                    '<td>' + 'paid' + '</td>';
-
-// !!! DEV - cut off phones & e-mails
-if (GVAR.user.toLowerCase() == 'tst') {
-  firstRowStr += '<td>' + 'mail' + '</td>' + '<td>' + 'phone' + '</td>';
-} else {
-  colsN -= 2; // !!! DEV - cut off phones & e-mails
-}
-
-if (appendToggle) {
-  tbody.insertAdjacentHTML('beforeEnd', doRowsStr(Arr));
-  return;
-}
-
-  tbodyInnerHtmlStr += firstRowStr;
-
-
-  tbodyInnerHtmlStr += doRowsStr(Arr);
-  tbody.innerHTML = tbodyInnerHtmlStr;
-  return(tbody);
-
-
-  function doRowsStr(Arr) {
-    let rowsN = Arr.length;
-
-    let RowsStr = '';
-    for(let ri = 0; ri < rowsN; ri++) {
-      let dateStr = _date.msToCustomDateObj( Arr[ri][timeCol] );
-      let freeTime = 30 - Arr[ri][timeValCol];
-      var curTime = Arr[ri][timeCol]; // !var - coz need scope!
-      let curTimeslotN = _date.msToSlotN( curTime );
-
-      let trId = (dateStr.dateN + '_' + dateStr.time);
-
-      let trClassStr = condFormatBookingTable(freeTime, minFreeTime, curTimeslotN, curTime);
-      let rowSpan = ( freeTime >= minFreeTime && freeTime < 30) ? 'rowspan="2"' : '' ;
-
-      let trStrStart = '<tr ' +('id="' +trId +'" ') +('class="' +trClassStr +'" ') +' >';
-      let thStr = doThStr(ri, rowSpan, dateStr);
-      let tdStr = doTdStr(freeTime, ri);
-
-      let trStr = trStrStart +thStr +tdStr +'</tr>';
-      RowsStr += trStr;
-
-      if(rowSpan) {
-        let adTrStr = '<tr ' +('class="' +trClassStr +'" ') +' >' +
-        '<td colspan="10" class="freeTimeTd">' +' -- свободно ' +freeTime +' мин. --' +'</td>' +
-        '<tr>';
-        RowsStr += adTrStr;
-      }
-    }//end for rows
-    return RowsStr;
-  }//END doRowsStr
-
-  function doThStr(ri, rowSpan, dateStr) {
-    let ThStr = '<th ' + ('id="r' + ri + 'c0" ') + rowSpan + ' >' + // +('class="' +groupName +'"')
-      '<span class="tdSpan">' +
-      dateStr.dayName + ', ' +
-      dateStr.dayN + '/' +
-      dateStr.monthN + ' ' +
-      '</span><br />' +
-      dateStr.time + ' ' +
-      //  dateStr.dateN +
-      '</th>';
-    return ThStr;
-  }// end doThStr
-  function doTdStr(freeTime, ri) {
-    let tdStr = '';
-    if (freeTime < 30) {
-      for (let ci = 2; ci < colsN; ci++) {
-        //let tdID = 'r' +ri +'c' +ci;
-        tdStr += '<td>' + Arr[ri][ci] + '</td>';
-      } // end for cols
-    }
-    else {
-      tdStr += '<td colspan="10" class="freeTimeTd"> -- свободно -- </td>';
-    }
-    return tdStr;
-  }//end doTdStr
-
-  function condFormatBookingTable(freeTime, minFreeTime, timeslotN, curTime) {
-    let trClassList = [];
-    let groupName;
-    if (timeslotN <= 17) {
-      groupName = 'groupN';
-    } else {
-      groupName = 'groupD';
-    }
-
-    if (timeslotN % 2) {
-      groupName += '-odd';
-    }
-    trClassList.push(groupName);
-
-    if(freeTime <= minFreeTime) {
-      trClassList.push('noTime-book');
-    }
-
-    if ( curTime < (nowTimeUTC - GVAR.GMToffset) ) { // - offset for UTC!!! ) {
-      trClassList.push('pastSlot');
-    }
-
-    let trClassStr = trClassList.join(' ');
-    return trClassStr;
-  }
-
-
-
-}//=====END setBookingTable==================
 
 
 
@@ -823,19 +631,19 @@ function testarr_setBookingTable(Arr, tbody) {
                     '<td>' + 'Booking №' + '</td>' +
                     '<td>' + 'Status' + '</td>';
 
-// !!! DEV - cut off phones & e-mails
-if (GVAR.user.toLowerCase() == 'tst') {
-  firstRowStr += '<td>' + 'mail' + '</td>' + '<td>' + 'phone' + '</td>';
-} else {
-  colsN -= 2; // !!! DEV - cut off phones & e-mails
-}
-tbodyInnerHtmlArr.push(firstRowStr);
+  // !!! DEV - cut off phones & e-mails
+  if (GVAR.user.toLowerCase() == 'tst') {
+    firstRowStr += '<td>' + 'mail' + '</td>' + '<td>' + 'phone' + '</td>';
+  } else {
+    colsN -= 2; // !!! DEV - cut off phones & e-mails
+  }
+  tbodyInnerHtmlArr.push(firstRowStr);
 
 
   for(let ri = 0; ri < rowsN; ri++) {
     let dateStr = _date.msToCustomDateObj( Arr[ri][timeCol] );
-let freeTime = 30 - Arr[ri][timeValCol];
-let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
+    let freeTime = 30 - Arr[ri][timeValCol];
+    let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
 
     let trClassList = [];
 
@@ -883,67 +691,87 @@ let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
 }//=====END setBookingTable==================
 
 
+// function OLDsetBookingTable(Arr, tbody) {
+//   tbody = tbody || document.createElement('tbody');
+//   tbody.classList.add('bookingTbody');
+//   let minFreeTime = 2;
+//   let rowsN = Arr.length,
+//     colsN = Arr[0].length;
 
 
+//   let {timeCol, timeValCol} = GVAR.bookingDataMap;
+
+//   let firstRow = document.createElement('tr');
+//   firstRow.innerHTML = '<th id="r0c0" class="th0" >' + 'Date/Time' + '</th>' +
+//                        '<td>' + getSVGicon('stopwatch') + '</td>' +
+//                        '<td>' + 'Tariff' + '</td>' +
+//                        '<td>' + 'Flyers' + '</td>' +
+//                        '<td>' + 'Notes' + '</td>' +
+//                        '<td>' + 'Booking №' + '</td>' +
+//                        '<td>' + 'Status' + '</td>';
+
+// // !!! DEV - cut off phones & e-mails
+// if (GVAR.user.toLowerCase() == 'tst') {
+//   firstRow.innerHTML += '<td>' + 'mail' + '</td>' + '<td>' + 'phone' + '</td>';
+// } else {
+//   colsN -= 2; // !!! DEV - cut off phones & e-mails
+// }
+
+//   tbody.appendChild(firstRow);
+
+//   for(let ri = 0; ri < rowsN; ri++) {
+//     let dateStr =  _date.msToCustomDateObj( Arr[ri][timeCol] );
+// let freeTime = 30 - Arr[ri][timeValCol];
+// let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
+
+//     let tr = document.createElement('tr');
+//     tr.setAttribute( 'id', (dateStr.dateN + '_' + dateStr.time) );
+
+//     let groupName;
+//     if (curTimeslotN <= 17) {
+//       groupName = 'groupN';
+//     } else {
+//       groupName = 'groupD';
+//     }
+//     if (curTimeslotN % 2) {
+//       groupName += '-odd';
+//     }
+//     tr.classList.add(groupName);
+
+//     if(freeTime <= minFreeTime) {
+//       tr.classList.add('noTime-book');
+//     }
 
 
-function scrollToCurrentTime(noScrollToggle) {
-  if (MODE != 'bookings') return;
-  let currentTime = Date.now();
-  let targetTr = getTarget( currentTime, true );
+//     let rowStr = '';
+//     rowStr += '<th ' + ('id="r' +ri +'c0" ') +'>' + // +('class="' +groupName +'"')
+//             '<span class="tdSpan">' +
+//                dateStr.dayName + ', ' +
+//                dateStr.dayN + '/' +
+//                dateStr.monthN + ' ' +
+//             '</span><br />'+
+//                dateStr.time + ' ' +
+//             //  dateStr.dateN +
+//             '</th>';
 
-  if( !targetTr || noScrollToggle ) {
-    let targetTime = Date.parse(GVAR.stDate);
-    targetTr = getTarget( targetTime + _date.hr24, false);
-  }
+//     for (let ci = 2; ci < colsN; ci++) {
+//       let tdID = 'r' +ri +'c' +ci;
+//       rowStr += '<td id="' +tdID +'">' +
+//                  Arr[ri][ci] +
+//                 '</td>';
+//     }// end for cols
 
-  scrollToElement(targetTr);
-  blinkElem(targetTr);
+//     tr.innerHTML = rowStr;
+//     tbody.appendChild(tr);
+//   }//end for rows
 
-  setTimeout( () => {
-    scrollToElement('servButton');
-  }, 5000);
-
-  function getTarget(timeMs, toggleGMT) {
-
-    let dateStr = _date.msToCustomDateObj(timeMs, toggleGMT);
-    let targetTrId = (dateStr.dateN + '_' + dateStr.time);
-    let targetTr = document.getElementById(targetTrId);
-    return targetTr;
-  }
-}
-
-function scrollToElement(theElement) {
-  if (typeof theElement === 'string') {
-    theElement = document.getElementById(theElement);
-  }
-
-  theElement.scrollIntoView(
-    {
-      block: 'center',
-      behavior: 'smooth'
-    }
-  );
-}// end scrollToElement
-
-function blinkElem(elem) {
-  if (typeof(elem) === 'string') {
-    elem = document.getElementById(elem);
-  }
-  elem.classList.toggle( 'blinkElem' );
-  setTimeout( () => {
-    elem.classList.toggle( 'blinkElem' );
-  }, 4000);
-}// end blinkElem
-
+//   return(tbody);
+// }//=====END setBookingTable==================
 
 
 function testB2(e) {
   console.log(e);
-  let input = document.getElementById('inputDate');
-  var o = document.createEvent('MouseEvents');  // Создаём объект события, выбран модуль событий мыши
-  o.initMouseEvent( 'click', true, true, window, 1, 12, 345, 7, 220, false, false, true, false, 0, null ); // Инициализируем объект события
-  input.dispatchEvent(o);  // Запускаем событие на элементе
-
 
 }
+
+

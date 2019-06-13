@@ -1,13 +1,15 @@
 /*global
- mainTableState,
- GVAR
- toggle
 
- parseCSV
+ GVAR
+
  _date
+
+condFormatFreetime
+ parseTariff
  setTimeSlotArr
  setBookingTable
  setFreeTimeTable
+ scrollToCurrentTime
  condFormatFreetime
 
 */
@@ -220,31 +222,44 @@ function proceedBookingArrToObj( bookingArr ) {
 
 
 // eslint-disable-next-line no-unused-vars
-function runTable(bookingData) {
-
+function runTable(data, toggle) {
   var mainTable = document.getElementById('mainTable');
   mainTable.innerHTML = '';
-
-  // mainTableState = {
-  //   checkMute: false,
-  //   checkCnt: 0,
-  //   tdChecked: {}, // { tdId:_, ...}
-  //   tdChanged: []  // [{ tdId:_, prevShift:_, newShift:_}, ...]
-  // };
-
   var tbody = document.createElement('tbody');
 
   switch (toggle) {
-  case 1:
-    setBookingTable(bookingData, tbody);
-    break;
-  case 2:
-    setFreeTimeTable(bookingData, tbody);
+  case 'freetime': case 1:
+    setFreeTimeTable(data, tbody);
     condFormatFreetime(tbody);
+    break;
+  case 'bookings': case 2:
+    // setBookingTable(data, tbody);
+    var initArr = data.slice(0,100);
+    var restArr = data.slice(100);
+    setBookingTable(initArr, tbody);
+
+    var noScrollToggle = !isNeedScroll();
+    setTimeout(() => {
+      setBookingTable(restArr, tbody, true);
+      scrollToCurrentTime( noScrollToggle );
+    }, 100);
     break;
   }
   mainTable.appendChild(tbody);
-}//=====END runTable================================
+
+
+  function isNeedScroll() {
+    let todayRu = new Date();
+    let stDateRu = new Date( GVAR.stDate );
+
+    let todayN = _date.dateMsToDateN(todayRu);
+    let stDateN = _date.dateMsToDateN(stDateRu);
+
+    if (stDateN == todayN - 1) {
+      return true;
+    }
+  }
+}//=====END runTable ================================
 
 
 

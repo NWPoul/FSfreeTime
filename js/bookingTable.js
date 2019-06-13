@@ -1,6 +1,6 @@
 /*global
- mainTableState,
  GVAR
+ MODE
 
  getSVGicon
 
@@ -10,129 +10,135 @@
 
 
 
-function setBookingTable(Arr, tbody) {
+function setBookingTable(Arr, tbody, appendToggle) {
   tbody = tbody || document.createElement('tbody');
   tbody.classList.add('bookingTbody');
-  let minFreeTime = 2;
-  let rowsN = Arr.length,
-    colsN = Arr[0].length;
 
+  let minFreeTime = 2;
+  let nowTimeUTC = Date.now();
+
+  let tbodyInnerHtmlStr = '';
+
+  let colsN = Arr[0].length;
 
   let {timeCol, timeValCol} = GVAR.bookingDataMap;
 
-  let firstRow = document.createElement('tr');
-  firstRow.innerHTML = '<th id="r0c0" class="th0" >' + 'Date/Time' + '</th>' +
-                       '<td>' + getSVGicon('stopwatch') + '</td>' +
-                       '<td>' + 'Tariff' + '</td>' +
-                       '<td>' + 'Flyers' + '</td>' +
-                       '<td>' + 'Notes' + '</td>' +
-                       '<td>' + 'Booking №' + '</td>' +
-                       '<td>' + 'Status' + '</td>';
+  let firstRowStr = '<th id="r0c0" class="th0">' + 'Date/Time' + '</th>' +
+                    '<td>' + getSVGicon('stopwatch') + '</td>' +
+                    '<td>' + 'Tariff' + '</td>' +
+                    '<td>' + 'Flyers' + '</td>' +
+                    '<td>' + 'Notes' + '</td>' +
+                    '<td>' + 'Booking №' + '</td>' +
+                    '<td>' + 'paid' + '</td>';
 
-// !!! DEV - cut off phones & e-mails
-if (GVAR.user.toLowerCase() == 'tst') {
-  firstRow.innerHTML += '<td>' + 'mail' + '</td>' + '<td>' + 'phone' + '</td>';
-} else {
-  colsN -= 2; // !!! DEV - cut off phones & e-mails
-}
+  // !!! DEV - cut off phones & e-mails
+  if (GVAR.user.toLowerCase() == 'tst') {
+    firstRowStr += '<td>' + 'mail' + '</td>' + '<td>' + 'phone' + '</td>';
+  } else {
+    colsN -= 2; // !!! DEV - cut off phones & e-mails
+  }
 
-  tbody.appendChild(firstRow);
+  if (appendToggle) {
+    tbody.insertAdjacentHTML('beforeEnd', doRowsStr(Arr));
+    return;
+  }
 
-  for(let ri = 0; ri < rowsN; ri++) {
-    let dateStr =  _date.msToCustomDateObj( Arr[ri][timeCol] );
-let freeTime = 30 - Arr[ri][timeValCol];
-let curTimeslotN = _date.msToSlotN( Arr[ri][timeCol] );
+  tbodyInnerHtmlStr += firstRowStr;
 
-    let tr = document.createElement('tr');
-    tr.setAttribute( 'id', (dateStr.dateN + '_' + dateStr.time) );
 
+  tbodyInnerHtmlStr += doRowsStr(Arr);
+  tbody.innerHTML = tbodyInnerHtmlStr;
+
+  // tbody.addEventListener('scroll', (e) => {
+  //   console.log(e);
+  // });
+  return(tbody);
+
+
+  function doRowsStr(Arr) {
+    let rowsN = Arr.length;
+
+    let RowsStr = '';
+    for(let ri = 0; ri < rowsN; ri++) {
+      let dateStr = _date.msToCustomDateObj( Arr[ri][timeCol] );
+      let freeTime = 30 - Arr[ri][timeValCol];
+      var curTime = Arr[ri][timeCol]; // !var - coz need scope!
+      let curTimeslotN = _date.msToSlotN( curTime );
+
+      let trId = (dateStr.dateN + '_' + dateStr.time);
+
+      let trClassStr = condFormatBookingTable(freeTime, minFreeTime, curTimeslotN, curTime);
+      let rowSpan = ( freeTime >= minFreeTime && freeTime < 30) ? 'rowspan="2"' : '' ;
+
+      let trStrStart = '<tr ' +('id="' +trId +'" ') +('class="' +trClassStr +'" ') +' >';
+      let thStr = doThStr(ri, rowSpan, dateStr);
+      let tdStr = doTdStr(freeTime, ri);
+
+      let trStr = trStrStart +thStr +tdStr +'</tr>';
+      RowsStr += trStr;
+
+      if(rowSpan) {
+        let adTrStr = '<tr ' +('class="' +trClassStr +'" ') +' >' +
+        '<td colspan="10" class="freeTimeTd">' +' -- свободно ' +freeTime +' мин. --' +'</td>' +
+        '<tr>';
+        RowsStr += adTrStr;
+      }
+    }//end for rows
+    return RowsStr;
+  }//END doRowsStr
+
+  function doThStr(ri, rowSpan, dateStr) {
+    let ThStr = '<th ' + ('id="r' + ri + 'c0" ') + rowSpan + ' >' + // +('class="' +groupName +'"')
+      '<span class="tdSpan">' +
+      dateStr.dayName + ', ' +
+      dateStr.dayN + '/' +
+      dateStr.monthN + ' ' +
+      '</span><br />' +
+      dateStr.time + ' ' +
+      //  dateStr.dateN +
+      '</th>';
+    return ThStr;
+  }// end doThStr
+  function doTdStr(freeTime, ri) {
+    let tdStr = '';
+    if (freeTime < 30) {
+      for (let ci = 2; ci < colsN; ci++) {
+        //let tdID = 'r' +ri +'c' +ci;
+        tdStr += '<td>' + Arr[ri][ci] + '</td>';
+      } // end for cols
+    }
+    else {
+      tdStr += '<td colspan="10" class="freeTimeTd"> -- свободно -- </td>';
+    }
+    return tdStr;
+  }//end doTdStr
+
+  function condFormatBookingTable(freeTime, minFreeTime, timeslotN, curTime) {
+    let trClassList = [];
     let groupName;
-    if (curTimeslotN <= 17) {
+    if (timeslotN <= 17) {
       groupName = 'groupN';
     } else {
       groupName = 'groupD';
     }
-    if (curTimeslotN % 2) {
+
+    if (timeslotN % 2) {
       groupName += '-odd';
     }
-    tr.classList.add(groupName);
+    trClassList.push(groupName);
 
     if(freeTime <= minFreeTime) {
-      tr.classList.add('noTime-book');
+      trClassList.push('noTime-book');
     }
 
+    if ( curTime < (nowTimeUTC - GVAR.GMToffset) ) { // - offset for UTC!!! ) {
+      trClassList.push('pastSlot');
+    }
 
-    let rowStr = '';
-    rowStr += '<th ' + ('id="r' +ri +'c0" ') +'>' + // +('class="' +groupName +'"')
-            '<span class="tdSpan">' +
-               dateStr.dayName + ', ' +
-               dateStr.dayN + '/' +
-               dateStr.monthN + ' ' +
-            '</span><br />'+
-               dateStr.time + ' ' +
-            //  dateStr.dateN +
-            '</th>';
-
-    for (let ci = 2; ci < colsN; ci++) {
-      let tdID = 'r' +ri +'c' +ci;
-      rowStr += '<td id="' +tdID +'">' +
-                 Arr[ri][ci] +
-                '</td>';
-    }// end for cols
-
-    tr.innerHTML = rowStr;
-    tbody.appendChild(tr);
-  }//end for rows
-
-  return(tbody);
+    let trClassStr = trClassList.join(' ');
+    return trClassStr;
+  }
 }//=====END setBookingTable==================
-
-
-
-
-/* condFormatBooking
-function condFormatBooking(tbody) {
-  var rowsCollection = tbody.rows;
-  var colsCnt = rowsCollection[0].cells.length;
-  let minTime = GVAR.minTime || 15;
-
-  // первая строка с датами
-  for (let ci = colsCnt; --ci > 0;) {
-    let td = rowsCollection[0].cells[ci];
-    if (td.HDay) {
-      td.classList.add('HDay');
-    }
-  }//endfor ci
-
-  for (let ri=rowsCollection.length; --ri > 0;) {
-    let tr = rowsCollection[ri];
-    let groupName;
-    switch (true) {
-    case (ri <= 17):
-      groupName = 'groupN';
-      break;
-    default:
-      groupName = 'groupD';
-      break;
-    }
-    tr.classList.add(groupName);
-    // tr.cells[0].classList.add(groupName + '-day');
-
-    for (let ci = colsCnt; --ci > 0;) {
-      let td = rowsCollection[ri].cells[ci];
-      let freeTimeVal = +td.innerHTML;
-      if (freeTimeVal > 28 ) {
-        td.classList.add('fullTime');
-      } else if(freeTimeVal < 2 ) {
-        td.classList.add('noTime');
-      } else if (freeTimeVal < minTime ) {
-        td.classList.add('lessTime');
-      }
-    }//endfor ci
-  }//endfor ri
-
-}//=====END condFormat===============================
-*/
 
 
 function parseTariff(tariffStr) {
@@ -187,3 +193,57 @@ function parseTariff(tariffStr) {
 
   return resStr;
 }
+
+
+
+
+
+
+function scrollToCurrentTime(noScrollToggle) {
+  if (MODE != 'bookings') return;
+  let currentTime = Date.now();
+  let targetTr = getTarget( currentTime, true );
+
+  if( !targetTr || noScrollToggle ) {
+    let targetTime = Date.parse(GVAR.stDate);
+    targetTr = getTarget( targetTime + _date.hr24, false);
+  }
+
+  scrollToElement(targetTr);
+  blinkElem(targetTr);
+
+  setTimeout( () => {
+    scrollToElement('homeButton');
+  }, 5000);
+
+  function getTarget(timeMs, toggleGMT) {
+
+    let dateStr = _date.msToCustomDateObj(timeMs, toggleGMT);
+    let targetTrId = (dateStr.dateN + '_' + dateStr.time);
+    let targetTr = document.getElementById(targetTrId);
+    return targetTr;
+  }
+}// end scrollToCurrentTime
+
+function scrollToElement(theElement) {
+  if (typeof theElement === 'string') {
+    theElement = document.getElementById(theElement);
+  }
+
+  theElement.scrollIntoView(
+    {
+      block: 'center',
+      behavior: 'smooth'
+    }
+  );
+}// end scrollToElement
+
+function blinkElem(elem) {
+  if (typeof(elem) === 'string') {
+    elem = document.getElementById(elem);
+  }
+  elem.classList.toggle( 'blinkElem' );
+  setTimeout( () => {
+    elem.classList.toggle( 'blinkElem' );
+  }, 4000);
+}// end blinkElem
