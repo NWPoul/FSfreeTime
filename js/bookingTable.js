@@ -23,7 +23,7 @@ function setBookingTable(Arr, tbody, appendToggle) {
 
   let {timeCol, timeValCol} = GVAR.bookingDataMap;
 
-  let firstRowStr = '<th id="r0c0" class="th0">' + 'Date/Time' + '</th>' +
+  let firstRowStr = '<th id="r0c0" class="th0">' + 'Date /<br>Time' + '</th>' +
                     '<td>' + getSVGicon('stopwatch') + '</td>' +
                     '<td>' + 'Tariff' + '</td>' +
                     '<td>' + 'Flyers' + '</td>' +
@@ -44,7 +44,6 @@ function setBookingTable(Arr, tbody, appendToggle) {
   }
 
   tbodyInnerHtmlStr += firstRowStr;
-
 
   tbodyInnerHtmlStr += doRowsStr(Arr);
   tbody.innerHTML = tbodyInnerHtmlStr;

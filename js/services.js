@@ -54,7 +54,7 @@ var _date = {
     let dateN = _date.dateMsToDateN(timeMS);
     let monthN = date.getUTCMonth();
     let dayN = date.getUTCDate();
-    let time = date.getUTCHours() + ':' + ( (+date.getUTCMinutes() == 30) ? '30' : '00' );
+    let time = date.getUTCHours() + ':' + ( (+date.getUTCMinutes() >= 30) ? '30' : '00' );
     let dayWeekN = date.getUTCDay();
     let HDay = _date.isHoliday(monthN, dayN, dayWeekN);
 
@@ -130,18 +130,18 @@ function timeIndexFunc(arg, mode) {
 
 function setButtonText(buttonId, text) {
   if (!text || !buttonId) return;
-  let trimedText = text.slice(0, 6);
   let button = document.getElementById(buttonId);
-  button.innerText = trimedText;
+  button.innerText = text;
+
 }
 
 function setButtonVis(buttonId, visible) {
   let button = document.getElementById(buttonId);
   // let ButtonClasses = button.classList;
   if (visible) {
-    button.style.display = '';
+    button.hidden = false;
   } else {
-    button.style.display = 'none';
+    button.hidden = true;
   }
 }
 

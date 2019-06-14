@@ -27,14 +27,15 @@
 
   <div class="buttonBar">
 
-        <button id="newDateButton" class="myBeautifulIcon">
-          📅<input type="date" id="startDate" name="startDate" onChange="inputDate(true)"/>
+        <button id="startDateButton" class="startDateButton">
+          <span id="startDateButtonText"></span>
+          <input type="date" id="startDateInput" name="startDate" onChange="inputDate(true)"></input>
         </button>
           <span style="width: 1em"></span>
 
         <button id="homeButton" onClick="homeButtonClick()" style="font-weight: 800"><b>⌂</b></button>
 
-        <button id="setMintimeButton" onClick="setMintime(this)"></button>
+        <button id="setMintimeButton" onClick="setMintime(this)" hidden="true"></button>
           <span style="width: 1em"></span>
 
         <button id="reloadButton" onClick="reloadButtonClick(this)" style="font-weight: 800"><b>&#08635;</b></button>

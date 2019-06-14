@@ -117,7 +117,7 @@ function proceedBookingData( bookingData ) {
         let addRec = new Array(colCnt).fill('');//bookingArr[i].slice();
         addRec[timeCol] = nextTime;
         addRec[timeValCol] = curFTimeVal;
-        addRec[restRecStCol+1] = ' ^ ^ ^ ';
+        addRec[restRecStCol+1] = ' ^ см. выше ^ ';
 
         bookingArr.splice(i+1, 0, addRec);
       } else {
@@ -262,38 +262,3 @@ function runTable(data, toggle) {
 }//=====END runTable ================================
 
 
-
-//-----TDconcat------------------------------------------------------------------------
-function TDconcat(Arr, tbody) {
-  tbody.innerHTML = '';
-  var rowsN = Arr.length,
-    colsN = Arr[0].length;
-
-  for(var i = 0; i < rowsN; i++){
-    let tr = document.createElement('tr');
-    var rowStr = '';
-    rowStr += '<th id="r' +i +'c0">' +
-                          Arr[i][0] +
-                '</th>';
-
-    for (var j = 1; j < colsN; j++) {
-      var tdID = 'r' +i +'c' +j;
-      rowStr += '<td id="' +tdID +'">' +
-                          Arr[i][j] +
-                '</td>';
-    }// end for cols
-
-    tr.innerHTML = rowStr;
-    tbody.appendChild(tr);
-  }//end for rows
-
-  // парсим массив свойств даты в первую строку
-  var firstRow = tbody.rows[0];
-  for (var ri = colsN; --ri >0;) {
-    var dateStr = Arr[0][ri][2] + '/' + ( 1+Arr[0][ri][1] ) + '<br>' + Arr[0][ri][3]; //Arr[0][ri][1]+1 т.к. месяцы с 0 в JS
-    firstRow.cells[ri].innerHTML = dateStr;
-    firstRow.cells[ri].HDay = Arr[0][ri][4];
-  }
-
-  return(tbody);
-}//=====END TDconcat==================

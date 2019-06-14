@@ -9,10 +9,14 @@
 
 */
 function inputDate() {
-  let startDateInput = document.getElementById('startDate');
+  let startDateInput = document.getElementById('startDateInput');
+  let startDateButton = document.getElementById('startDateButton');
 
   let stDate = startDateInput.value;
   stDate = new Date(stDate);
+
+  setButtonText('startDateButtonText', stDate.toLocaleDateString());
+
   stDate.setDate(stDate.getDate() - 1); //also take data for prev day
   let stDateStr = _date.dateToYYYYMMDD(stDate);
   GVAR.stDate = stDateStr;
@@ -23,10 +27,11 @@ function inputDate() {
 
 function getDates(buttonCall) {
   if (!GVAR.stDate) {
-    let startDateInput = document.getElementById('startDate');
+    let startDateInput = document.getElementById('startDateInput');
+
     let stDate = new Date();
 
-    startDateInput.value = _date.dateToYYYYMMDD(stDate);
+    setButtonText('startDateButtonText', stDate.toLocaleDateString());
 
     stDate.setDate(stDate.getDate() - 1); //also take data for prev day
     let stDateStr = _date.dateToYYYYMMDD(stDate);
@@ -91,7 +96,7 @@ function setUser() {
     GVAR.user = localStorage.getItem('user');
     GVAR.userPs = localStorage.getItem('userPs');
     GVAR.userData = localStorage.getItem('userData');
-    setButtonText('loginButton', GVAR.user);
+    setButtonText('loginButton', GVAR.user.slice(0, 6));
   } else {
     logIn();
   }
@@ -105,7 +110,7 @@ function logIn () {
     return;
   }
   storeUser(user, ps);
-  setButtonText('loginButton', user);
+  setButtonText( 'loginButton', user.slice(0, 6) );
 }
 
 // eslint-disable-next-line no-unused-vars
