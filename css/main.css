@@ -101,23 +101,31 @@ tr:first-child td {
 .groupN {
     background-color: #6daae6;
 }
-.groupN-odd {
+.groupN.odd {
     background-color: #83bbdc;
 }
  .groupD {
     background-color: #29d214;
 }
-.groupD-odd {
+.groupD.odd {
     background-color: #63d666;
 }
 
 
 
 
-.hDay {
+.HDay {
     background-color: #df4740 !important;
     color: #ffffff !important;
     font-weight: bold;
+}
+.tdHDay {
+    background-color: #ff837dcc;
+}
+
+.trPrimeTime,
+.trPrimeTime td {
+    border-bottom: solid #ff5757 1px;
 }
 
 
