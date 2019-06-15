@@ -769,7 +769,7 @@ function testarr_setBookingTable(Arr, tbody) {
 // }//=====END setBookingTable==================
 
 
-function testB2(e) {
+function onScrollFunvtion(e) {
   console.log(e);
 
 }
