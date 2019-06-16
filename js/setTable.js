@@ -233,12 +233,13 @@ function runTable(data, toggle) {
     condFormatFreetime(tbody);
     break;
   case 'bookings': case 2:
-    // setBookingTable(data, tbody);
-    var initArr = data.slice(0,100);
-    var restArr = data.slice(100);
+    var initRowsCnt = 100;
+    var initArr = data.slice(0, initRowsCnt);
+    var restArr = data.slice(initRowsCnt);
     setBookingTable(initArr, tbody);
 
     var noScrollToggle = !isNeedScroll();
+
     setTimeout(() => {
       setBookingTable(restArr, tbody, true);
       scrollToCurrentTime( noScrollToggle );

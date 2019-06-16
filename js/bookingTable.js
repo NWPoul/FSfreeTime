@@ -87,7 +87,7 @@ function setBookingTable(Arr, tbody, appendToggle) {
   }//END doRowsStr
 
   function doThStr(ri, rowSpan, dateStr) {
-    let ThStr = '<th ' + ('id="r' + ri + 'c0" ') + rowSpan + ' >' + // +('class="' +groupName +'"')
+    let ThStr = '<th ' +  rowSpan + ' >' + // +('class="' +groupName +'"') +('id="r' + ri + 'c0" ')
       '<span class="tdSpan">' +
       dateStr.dayName + ', ' +
       dateStr.dayN + '/' +
