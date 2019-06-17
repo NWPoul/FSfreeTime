@@ -39,8 +39,15 @@
     <!--<script src="js/sweetAlertMin.js"></script>-->
 
     <script type="text/javascript">
-      if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register('sw.js')
+      if ('serviceWorker' in navigator) { registerSW(); }
+
+      function registerSW() {
+        if (location.origin == 'file://') {
+        console.log('local development; SW - off');
+        return;
+        }
+
+        navigator.serviceWorker.register('sw.js')
           .then(function(registration) {
               console.log('Registration successful, scope is:', registration.scope);
           })
@@ -48,6 +55,7 @@
               console.log('Service worker registration failed, error:', error);
           });
       }
+
   </script>
 
   </head>
