@@ -3,7 +3,7 @@ var CURRENT_CACHES = {
   font: 'font-cache-v1',
   css:'css-cache-v1',
   js:'js-cache-v17-2',
-  site: 'site-cache-v17-2',
+  site: 'site-cache-v17-3',
   image: 'image-cache-v1'
 };
 
