@@ -77,7 +77,7 @@
         // No, register a service worker to control pages like us.
         // Note that it won't control this instance of this page, it only takes effect
         // for pages in its scope loaded *after* it's installed.
-          navigator.serviceWorker.register("service-worker.js")
+          navigator.serviceWorker.register('sw.js')
             .then(function(registration) {
               console.log("Service worker registered, scope: " + registration.scope);
               console.log("Refresh the page to talk to it.");
