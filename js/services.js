@@ -167,7 +167,7 @@ POST REQUEST ----- POST REQUEST ----- POST REQUEST ----- POST REQUEST
 */
 
 function promisedPOST(url, params) {
-  return new Promise(function(resolve, reject) {
+  return new Promise( function(resolve, reject) {
     var paramsQstring = '';
     for (let param in params){
       paramsQstring += '&' + param + '=' + params[param];

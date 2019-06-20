@@ -79,6 +79,22 @@ async function getBookingData (stDate, endDate) {
 
 }//end getBookingData
 
+async function getSwVersion (stDate, endDate) {
+  var url = 'https://fakeURLForSWGetVersion';
+
+  var params = { 'method': 'POST' };
+
+  return promisedPOST (url, params)
+    .catch(error => {
+      console.error('SW version request Failed!', error);
+      return false;
+    })
+    .then(response => {
+      return response;
+    });
+
+}//end getSwVersion
+
 
 
 

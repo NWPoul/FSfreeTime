@@ -51,8 +51,11 @@
           .then(function(registration) {
               console.log('Registration successful, scope is:', registration.scope);
 
-              let verN = document.getElementById('verN');
-              verN.innerText = ' ' +Gpref;
+              let verNumberIndicator = document.getElementById('verN');
+              getSwVersion()
+                .then( function(swVer) {
+                  verNumberIndicator.innerText = ' ' +swVer;
+                });
 
           })
           .catch(function(error) {
