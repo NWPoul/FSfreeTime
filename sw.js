@@ -1,5 +1,5 @@
 // Caches
-var Gpref = 18.3;
+var Gpref = 18.5;
 
 var CURRENT_CACHES = {
   font: 'font-cache-v' +Gpref +'.' +'1',
