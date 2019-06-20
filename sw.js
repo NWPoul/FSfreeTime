@@ -39,7 +39,7 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('message', function(event) {
   self.clients.matchAll().then(all => all.forEach(client => {
-    client.postMessage('Responding to ' + event.data);
+    client.postMessage('SWverN:' + Gpref);
   }));
 });
 

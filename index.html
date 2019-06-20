@@ -65,7 +65,13 @@
 
         //COMMUNICATE WITH SW
         navigator.serviceWorker.addEventListener('message', function(event) {
-          console.log("Got reply from service worker: " + event.data);
+          let SWResp = event.data;
+          console.log("Got reply from service worker: " + SWResp);
+          if (SWResp.slice(0,1) == 'SW') {
+
+            let verNumberIndicator = document.getElementById('verN');
+            verNumberIndicator.innerText = ' ' +SWResp.slice(7);
+          };
         });
 
         // Are we being controlled?
