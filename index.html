@@ -50,13 +50,6 @@
         navigator.serviceWorker.register('sw.js')
           .then(function(registration) {
               console.log('Registration successful, scope is:', registration.scope);
-
-              // let verNumberIndicator = document.getElementById('verN');
-              // getSwVersion()
-              //   .then( function(swVer) {
-              //     verNumberIndicator.innerText = ' ' +swVer;
-              //   });
-
           })
           .catch(function(error) {
               console.log('Service worker registration failed, error:', error);
@@ -70,8 +63,9 @@
           if (SWResp.slice(0,1) == 'SW') {
             let verNumberIndicator = document.getElementById('verN');
             verNumberIndicator.innerText = ' ' +SWResp.slice(7);
-          };
-        });
+          }
+            console.log( SWResp.slice(0,1) );
+          });
 
         // Are we being controlled?
         if (navigator.serviceWorker.controller) {
