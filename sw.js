@@ -1,10 +1,10 @@
 // Caches
-var Gpref = 17;
+var Gpref = 18;
 var CURRENT_CACHES = {
   font: 'font-cache-v' +Gpref +'.' +'1',
   css:'css-cache-v' +Gpref +'.' +'1',
-  js:'js-cache-v' +Gpref +'.' +'3',
-  site: 'site-cache-v' +Gpref +'.' +'3',
+  js:'js-cache-v' +Gpref +'.' +'1',
+  site: 'site-cache-v' +Gpref +'.' +'1',
   image: 'image-cache-v' +Gpref +'.' +'1'
 };
 
