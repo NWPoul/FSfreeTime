@@ -36,6 +36,13 @@ self.addEventListener('activate', (event) => {
   console.log('Service Worker has been activated');
 });
 
+
+self.addEventListener('message', function(event) {
+  event.source.postMessage('Responding to ' + event.data);
+});
+
+
+
 self.addEventListener('fetch', function(event) {
   console.log('Fetching:', event.request.url);
   event.respondWith(async function() {
