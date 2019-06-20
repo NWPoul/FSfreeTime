@@ -1,7 +1,5 @@
 // Caches
-var Gpref = 18.1;
-let verN = document.getElementById('verN');
-verN.innerText = ' ' +Gpref;
+var Gpref = 18.2;
 
 var CURRENT_CACHES = {
   font: 'font-cache-v' +Gpref +'.' +'1',
