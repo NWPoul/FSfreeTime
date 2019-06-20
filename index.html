@@ -68,7 +68,6 @@
           let SWResp = event.data;
           console.log("Got reply from service worker: " + SWResp);
           if (SWResp.slice(0,1) == 'SW') {
-
             let verNumberIndicator = document.getElementById('verN');
             verNumberIndicator.innerText = ' ' +SWResp.slice(7);
           };
@@ -77,20 +76,20 @@
         // Are we being controlled?
         if (navigator.serviceWorker.controller) {
         // Yes, send our controller a message.
-          console.log("Sending 'hi' to controller");
-          navigator.serviceWorker.controller.postMessage("hi");
+          console.log("Sending req to controller");
+          navigator.serviceWorker.controller.postMessage("get SWverN");
         } else {
         // No, register a service worker to control pages like us.
         // Note that it won't control this instance of this page, it only takes effect
         // for pages in its scope loaded *after* it's installed.
           navigator.serviceWorker.register('sw.js')
             .then(function(registration) {
-              console.log("Service worker registered, scope: " + registration.scope);
+              console.log("Service worker registered from intervom module, scope: " + registration.scope);
               console.log("Refresh the page to talk to it.");
         // If we want to, we might do `location.reload();` so that we'd be controlled by it
             })
             .catch(function(error) {
-              console.log("Service worker registration failed: " + error.message);
+              console.log("Service worker registration from intervom module failed: " + error.message);
             });
         }
       }
