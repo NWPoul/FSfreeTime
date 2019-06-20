@@ -60,12 +60,11 @@
         navigator.serviceWorker.addEventListener('message', function(event) {
           let SWResp = event.data;
           console.log("Got reply from service worker: " + SWResp);
-          if (SWResp.slice(0,1) == 'SW') {
+          if (SWResp.slice(0,2) == 'SW') {
             let verNumberIndicator = document.getElementById('verN');
             verNumberIndicator.innerText = ' ' +SWResp.slice(7);
           }
-            console.log( SWResp.slice(0,1) );
-          });
+        });
 
         // Are we being controlled?
         if (navigator.serviceWorker.controller) {
