@@ -77,12 +77,12 @@
         // for pages in its scope loaded *after* it's installed.
           navigator.serviceWorker.register('sw.js')
             .then(function(registration) {
-              console.log("Service worker registered from intervom module, scope: " + registration.scope);
+              console.log("Service worker registered from interсom module, scope: " + registration.scope);
               console.log("Refresh the page to talk to it.");
         // If we want to, we might do `location.reload();` so that we'd be controlled by it
             })
             .catch(function(error) {
-              console.log("Service worker registration from intervom module failed: " + error.message);
+              console.log("Service worker registration from interсom module failed: " + error.message);
             });
         }
       }
