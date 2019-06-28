@@ -192,6 +192,11 @@ tr:first-child td {
     color: #0000ff5c;
 }
 
+.bookingTbody .newDayTr {
+    text-align: center;
+    font-weight: bold;
+    color: #8e188d;
+}
 
 .bookingTbody .freeTimeTd {
     text-align: left !important;

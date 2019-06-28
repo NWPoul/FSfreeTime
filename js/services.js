@@ -57,7 +57,7 @@ var _date = {
     let time = date.getUTCHours() + ':' + ( (+date.getUTCMinutes() >= 30) ? '30' : '00' );
     let dayWeekN = date.getUTCDay();
     let HDay = _date.isHoliday(monthN, dayN, dayWeekN);
-
+    
     let dayName = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
     let dateObj = {
       time: time,

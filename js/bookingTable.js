@@ -55,22 +55,39 @@ function setBookingTable(Arr, tbody, appendToggle) {
 
 
   function doRowsStr(Arr) {
-    let rowsN = Arr.length;
+    let rowsCnt = Arr.length;
 
     let RowsStr = '';
-    for(let ri = 0; ri < rowsN; ri++) {
-      let dateStr = _date.msToCustomDateObj( Arr[ri][timeCol] );
-      let freeTime = 30 - Arr[ri][timeValCol];
+    for(let ri = 0; ri < rowsCnt; ri++) {
       var curTime = Arr[ri][timeCol]; // !var - coz need scope!
+      let dateObj = _date.msToCustomDateObj( curTime );
       let curTimeslotN = _date.msToSlotN( curTime );
+      
+      if (curTimeslotN === 0) {
+        let date = new Date(curTime);
+        let dateStr = date.toLocaleDateString('ru-RU', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        let newDayTrStr = '<tr class="newDayTr">' +
+          '<th>' +'NEW DAY' +'</th>' +
+        
+          '<td></td>' + //
+          '<td colspan="10" class="newDayTr">' +
+            dateStr +
+            ( (dateObj.HDay) ? ' (выходной) ' : ' ( будень)' ) +
+          '</td>' +
 
-      let trId = (dateStr.dateN + '_' + dateStr.time);
+        '</tr>';
+        RowsStr += newDayTrStr;
+      } // end marking new date
+
+      let freeTime = 30 - Arr[ri][timeValCol];
+      
+      let trId = (dateObj.dateN + '_' + dateObj.time);
 
       let trClassStr = condFormatBookingTable(freeTime, minFreeTime, curTimeslotN, curTime);
       let rowSpan = ( freeTime >= minFreeTime && freeTime < 30) ? 'rowspan="2"' : '' ;
 
       let trStrStart = '<tr ' +('id="' +trId +'" ') +('class="' +trClassStr +'" ') +' >';
-      let thStr = doThStr(ri, rowSpan, dateStr);
+      let thStr = doThStr(ri, rowSpan, dateObj);
       let tdStr = doTdStr(freeTime, ri);
 
       let trStr = trStrStart +thStr +tdStr +'</tr>';
@@ -79,22 +96,22 @@ function setBookingTable(Arr, tbody, appendToggle) {
       if(rowSpan) {
         let adTrStr = '<tr ' +('class="' +trClassStr +'" ') +' >' +
         '<td colspan="10" class="freeTimeTd">' +' -- свободно ' +freeTime +' мин. --' +'</td>' +
-        '<tr>';
+        '</tr>';
         RowsStr += adTrStr;
       }
     }//end for rows
     return RowsStr;
   }//END doRowsStr
 
-  function doThStr(ri, rowSpan, dateStr) {
+  function doThStr(ri, rowSpan, dateObj) {
     let ThStr = '<th ' +  rowSpan + ' >' + // +('class="' +groupName +'"') +('id="r' + ri + 'c0" ')
       '<span class="tdSpan">' +
-      dateStr.dayName + ', ' +
-      dateStr.dayN + '/' +
-      dateStr.monthN + ' ' +
+      dateObj.dayName + ', ' +
+      dateObj.dayN + '/' +
+      dateObj.monthN + ' ' +
       '</span><br />' +
-      dateStr.time + ' ' +
-      //  dateStr.dateN +
+      dateObj.time + ' ' +
+      //  dateObj.dateN +
       '</th>';
     return ThStr;
   }// end doThStr
@@ -217,8 +234,8 @@ function scrollToCurrentTime(noScrollToggle) {
 
   function getTarget(timeMs, toggleGMT) {
 
-    let dateStr = _date.msToCustomDateObj(timeMs, toggleGMT);
-    let targetTrId = (dateStr.dateN + '_' + dateStr.time);
+    let dateObj = _date.msToCustomDateObj(timeMs, toggleGMT);
+    let targetTrId = (dateObj.dateN + '_' + dateObj.time);
     let targetTr = document.getElementById(targetTrId);
     return targetTr;
   }
