@@ -245,6 +245,10 @@ function runTable(data, toggle) {
       scrollToCurrentTime( noScrollToggle );
     }, 100);
     break;
+
+  case 'testing':
+    TESTsetBookingTable(data, mainTable);
+    return;
   }
   mainTable.appendChild(tbody);
 

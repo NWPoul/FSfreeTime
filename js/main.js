@@ -65,16 +65,6 @@ function start() {
 }// end start
 
 
-function changeMode(callMode) {
-  if (callMode) {
-    MODE = callMode;
-  } else if (MODE == 'freetime') {
-    MODE = 'bookings';
-  } else {
-    MODE = 'freetime';
-  }
-  initMode();
-} // end changeMode
 
 
 
@@ -97,6 +87,16 @@ function initMode() {
 }
 
 
+function changeMode(callMode) {
+  if (callMode) {
+    MODE = callMode;
+  } else if (MODE == 'freetime') {
+    MODE = 'bookings';
+  } else {
+    MODE = 'freetime';
+  }
+  initMode();
+} // end changeMode
 
 
 

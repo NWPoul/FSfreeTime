@@ -65,7 +65,7 @@ function setFreeTimeTable(bookingObj, tbody) {
   });
 
   return(tbody);
-}//=====END setBookingTable==================
+}//===== END setFreeTimeTable ==================
 
 
 

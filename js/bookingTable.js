@@ -11,6 +11,13 @@
 
 
 function setBookingTable(Arr, tbody, appendToggle) {
+  let headRowStr = '<th id="r0c0" class="th0">' + 'Date /<br>Time' + '</th>' +
+                    '<td>' + getSVGicon('stopwatch') + '</td>' +
+                    '<td>' + 'Tariff' + '</td>' +
+                    '<td>' + 'Flyers' + '</td>' +
+                    '<td>' + 'Notes' + '</td>' +
+                    '<td>' + 'Booking №' + '</td>' +
+                    '<td>' + 'paid' + '</td>';
   tbody = tbody || document.createElement('tbody');
   tbody.classList.add('bookingTbody');
 
@@ -19,23 +26,17 @@ function setBookingTable(Arr, tbody, appendToggle) {
 
   let tbodyInnerHtmlStr = '';
 
-  let colsN = Arr[0].length;
+  let colsCnt = Arr[0].length;
 
   let {timeCol, timeValCol} = GVAR.bookingDataMap;
 
-  let firstRowStr = '<th id="r0c0" class="th0">' + 'Date /<br>Time' + '</th>' +
-                    '<td>' + getSVGicon('stopwatch') + '</td>' +
-                    '<td>' + 'Tariff' + '</td>' +
-                    '<td>' + 'Flyers' + '</td>' +
-                    '<td>' + 'Notes' + '</td>' +
-                    '<td>' + 'Booking №' + '</td>' +
-                    '<td>' + 'paid' + '</td>';
+
 
   // !!! DEV - cut off phones & e-mails
   if (GVAR.user.toLowerCase() == 'tst') {
-    firstRowStr += '<td>' + 'mail' + '</td>' + '<td>' + 'phone' + '</td>';
+    headRowStr += '<td>' + 'mail' + '</td>' + '<td>' + 'phone' + '</td>';
   } else {
-    colsN -= 2; // !!! DEV - cut off phones & e-mails
+    colsCnt -= 2; // !!! DEV - cut off phones & e-mails
   }
 
   if (appendToggle) {
@@ -43,7 +44,7 @@ function setBookingTable(Arr, tbody, appendToggle) {
     return;
   }
 
-  tbodyInnerHtmlStr += firstRowStr;
+  tbodyInnerHtmlStr += headRowStr;
 
   tbodyInnerHtmlStr += doRowsStr(Arr);
   tbody.innerHTML = tbodyInnerHtmlStr;
@@ -62,13 +63,13 @@ function setBookingTable(Arr, tbody, appendToggle) {
       var curTime = Arr[ri][timeCol]; // !var - coz need scope!
       let dateObj = _date.msToCustomDateObj( curTime );
       let curTimeslotN = _date.msToSlotN( curTime );
-      
+
       if (curTimeslotN === 0) {
         let date = new Date(curTime);
         let dateStr = date.toLocaleDateString('ru-RU', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         let newDayTrStr = '<tr class="newDayTr">' +
           '<th>' +'NEW DAY' +'</th>' +
-        
+
           '<td></td>' + //
           '<td colspan="10" class="newDayTr">' +
             dateStr +
@@ -80,7 +81,7 @@ function setBookingTable(Arr, tbody, appendToggle) {
       } // end marking new date
 
       let freeTime = 30 - Arr[ri][timeValCol];
-      
+
       let trId = (dateObj.dateN + '_' + dateObj.time);
 
       let trClassStr = condFormatBookingTable(freeTime, minFreeTime, curTimeslotN, curTime);
@@ -118,7 +119,7 @@ function setBookingTable(Arr, tbody, appendToggle) {
   function doTdStr(freeTime, ri) {
     let tdStr = '';
     if (freeTime < 30) {
-      for (let ci = 2; ci < colsN; ci++) {
+      for (let ci = 2; ci < colsCnt; ci++) {
         //let tdID = 'r' +ri +'c' +ci;
         tdStr += '<td>' + Arr[ri][ci] + '</td>';
       } // end for cols
