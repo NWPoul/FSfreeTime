@@ -698,7 +698,7 @@ function TESTsetBookingTable(Arr, mainTable) {
 
   let {timeCol, timeValCol} = GVAR.bookingDataMap;
 
-  let headerStr = '<tbody id="btHeaderTbody">' +'<tr id="btHeaderTr">' +
+  let headerStr = '<tbody id="btHeaderTbody">' +'<tr id="btHeaderTr", class="tableHeader">' +
                     '<th id="r0c0" class="th0">' +'Time' +'</th>' +
                     '<td>' + getSVGicon('stopwatch') +'</td>' +
                     '<td>' + 'Tariff' +'</td>' +
@@ -707,7 +707,7 @@ function TESTsetBookingTable(Arr, mainTable) {
                     '<td>' + 'Booking №' +'</td>' +
                     '<td>' + 'paid' +'</td>' +
                     adminCols +
-                 +'</tr>' +'</tbody>';
+                  '</tr>' +'</tbody>';
 
   mainTable.innerHTML = headerStr;
 
@@ -823,4 +823,4 @@ function onScrollFunvtion(e) {
 
 }
 
-
+console.log( "runTable(GVAR.bookingArr, 'testing') " );

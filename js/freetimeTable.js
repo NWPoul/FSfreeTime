@@ -23,6 +23,7 @@ function setFreeTimeTable(bookingObj, tbody) {
     tr1 += '<td' +HDayStr +' >' +testDayVal +'</td>';
   });
   let firstRow = document.createElement('tr');
+  firstRow.className = 'tableHeader';
   firstRow.innerHTML = tr1;
   tbody.appendChild(firstRow);
 
