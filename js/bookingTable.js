@@ -11,13 +11,14 @@
 
 
 function setBookingTable(Arr, tbody, appendToggle) {
+  let tdHeaderClassStr = 'class="td-header" '
   let headRowStr = '<th id="r0c0" class="th0">' + 'Date /<br>Time' + '</th>' +
-                    '<td>' + getSVGicon('stopwatch') + '</td>' +
-                    '<td>' + 'Tariff' + '</td>' +
-                    '<td>' + 'Flyers' + '</td>' +
-                    '<td>' + 'Notes' + '</td>' +
-                    '<td>' + 'Booking №' + '</td>' +
-                    '<td>' + 'paid' + '</td>';
+                    '<td ' +tdHeaderClassStr +'>' + getSVGicon('stopwatch') + '</td>' +
+                    '<td ' +tdHeaderClassStr +'>' + 'Tariff' + '</td>' +
+                    '<td ' +tdHeaderClassStr +'>' + 'Flyers' + '</td>' +
+                    '<td ' +tdHeaderClassStr +'>' + 'Notes' + '</td>' +
+                    '<td ' +tdHeaderClassStr +'>' + 'Booking №' + '</td>' +
+                    '<td ' +tdHeaderClassStr +'>' + 'paid' + '</td>';
   tbody = tbody || document.createElement('tbody');
   tbody.classList.add('bookingTbody');
 

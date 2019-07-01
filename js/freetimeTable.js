@@ -13,14 +13,14 @@ function setFreeTimeTable(bookingObj, tbody) {
 
   let days = Object.keys(bookingObj);
 
-  let tr1 = '<th id="r0c0">' + 'Slot' + '</th>';
+  let tr1 = '<th id="r0c0" class="th0">' + 'Slot' + '</th>';
   days.forEach(day => {
     let testDayVal = new Date( +day * _date.hr24 );
     let HDayStr = ( _date.isHoliday( testDayVal.getUTCMonth(), testDayVal.getUTCDate(), testDayVal.getUTCDay() ) ) ?
-      ' class = "HDay"' : '';
+      'HDay' : '';
     testDayVal = (testDayVal.getUTCDate() +'/' +(testDayVal.getUTCMonth()+1) );
 
-    tr1 += '<td' +HDayStr +' >' +testDayVal +'</td>';
+    tr1 += '<td class="td-header ' +HDayStr +'" >' +testDayVal +'</td>';
   });
   let firstRow = document.createElement('tr');
   firstRow.className = 'tableHeader';

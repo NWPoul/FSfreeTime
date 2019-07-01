@@ -12,6 +12,23 @@ button {
     margin: 0.5vw;
 }
 
+.startDateButton {
+    position: relative;
+    min-width: 7em;
+}
+
+ #startDateInput,
+ #startDateInput::-webkit-calendar-picker-indicator {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+ }
+
+
+
 .inner {
     overflow-x: scroll;
     overflow-y: visible;
@@ -45,6 +62,15 @@ table, th, td {
    border-width: 1px
 }
 
+td {
+min-width: 3em;
+max-width: 18em;
+    height: 1.5em;
+    padding: 2px 2px;
+
+    color: #00000047;
+    font-weight: bold;
+}
 
 th {
    position: -webkit-sticky;
@@ -56,24 +82,17 @@ th {
    font-weight: bold
 }
 
-tr:first-child th {
+.th0 {
   background-color: #D8E6F3;
   z-index: 10;
   top: 0; left: 0;
 }
 
 
-td {
-min-width: 3em;
-max-width: 18em;
-    height: 1.5em;
-    padding: 2px 2px;
 
-    color: #00000047;
-    font-weight: bold;
-}
 
-tr:first-child td {
+
+.td-header {
     position: -webkit-sticky;
     position: sticky;
     top: 0px;
@@ -133,20 +152,7 @@ tr:first-child td {
 
 
 
-.startDateButton {
-    position: relative;
-    min-width: 7em;
-}
 
- #startDateInput,
- #startDateInput::-webkit-calendar-picker-indicator {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    opacity: 0;
- }
 
 
 
@@ -163,28 +169,24 @@ tr:first-child td {
     padding: 2px 2px 7px 2px;
     color: #000000a8;
     font-weight: normal;
+
+    text-align: left;
 }
 
-.bookingTbody tr:first-child td {
+.bookingTbody .td-header {
     padding: 0;
     vertical-align: middle;
     font-size: 2vh;
-    text-align: center;
+    text-align: center !important;
 }
 
 .bookingTbody td:nth-child(2) {
     text-align: right;
     min-width: 1em;
 }
-.bookingTbody td:nth-child(3),
-.bookingTbody td:nth-child(4),
-.bookingTbody td:nth-child(5)
- {
-    text-align: left;
-}
 
 
-.th0 {
+.bookingTbody .th0 {
     border-bottom: solid black 1px;
 }
 
@@ -214,8 +216,7 @@ tr:first-child td {
 }
 
 .noTime-book th,
-.noTime-book td/*:nth-child(2)*/
- {
+.noTime-book td {
     background-color: #56565680;
 }
 
