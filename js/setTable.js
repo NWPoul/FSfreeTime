@@ -233,21 +233,24 @@ function runTable(data, toggle) {
     condFormatFreetime(tbody);
     break;
   case 'bookings': case 2:
-    var initRowsCnt = 100;
-    var initArr = data.slice(0, initRowsCnt);
-    var restArr = data.slice(initRowsCnt);
-    setBookingTable(initArr, tbody);
+    setBookingTable(data, mainTable);
 
     var noScrollToggle = !isNeedScroll();
-
     setTimeout(() => {
-      setBookingTable(restArr, tbody, true);
       scrollToCurrentTime( noScrollToggle );
     }, 100);
     break;
 
   case 'testing':
-    TESTsetBookingTable(data, mainTable);
+    var initRowsCnt = 100;
+    var initArr = data.slice(0, initRowsCnt);
+    var restArr = data.slice(initRowsCnt);
+    setBookingTable(initArr, tbody);
+
+    setTimeout(() => {
+      setBookingTable(restArr, tbody, true);
+      scrollToCurrentTime( noScrollToggle );
+    }, 100);
     return;
   }
   mainTable.appendChild(tbody);

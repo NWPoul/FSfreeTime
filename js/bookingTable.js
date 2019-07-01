@@ -10,75 +10,72 @@
 
 
 
-function setBookingTable(Arr, tbody, appendToggle) {
-  let tdHeaderClassStr = 'class="td-header" '
-  let headRowStr = '<th id="r0c0" class="th0">' + 'Date /<br>Time' + '</th>' +
-                    '<td ' +tdHeaderClassStr +'>' + getSVGicon('stopwatch') + '</td>' +
-                    '<td ' +tdHeaderClassStr +'>' + 'Tariff' + '</td>' +
-                    '<td ' +tdHeaderClassStr +'>' + 'Flyers' + '</td>' +
-                    '<td ' +tdHeaderClassStr +'>' + 'Notes' + '</td>' +
-                    '<td ' +tdHeaderClassStr +'>' + 'Booking №' + '</td>' +
-                    '<td ' +tdHeaderClassStr +'>' + 'paid' + '</td>';
-  tbody = tbody || document.createElement('tbody');
-  tbody.classList.add('bookingTbody');
-
+function setBookingTable(Arr, mainTable) {
   let minFreeTime = 2;
   let nowTimeUTC = Date.now();
-
-  let tbodyInnerHtmlStr = '';
-
   let colsCnt = Arr[0].length;
 
-  let {timeCol, timeValCol} = GVAR.bookingDataMap;
+  let tdHeaderClassStr = 'class="td-header" ';
 
-
-
-  // !!! DEV - cut off phones & e-mails
+  let adminCols = '';
   if (GVAR.user.toLowerCase() == 'tst') {
-    headRowStr += '<td>' + 'mail' + '</td>' + '<td>' + 'phone' + '</td>';
+    adminCols += '<td ' +tdHeaderClassStr +'>' +'mail' +'</td>' +
+                 '<td ' +tdHeaderClassStr +'>' +'phone' +'</td>';
   } else {
     colsCnt -= 2; // !!! DEV - cut off phones & e-mails
   }
 
-  if (appendToggle) {
-    tbody.insertAdjacentHTML('beforeEnd', doRowsStr(Arr));
-    return;
-  }
+  let {timeCol, timeValCol} = GVAR.bookingDataMap;
 
-  tbodyInnerHtmlStr += headRowStr;
 
-  tbodyInnerHtmlStr += doRowsStr(Arr);
-  tbody.innerHTML = tbodyInnerHtmlStr;
+  let headerStr = '<tbody id="btHeaderTbody">' +'<tr id="btHeaderTr", class="tableHeader">' +
+                  '<th id="r0c0" class="th0">' + 'Time' + '</th>' +
+                  '<td ' +tdHeaderClassStr +'>' + getSVGicon('stopwatch') + '</td>' +
+                  '<td ' +tdHeaderClassStr +'>' + 'Tariff' + '</td>' +
+                  '<td ' +tdHeaderClassStr +'>' + 'Flyers' + '</td>' +
+                  '<td ' +tdHeaderClassStr +'>' + 'Notes' + '</td>' +
+                  '<td ' +tdHeaderClassStr +'>' + 'Booking №' + '</td>' +
+                  '<td ' +tdHeaderClassStr +'>' + 'paid' + '</td>' +
+                    adminCols +
+                  '</tr>' +'</tbody>';
 
-  // tbody.addEventListener('scroll', (e) => {
-  //   console.log(e);
-  // });
-  return(tbody);
+  mainTable.innerHTML = headerStr;
+
+
+  mainTable.insertAdjacentHTML('beforeEnd', doRowsStr(Arr));
+
+  return;
 
 
   function doRowsStr(Arr) {
     let rowsCnt = Arr.length;
+    let tbodyN = 1;
 
-    let RowsStr = '';
+    let RowsStr = '<tbody id=' +tbodyN +' class="bookingTbody"' +'>';
     for(let ri = 0; ri < rowsCnt; ri++) {
       var curTime = Arr[ri][timeCol]; // !var - coz need scope!
       let dateObj = _date.msToCustomDateObj( curTime );
       let curTimeslotN = _date.msToSlotN( curTime );
 
       if (curTimeslotN === 0) {
+        tbodyN++;
         let date = new Date(curTime);
         let dateStr = date.toLocaleDateString('ru-RU', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         let newDayTrStr = '<tr class="newDayTr">' +
-          '<th>' +'NEW DAY' +'</th>' +
-
-          '<td></td>' + //
+          '<th>' +dateObj.dayName + ', ' +
+                  dateObj.dayN + '/' +
+                  dateObj.monthN + ' ' +
+          '</th>' +
+          '<td></td>' +
           '<td colspan="10" class="newDayTr">' +
             dateStr +
-            ( (dateObj.HDay) ? ' (выходной) ' : ' ( будень)' ) +
+            ( (dateObj.HDay) ? ' (выходной) ' : ' (будень)' ) +
           '</td>' +
 
         '</tr>';
-        RowsStr += newDayTrStr;
+        RowsStr += '</tbody>' +
+        '<tbody id=' +tbodyN +' class="bookingTbody"' +'>' +
+        newDayTrStr;
       } // end marking new date
 
       let freeTime = 30 - Arr[ri][timeValCol];
@@ -106,15 +103,10 @@ function setBookingTable(Arr, tbody, appendToggle) {
   }//END doRowsStr
 
   function doThStr(ri, rowSpan, dateObj) {
-    let ThStr = '<th ' +  rowSpan + ' >' + // +('class="' +groupName +'"') +('id="r' + ri + 'c0" ')
-      '<span class="tdSpan">' +
-      dateObj.dayName + ', ' +
-      dateObj.dayN + '/' +
-      dateObj.monthN + ' ' +
-      '</span><br />' +
-      dateObj.time + ' ' +
-      //  dateObj.dateN +
-      '</th>';
+    let ThStr = '<th ' +  rowSpan + ' >' +
+      dateObj.time + ' <br />' +
+      '<span class="tdSpan">' +'</span>' +
+    '</th>';
     return ThStr;
   }// end doThStr
   function doTdStr(freeTime, ri) {

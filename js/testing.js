@@ -689,23 +689,28 @@ function TESTsetBookingTable(Arr, mainTable) {
   let minFreeTime = 2;
   let nowTimeUTC = Date.now();
   let colsCnt = Arr[0].length;
+
+  let tdHeaderClassStr = 'class="td-header" ';
+
   let adminCols = '';
   if (GVAR.user.toLowerCase() == 'tst') {
-    adminCols += '<td>' +'mail' +'</td>' +'<td>' +'phone' +'</td>';
+    adminCols += '<td ' +tdHeaderClassStr +'>' +'mail' +'</td>' +
+                 '<td ' +tdHeaderClassStr +'>' +'phone' +'</td>';
   } else {
     colsCnt -= 2; // !!! DEV - cut off phones & e-mails
   }
 
   let {timeCol, timeValCol} = GVAR.bookingDataMap;
 
+
   let headerStr = '<tbody id="btHeaderTbody">' +'<tr id="btHeaderTr", class="tableHeader">' +
-                    '<th id="r0c0" class="th0">' +'Time' +'</th>' +
-                    '<td>' + getSVGicon('stopwatch') +'</td>' +
-                    '<td>' + 'Tariff' +'</td>' +
-                    '<td>' + 'Flyers' +'</td>' +
-                    '<td>' + 'Notes' +'</td>' +
-                    '<td>' + 'Booking №' +'</td>' +
-                    '<td>' + 'paid' +'</td>' +
+                  '<th id="r0c0" class="th0">' + 'Time' + '</th>' +
+                  '<td ' +tdHeaderClassStr +'>' + getSVGicon('stopwatch') + '</td>' +
+                  '<td ' +tdHeaderClassStr +'>' + 'Tariff' + '</td>' +
+                  '<td ' +tdHeaderClassStr +'>' + 'Flyers' + '</td>' +
+                  '<td ' +tdHeaderClassStr +'>' + 'Notes' + '</td>' +
+                  '<td ' +tdHeaderClassStr +'>' + 'Booking №' + '</td>' +
+                  '<td ' +tdHeaderClassStr +'>' + 'paid' + '</td>' +
                     adminCols +
                   '</tr>' +'</tbody>';
 
@@ -732,12 +737,14 @@ function TESTsetBookingTable(Arr, mainTable) {
         let date = new Date(curTime);
         let dateStr = date.toLocaleDateString('ru-RU', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         let newDayTrStr = '<tr class="newDayTr">' +
-          '<th>' +'NEW DAY' +'</th>' +
-
-          '<td></td>' + //
+          '<th>' +dateObj.dayName + ', ' +
+                  dateObj.dayN + '/' +
+                  dateObj.monthN + ' ' +
+          '</th>' +
+          '<td></td>' +
           '<td colspan="10" class="newDayTr">' +
             dateStr +
-            ( (dateObj.HDay) ? ' (выходной) ' : ' ( будень)' ) +
+            ( (dateObj.HDay) ? ' (выходной) ' : ' (будень)' ) +
           '</td>' +
 
         '</tr>';
@@ -771,9 +778,9 @@ function TESTsetBookingTable(Arr, mainTable) {
   }//END doRowsStr
 
   function doThStr(ri, rowSpan, dateObj) {
-    let ThStr = '<th ' +  rowSpan + ' >' + // +('class="' +groupName +'"') +('id="r' + ri + 'c0" ')
-      '<span class="tdSpan">' +'</span><br />' +
-      dateObj.time + ' ' +
+    let ThStr = '<th ' +  rowSpan + ' >' +
+      dateObj.time + ' <br />' +
+      '<span class="tdSpan">' +'</span>' +
     '</th>';
     return ThStr;
   }// end doThStr
@@ -824,3 +831,6 @@ function onScrollFunvtion(e) {
 }
 
 console.log( "runTable(GVAR.bookingArr, 'testing') " );
+function test(){
+  runTable(GVAR.bookingArr, 'testing');
+}

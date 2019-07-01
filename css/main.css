@@ -173,7 +173,7 @@ th {
     text-align: left;
 }
 
-.bookingTbody .td-header {
+#btHeaderTr .td-header {
     padding: 0;
     vertical-align: middle;
     font-size: 2vh;
@@ -186,19 +186,31 @@ th {
 }
 
 
-.bookingTbody .th0 {
+#btHeaderTr .th0 {
     border-bottom: solid black 1px;
 }
 
 .tdSpan {
+    display: inline-block;
     color: #0000ff5c;
 }
 
-.bookingTbody .newDayTr {
-    text-align: center;
+.newDayTr th,
+.newDayTr td {
+    position: sticky;
+    top: 1.5em;
+
+    height: 1vh;
+    padding: 0.2em;
+
     font-weight: bold;
     color: #8e188d;
+    background-color: #e0dede;
 }
+.newDayTr th {
+    z-index: 1;
+}
+
 
 .bookingTbody .freeTimeTd {
     text-align: left !important;
