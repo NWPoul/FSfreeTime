@@ -28,7 +28,7 @@ function setBookingTable(Arr, mainTable) {
   let {timeCol, timeValCol} = GVAR.bookingDataMap;
 
 
-  let headerStr = '<tbody id="btHeaderTbody">' +'<tr id="btHeaderTr", class="tableHeader">' +
+  let headerStr = '<tbody id="btHeaderTbody" class="bookingTbody">' +'<tr id="btHeaderTr", class="tableHeader">' +
                   '<th id="r0c0" class="th0">' + 'Time' + '</th>' +
                   '<td ' +tdHeaderClassStr +'>' + getSVGicon('stopwatch') + '</td>' +
                   '<td ' +tdHeaderClassStr +'>' + 'Tariff' + '</td>' +
