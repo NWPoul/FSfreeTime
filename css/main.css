@@ -167,6 +167,7 @@ th {
 
 .bookingTbody td {
     padding: 2px 2px 7px 2px;
+    height: unset;
     color: #000000a8;
     font-weight: normal;
 
