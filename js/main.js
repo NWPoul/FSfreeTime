@@ -76,6 +76,10 @@ function initMode() {
     setButtonVis('homeButton', false);
 
     runTable(GVAR.bookingObj, 'freetime');
+
+    disableCSS('freetimeCSS', false);
+    disableCSS('bookingsCSS', true);
+
     break;
 
   default: //'bookings'
@@ -83,6 +87,10 @@ function initMode() {
     setButtonVis('setMintimeButton', false);
 
     runTable(GVAR.bookingArr, 'bookings');
+
+    disableCSS('bookingsCSS', false);
+    disableCSS('freetimeCSS', true);
+
   }//end swich
 }
 

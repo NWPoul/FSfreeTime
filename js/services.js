@@ -57,7 +57,7 @@ var _date = {
     let time = date.getUTCHours() + ':' + ( (+date.getUTCMinutes() >= 30) ? '30' : '00' );
     let dayWeekN = date.getUTCDay();
     let HDay = _date.isHoliday(monthN, dayN, dayWeekN);
-    
+
     let dayName = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
     let dateObj = {
       time: time,
@@ -95,7 +95,11 @@ var _date = {
 }; // ===== END custom DATE OBJ ===== custom DATE OBJ ===== custom DATE OBJ ===== custom DATE OBJ =====
 
 
-
+function disableCSS(cssID, command) {
+  let CSSlink = document.getElementById(cssID);
+  let stylesheet = CSSlink.sheet;
+  stylesheet.disabled = command;
+}
 
 function setTimeSlotArr() {
 
