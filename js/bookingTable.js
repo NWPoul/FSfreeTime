@@ -13,39 +13,35 @@
 function setBookingTable(Arr, mainTable) {
   let minFreeTime = 2;
   let nowTimeUTC = Date.now();
-  let colsCnt = Arr[0].length;
-
-  let tdHeaderClassStr = 'class="td-header" ';
-
-  let adminCols = '';
-  if (GVAR.user.toLowerCase() == 'tst') {
-    adminCols += '<td ' +tdHeaderClassStr +'>' +'mail' +'</td>' +
-                 '<td ' +tdHeaderClassStr +'>' +'phone' +'</td>';
-  } else {
-    colsCnt -= 2; // !!! DEV - cut off phones & e-mails
-  }
-
   let {timeCol, timeValCol} = GVAR.bookingDataMap;
+  let adminToggle = (GVAR.user.toLowerCase() == 'tst');
 
+  let colsCnt = (adminToggle) ? Arr[0].length : Arr[0].length - 2; // !!! DEV - cut off phones & e-mails
 
-  let headerStr = '<tbody id="btHeaderTbody" class="bookingTbody">' +'<tr id="btHeaderTr", class="tableHeader">' +
-                  '<th id="r0c0" class="th0">' + 'Time' + '</th>' +
-                  '<td ' +tdHeaderClassStr +'>' + getSVGicon('stopwatch') + '</td>' +
-                  '<td ' +tdHeaderClassStr +'>' + 'Tariff' + '</td>' +
-                  '<td ' +tdHeaderClassStr +'>' + 'Flyers' + '</td>' +
-                  '<td ' +tdHeaderClassStr +'>' + 'Notes' + '</td>' +
-                  '<td ' +tdHeaderClassStr +'>' + 'Booking №' + '</td>' +
-                  '<td ' +tdHeaderClassStr +'>' + 'paid' + '</td>' +
-                    adminCols +
-                  '</tr>' +'</tbody>';
-
-  mainTable.innerHTML = headerStr;
-
-
+  mainTable.innerHTML = doHeaderStr(adminToggle);
   mainTable.insertAdjacentHTML('beforeEnd', doRowsStr(Arr));
 
   return;
 
+
+  function doHeaderStr(adminToggle) {
+    let tdHeaderClassStr = 'class="td-header" ';
+    let headerStr = '<tbody id="btHeaderTbody" class="bookingTbody">' + '<tr id="btHeaderTr", class="tableHeader">' +
+      '<th id="r0c0" class="th0">' + 'Time' + '</th>' +
+      '<td ' + tdHeaderClassStr + '>' + getSVGicon('stopwatch') + '</td>' +
+      '<td ' + tdHeaderClassStr + '>' + 'Tariff' + '</td>' +
+      '<td ' + tdHeaderClassStr + '>' + 'Flyers' + '</td>' +
+      '<td ' + tdHeaderClassStr + '>' + 'Notes' + '</td>' +
+      '<td ' + tdHeaderClassStr + '>' + 'Booking №' + '</td>' +
+      '<td ' + tdHeaderClassStr + '>' + 'paid' + '</td>' +
+
+      ( !adminToggle ? '' :
+        '<td ' + tdHeaderClassStr + '>' + 'mail' + '</td>' +
+        '<td ' + tdHeaderClassStr + '>' + 'phone' + '</td>' ) +
+
+        '</tr>' + '</tbody>';
+    return headerStr;
+  }
 
   function doRowsStr(Arr) {
     let rowsCnt = Arr.length;
@@ -151,6 +147,9 @@ function setBookingTable(Arr, mainTable) {
 }//=====END setBookingTable==================
 
 
+
+
+
 function parseTariff(tariffStr) {
   let resStr;
   switch (true) {
@@ -203,10 +202,6 @@ function parseTariff(tariffStr) {
 
   return resStr;
 }
-
-
-
-
 
 
 function scrollToCurrentTime(noScrollToggle) {
