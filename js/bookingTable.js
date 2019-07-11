@@ -18,60 +18,37 @@ function setBookingTable(Arr, mainTable) {
 
   let colsCnt = (adminToggle) ? Arr[0].length : Arr[0].length - 2; // !!! DEV - cut off phones & e-mails
 
-  mainTable.innerHTML = doHeaderStr(adminToggle);
+  mainTable.innerHTML = doHeaderStr(colsCnt);
   mainTable.insertAdjacentHTML('beforeEnd', doRowsStr(Arr));
 
   return;
 
 
   function doHeaderStr(adminToggle) {
-    let tdHeaderClassStr = 'class="td-header" ';
-    let headerStr = '<tbody id="btHeaderTbody" class="bookingTbody">' + '<tr id="btHeaderTr", class="tableHeader">' +
-      '<th id="r0c0" class="th0">' + 'Time' + '</th>' +
-      '<td ' + tdHeaderClassStr + '>' + getSVGicon('stopwatch') + '</td>' +
-      '<td ' + tdHeaderClassStr + '>' + 'Tariff' + '</td>' +
-      '<td ' + tdHeaderClassStr + '>' + 'Flyers' + '</td>' +
-      '<td ' + tdHeaderClassStr + '>' + 'Notes' + '</td>' +
-      '<td ' + tdHeaderClassStr + '>' + 'Booking №' + '</td>' +
-      '<td ' + tdHeaderClassStr + '>' + 'paid' + '</td>' +
+    let headerArr = [ 'Time', getSVGicon('stopwatch'), 'Tariff', 'Flyers', 'Notes', 'Booking №', 'paid' ];
+    let headerAdm = ['mail','phone'];
+    if(adminToggle) headerArr = headerArr.concat(headerAdm);
 
-      ( !adminToggle ? '' :
-        '<td ' + tdHeaderClassStr + '>' + 'mail' + '</td>' +
-        '<td ' + tdHeaderClassStr + '>' + 'phone' + '</td>' ) +
+    let headerStr = '<tbody id="btHeaderTbody" class="bookingTbody">' +
+                    '<tr id="btHeaderTr", class="tableHeader">' +
+                    '<th id="r0c0" class="th0">' +headerArr.shift() +'</th>';
+    headerStr += '<td class="td-header">' +headerArr.join('</td><td class="td-header">') +'</td>';
+    headerStr += '</tr></tbody>';
 
-        '</tr>' + '</tbody>';
     return headerStr;
   }
 
   function doRowsStr(Arr) {
     let rowsCnt = Arr.length;
-    let tbodyN = 1;
+    let RowsStr = initDailyTbody( Arr[0][timeCol] );
 
-    let RowsStr = '<tbody id=' +tbodyN +' class="bookingTbody"' +'>';
     for(let ri = 0; ri < rowsCnt; ri++) {
       var curTime = Arr[ri][timeCol]; // !var - coz need scope!
       let dateObj = _date.msToCustomDateObj( curTime );
       let curTimeslotN = _date.msToSlotN( curTime );
 
       if (curTimeslotN === 0) {
-        tbodyN++;
-        let date = new Date(curTime);
-        let dateStr = date.toLocaleDateString('ru-RU', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        let newDayTrStr = '<tr class="newDayTr">' +
-          '<th>' +dateObj.dayName + ', ' +
-                  dateObj.dayN + '/' +
-                  dateObj.monthN + ' ' +
-          '</th>' +
-          '<td></td>' +
-          '<td colspan="10" class="newDayTr">' +
-            dateStr +
-            ( (dateObj.HDay) ? ' (выходной) ' : ' (будень)' ) +
-          '</td>' +
-
-        '</tr>';
-        RowsStr += '</tbody>' +
-        '<tbody id=' +tbodyN +' class="bookingTbody"' +'>' +
-        newDayTrStr;
+        RowsStr += '</tbody>' +initDailyTbody( curTime );
       } // end marking new date
 
       let freeTime = 30 - Arr[ri][timeValCol];
@@ -98,9 +75,31 @@ function setBookingTable(Arr, mainTable) {
     return RowsStr;
   }//END doRowsStr
 
+  function initDailyTbody( msTime ) {
+    let date = new Date(msTime);
+    let dateStr = date.toLocaleDateString('ru-RU', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    let dateObj = _date.customDate(date);
+
+    let tbodyId = dateObj.dayN +'_' +dateObj.monthN;
+    let newDayTrStr =
+      '<tr class="newDayTr">' +
+        '<th>' + dateObj.dayName +', ' +
+                 dateObj.dayN +'/' +
+                 dateObj.monthN +' ' +
+        '</th>' +
+        '<td></td>' +
+        '<td colspan="10" class="newDayTr">' +
+                 dateStr +( (dateObj.HDay) ? ' (выходной) ' : ' (будень)' ) +
+        '</td>' +
+      '</tr>';
+
+    let tbodyInitStr = '<tbody id=' +tbodyId +' class="bookingTbody"' +'>' +newDayTrStr;
+    return tbodyInitStr;
+  }//end initDailyTbody
+
   function doThStr(ri, rowSpan, dateObj) {
-    let ThStr = '<th ' +  rowSpan + ' >' +
-      dateObj.time + ' <br />' +
+    let ThStr = '<th ' +rowSpan +' >' +
+      dateObj.time +' <br />' +
       '<span class="tdSpan">' +'</span>' +
     '</th>';
     return ThStr;
@@ -109,8 +108,7 @@ function setBookingTable(Arr, mainTable) {
     let tdStr = '';
     if (freeTime < 30) {
       for (let ci = 2; ci < colsCnt; ci++) {
-        //let tdID = 'r' +ri +'c' +ci;
-        tdStr += '<td>' + Arr[ri][ci] + '</td>';
+        tdStr += '<td class="pf">' +Arr[ri][ci] +'</td>';
       } // end for cols
     }
     else {
@@ -128,10 +126,12 @@ function setBookingTable(Arr, mainTable) {
       groupName = 'groupD';
     }
 
-    if (timeslotN % 2) {
-      groupName += '-odd';
-    }
     trClassList.push(groupName);
+
+    if (timeslotN % 2) {
+      trClassList.push('odd');
+    }
+
 
     if(freeTime <= minFreeTime) {
       trClassList.push('noTime-book');

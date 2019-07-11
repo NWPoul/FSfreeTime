@@ -104,13 +104,13 @@ th {
 .groupN {
   background-color: #bfddf9;
 }
-.groupN-odd {
+.groupN.odd {
   background-color: #cfedff;
 }
 .groupD {
   background-color: #a8ff9e;
 }
-.groupD-odd {
+.groupD.odd {
   background-color: #c9ffcb;
 }
 

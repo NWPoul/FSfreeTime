@@ -160,37 +160,6 @@ function bookingDataToArr( bookingData, sortCol ) {
 }
 
 
-
-
-
-function simpleTable(Arr, tbody) {
-  tbody = tbody || document.createElement('tbody');
-  let rowsN = Arr.length,
-    colsN = Arr[0].length;
-
-  for(let ri = 0; ri < rowsN; ri++){
-    let tr = document.createElement('tr');
-    var rowStr = '';
-    rowStr += '<th id="r' +ri +'c0">' +
-               Arr[ri][0] +
-              '</th>';
-
-    for (let ci = 1; ci < colsN; ci++) {
-      let tdID = 'r' +ri +'c' +ci;
-      rowStr += '<td id="' +tdID +'">' +
-                 Arr[ri][ci] +
-                '</td>';
-    }// end for cols
-
-    tr.innerHTML = rowStr;
-    tbody.appendChild(tr);
-  }//end for rows
-
-  return(tbody);
-}//=====END simpleTable==================
-
-
-
 function proceedBookingArrToObj( bookingArr ) {
   let bookingObj = {};
   let {timeCol, timeValCol} = GVAR.bookingDataMap;
@@ -268,5 +237,3 @@ function runTable(data, toggle) {
     }
   }
 }//=====END runTable ================================
-
-
