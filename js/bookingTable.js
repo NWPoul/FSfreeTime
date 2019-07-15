@@ -67,7 +67,7 @@ function setBookingTable(Arr, mainTable) {
 
       if(rowSpan) {
         let adTrStr = '<tr ' +('class="' +trClassStr +'" ') +' >' +
-        '<td colspan="10" class="freeTimeTd">' +' -- свободно ' +freeTime +' мин. --' +'</td>' +
+        '<td colspan="6" class="freeTimeTd">' +' -- свободно ' +freeTime +' мин. --' +'</td>' +
         '</tr>';
         RowsStr += adTrStr;
       }
@@ -88,7 +88,7 @@ function setBookingTable(Arr, mainTable) {
                  dateObj.monthN +' ' +
         '</th>' +
         '<td></td>' +
-        '<td colspan="10" class="newDayTr">' +
+        '<td colspan="5" class="newDayTr">' +
                  dateStr +( (dateObj.HDay) ? ' (выходной) ' : ' (будень)' ) +
         '</td>' +
       '</tr>';
@@ -112,7 +112,7 @@ function setBookingTable(Arr, mainTable) {
       } // end for cols
     }
     else {
-      tdStr += '<td colspan="10" class="freeTimeTd"> -- свободно -- </td>';
+      tdStr += '<td colspan="6" class="freeTimeTd"> -- свободно -- </td>';
     }
     return tdStr;
   }//end doTdStr
