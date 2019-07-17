@@ -30,7 +30,7 @@ function setBookingTable(Arr, mainTable) {
     if(adminToggle) headerArr = headerArr.concat(headerAdm);
 
     let headerStr = '<tbody id="btHeaderTbody" class="bookingTbody">' +
-                    '<tr id="btHeaderTr", class="tableHeader">' +
+                    '<tr id="btHeaderTr" class="tableHeader">' +
                     '<th id="r0c0" class="th0">' +headerArr.shift() +'</th>';
     headerStr += '<td class="td-header">' +headerArr.join('</td><td class="td-header">') +'</td>';
     headerStr += '</tr></tbody>';
