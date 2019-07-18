@@ -42,8 +42,8 @@ function setBookingTable(Arr, mainTable) {
     let rowsCnt = Arr.length;
     let RowsStr = initDailyTbody( Arr[0][timeCol] );
 
-    for(let ri = 0; ri < rowsCnt; ri++) {
-      var curTime = Arr[ri][timeCol]; // !var - coz need scope!
+    for(let ri = 1; ri < rowsCnt; ri++) {               // ri=1 coz continue after setup in let Rowstr
+      var curTime = Arr[ri][timeCol];                   // !var - coz need scope!
       let dateObj = _date.msToCustomDateObj( curTime );
       let curTimeslotN = _date.msToSlotN( curTime );
 
