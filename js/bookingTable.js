@@ -18,7 +18,7 @@ function setBookingTable(Arr, mainTable) {
 
   let colsCnt = (adminToggle) ? Arr[0].length : Arr[0].length - 2; // !!! DEV - cut off phones & e-mails
 
-  mainTable.innerHTML = doHeaderStr(colsCnt);
+  mainTable.innerHTML = doHeaderStr(adminToggle);
   mainTable.insertAdjacentHTML('beforeEnd', doRowsStr(Arr));
 
   return;
