@@ -37,9 +37,7 @@ th {
   top: 0; left: 0;
 }
 
-.td-header {
-  position: -webkit-sticky;
-  position: sticky;
+.th-header {
   top: 0px;
 
   height: 2.5vh;
@@ -53,7 +51,18 @@ th {
   text-align: center !important;
 }
 
+.divHeader {
+  position: absolute;
+  margin-top: 0.5em;
+  width: 96vw;
+  padding: 0;
 
+  font-size: 2vh;
+  
+  
+  vertical-align: middle;
+  background-color: #e0dede
+}
 
 
 .newDayTr th,

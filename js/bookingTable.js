@@ -21,20 +21,12 @@ function setBookingTable(Arr, mainTable) {
   mainTable.innerHTML = doHeaderStr(adminToggle);
   mainTable.insertAdjacentHTML( 'beforeEnd', doRowsStr(Arr, colsCnt) );
 
-  doDayHeaderDiv();
+  let hTh = document.getElementById('th0');
+  setHeaderDiv(hTh);
 
   return;
 
-  function doDayHeaderDiv(params) {
-    let inner = document.getElementById('inner');
-    let dayHeader = document.createElement('div');
-    dayHeader.className = 'dayHeader';
-    dayHeader.draggable="true"
-    dayHeader.innerHTML = 'Header text for day';
-    inner.appendChild(dayHeader);
-
-    return dayHeader;
-  }
+  
 
   function doHeaderStr(adminToggle) {
     let headerArr = [ 'Time', getSVGicon('stopwatch'), 'Tariff', 'Flyers', 'Notes', 'Booking №', 'paid' ];
@@ -44,7 +36,7 @@ function setBookingTable(Arr, mainTable) {
     let headerStr = '<tbody id="btHeaderTbody" class="bookingTbody">' +
                     '<tr id="btHeaderTr" class="tableHeader">' +
                     '<th id="th0" class="th0">' +headerArr.shift() +'</th>';
-    headerStr += '<td class="td-header">' +headerArr.join('</td><td class="td-header">') +'</td>';
+    headerStr += '<th class="th-header">' +headerArr.join('</th><th class="th-header">') +'</th>';
 
     return headerStr;
   }
@@ -107,6 +99,16 @@ function setBookingTable(Arr, mainTable) {
     let tbodyInitStr = '<tbody id=' +tbodyId +' class="bookingTbody"' +'>' +newDayTrStr;
     return tbodyInitStr;
   }//end initDailyTbody
+
+  function setHeaderDiv(hTh) {
+    let divHeader = document.createElement('div');
+    divHeader.id = 'divHeader';
+    divHeader.classList.add('divHeader');
+    divHeader.innerHTML = 'div Header!';
+    hTh.appendChild(divHeader);
+  
+    return divHeader;
+  }// end setHeaderDiv
 
   function doThStr(ri, rowSpan, dateObj) {
     let ThStr = '<th ' +rowSpan +' >' +
