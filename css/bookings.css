@@ -53,13 +53,13 @@ th {
 
 .divHeader {
   position: absolute;
-  margin-top: 0.5em;
+  top: 110%;
   width: 96vw;
   padding: 0;
 
   font-size: 2vh;
-  
-  
+
+
   vertical-align: middle;
   background-color: #e0dede
 }

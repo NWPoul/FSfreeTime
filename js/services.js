@@ -164,6 +164,62 @@ function getSVGicon(iconName) {
 
 
 
+function dayHeaderObserver() {
+  //console.log('setObserver');
+  var options = {
+    root: document.getElementById('inner'),
+    rootMargin: '-10% 0% 0% 0%'
+  };
+  var callback = function(entries, observer) {
+    entries.forEach(entry => {
+      changeHeader(entry);
+    });
+  };
+
+  var observer = new IntersectionObserver(callback, options);
+  var mainTable = document.getElementById('mainTable');
+  var headers = mainTable.getElementsByClassName('newDayTr');
+
+  for (let header of headers) {
+    observer.observe(header);
+  }
+
+}// end testObserver
+
+function changeHeader(entry) {
+  let dayHeaderId = 'divHeader';
+  let dayHeader = document.getElementById(dayHeaderId);
+
+  let xOffset = 10;
+  let yOffset = entry.isIntersecting ? 1 : 30;
+
+  let curElem = findCurElem('divHeader', xOffset, yOffset);
+  let curTbody = findParent(curElem, 'TBODY');
+  let curTbodyHeader = curTbody.rows[0].cells[2];
+  let dayHeaderText = curTbodyHeader.innerHTML;
+
+  console.log(curTbodyHeader);
+
+  dayHeader.innerHTML = dayHeaderText;
+}// end of changeHeader
+
+function findCurElem(anchorId, xOffset = 1, yOffset = 1) {
+  let anchor = document.getElementById(anchorId);
+  let anchorRect = anchor.getBoundingClientRect();
+  let xPos = anchorRect.left + xOffset;
+  let yPos = anchorRect.bottom + yOffset;
+
+  let curElem = document.elementFromPoint(xPos, yPos);
+  return curElem;
+}
+
+function findParent(elem, targetTagName) {
+  while ( (elem = elem.parentElement) && (elem.tagName != targetTagName) );
+  return elem;
+}
+
+
+
 
 /*
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

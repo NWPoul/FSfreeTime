@@ -23,10 +23,11 @@ function setBookingTable(Arr, mainTable) {
 
   let hTh = document.getElementById('th0');
   setHeaderDiv(hTh);
+  dayHeaderObserver();
 
   return;
 
-  
+
 
   function doHeaderStr(adminToggle) {
     let headerArr = [ 'Time', getSVGicon('stopwatch'), 'Tariff', 'Flyers', 'Notes', 'Booking №', 'paid' ];
@@ -106,7 +107,7 @@ function setBookingTable(Arr, mainTable) {
     divHeader.classList.add('divHeader');
     divHeader.innerHTML = 'div Header!';
     hTh.appendChild(divHeader);
-  
+
     return divHeader;
   }// end setHeaderDiv
 
@@ -229,7 +230,7 @@ function scrollToCurrentTime(noScrollToggle) {
 
   setTargetObserver(targetTr);
   scrollToElement(targetTr);
-  
+
 //old scrolling (timeout based)
   // blinkElem(targetTr);
   // setTimeout( () => {
@@ -242,7 +243,7 @@ function scrollToCurrentTime(noScrollToggle) {
     let targetTr = document.getElementById(targetTrId);
     return targetTr;
   }//endsub getTarget
-  
+
   function setTargetObserver(targetElem) {
     let options = {
       root: document.getElementById('inner'),
@@ -268,7 +269,7 @@ function scrollToElement(theElement) {
   if (typeof theElement === 'string') {
     theElement = document.getElementById(theElement);
   }
-  
+
   theElement.scrollIntoView(
     {
       block: 'center',
