@@ -225,27 +225,48 @@ function scrollToCurrentTime(noScrollToggle) {
     targetTr = getTarget( targetTime + _date.hr24, false);
   }
 
+  setTargetObserver(targetTr);
   scrollToElement(targetTr);
-  blinkElem(targetTr);
-
-  setTimeout( () => {
-    scrollToElement('homeButton');
-  }, 5000);
+  
+//old scrolling (timeout based)
+  // blinkElem(targetTr);
+  // setTimeout( () => {
+  //   scrollToElement('homeButton');
+  // }, 5000);
 
   function getTarget(timeMs, toggleGMT) {
-
     let dateObj = _date.msToCustomDateObj(timeMs, toggleGMT);
     let targetTrId = (dateObj.dateN + '_' + dateObj.time);
     let targetTr = document.getElementById(targetTrId);
     return targetTr;
-  }
-}// end scrollToCurrentTime
+  }//endsub getTarget
+  
+  function setTargetObserver(targetElem) {
+    let options = {
+      root: document.getElementById('inner'),
+      rootMargin: '-40% 0% -40% 0%'
+    };
+    let callback = function (entries, observer) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          blinkElem(entry.target);
+          observer.disconnect();
+          scrollToElement('homeButton');
+        }
+      });
+    };
+    let observer = new IntersectionObserver(callback, options);
+    observer.observe(targetElem);
+  }//endsub setTargetObserver
+
+}// END scrollToCurrentTime
+
 
 function scrollToElement(theElement) {
   if (typeof theElement === 'string') {
     theElement = document.getElementById(theElement);
   }
-
+  
   theElement.scrollIntoView(
     {
       block: 'center',
@@ -261,5 +282,5 @@ function blinkElem(elem) {
   elem.classList.toggle( 'blinkElem' );
   setTimeout( () => {
     elem.classList.toggle( 'blinkElem' );
-  }, 4000);
+  }, 2000);
 }// end blinkElem

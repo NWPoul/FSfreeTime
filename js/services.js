@@ -91,7 +91,6 @@ var _date = {
     return false;
   }//end isHoliday
 
-
 }; // ===== END custom DATE OBJ ===== custom DATE OBJ ===== custom DATE OBJ ===== custom DATE OBJ =====
 
 
@@ -102,7 +101,6 @@ function disableCSS(cssID, command) {
 }
 
 function setTimeSlotArr() {
-
   let timeSlotArr = [];
   for (let i = 0; i <= 23; i++ ) {
     timeSlotArr.push([i*2*_date.m30, i*100+0, i + ':00' ]);
@@ -163,6 +161,9 @@ function getSVGicon(iconName) {
   };
   return iconPack[iconName];
 }
+
+
+
 
 /*
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
