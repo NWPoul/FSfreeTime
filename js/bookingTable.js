@@ -92,8 +92,8 @@ function setBookingTable(Arr, mainTable) {
                  dateObj.monthN +' ' +
         '</th>' +
         '<td></td>' +
-        '<td colspan="' +(colsCnt-1) +'" class="newDayTr">' +
-                 dateStr +( (dateObj.HDay) ? ' (выходной) ' : ' (будень)' ) +
+        '<td colspan="' +(colsCnt-1) +'">' +
+                 dateStr +( (dateObj.HDay) ? ' (вых) ' : ' (будень)' ) +
         '</td>' +
       '</tr>';
 
@@ -285,5 +285,5 @@ function blinkElem(elem) {
   elem.classList.toggle( 'blinkElem' );
   setTimeout( () => {
     elem.classList.toggle( 'blinkElem' );
-  }, 2000);
+  }, 3000);
 }// end blinkElem
