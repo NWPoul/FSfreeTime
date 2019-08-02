@@ -171,8 +171,11 @@ function dayHeaderObserver() {
     rootMargin: '-10% 0% 0% 0%'
   };
   var callback = function(entries, observer) {
+    let dayHeaderId = 'divHeader';
+    var dayHeader = document.getElementById(dayHeaderId);
+
     entries.forEach(entry => {
-      changeHeader(entry);
+      changeHeader(entry, dayHeader);
     });
   };
 
@@ -186,9 +189,8 @@ function dayHeaderObserver() {
 
 }// end testObserver
 
-function changeHeader(entry) {
-  let dayHeaderId = 'divHeader';
-  let dayHeader = document.getElementById(dayHeaderId);
+function changeHeader(entry, dayHeader) {
+
 
   let xOffset = 10;
   let yOffset = entry.isIntersecting ? 1 : 30;
@@ -198,9 +200,10 @@ function changeHeader(entry) {
   let curTbodyHeader = curTbody.rows[0].cells[2];
   let dayHeaderText = curTbodyHeader.innerHTML;
 
-  console.log(curTbodyHeader);
-
-  dayHeader.innerHTML = dayHeaderText;
+  if (dayHeader.innerHTML != dayHeaderText) {
+    console.log(entry);
+    dayHeader.innerHTML = dayHeaderText;
+  }
 }// end of changeHeader
 
 function findCurElem(anchorId, xOffset = 1, yOffset = 1) {
