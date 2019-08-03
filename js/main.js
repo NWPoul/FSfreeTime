@@ -69,6 +69,11 @@ function start() {
 
 
 function initMode() {
+  if(GVAR.dayHeaderObserver) {
+    console.log('Disconection of GVAR.dayHeaderObserver');
+    GVAR.dayHeaderObserver.disconnect();
+  }
+
   switch (MODE) {
   case 'freetime':
     setButtonText('setMintimeButton', GVAR.minTime + '\'') ;

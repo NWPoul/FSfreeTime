@@ -23,7 +23,7 @@ function setBookingTable(Arr, mainTable) {
 
   let hTh = document.getElementById('th0');
   setHeaderDiv(hTh);
-  dayHeaderObserver();
+  setDayHeaderObserver();
 
   return;
 

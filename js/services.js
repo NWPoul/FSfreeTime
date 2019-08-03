@@ -164,8 +164,8 @@ function getSVGicon(iconName) {
 
 
 
-function dayHeaderObserver() {
-  //console.log('setObserver');
+function setDayHeaderObserver() {
+  // console.log('setObserver');
   var options = {
     root: document.getElementById('inner'),
     rootMargin: '-10% 0% 0% 0%'
@@ -179,12 +179,13 @@ function dayHeaderObserver() {
     });
   };
 
-  var observer = new IntersectionObserver(callback, options);
+  GVAR.dayHeaderObserver = new IntersectionObserver(callback, options);
   var mainTable = document.getElementById('mainTable');
   var headers = mainTable.getElementsByClassName('newDayTr');
 
   for (let header of headers) {
-    observer.observe(header);
+    GVAR.dayHeaderObserver.observe(header);
+    console.log('now observe ' +header);
   }
 
 }// end testObserver
