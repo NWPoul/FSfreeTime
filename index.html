@@ -10,20 +10,19 @@
 
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-
     <link rel="apple-touch-icon" sizes="57x57" href="src/icons/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="src/icons/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="src/icons/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="src/icons/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="src/icons/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="src/icons/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="src/icons/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="src/icons/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="src/icons/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="src/icons/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="src/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="src/icons/favicon-96x96.png">
+     <link rel="apple-touch-icon" sizes="60x60" href="src/icons/apple-icon-60x60.png">
+     <link rel="apple-touch-icon" sizes="72x72" href="src/icons/apple-icon-72x72.png">
+     <link rel="apple-touch-icon" sizes="76x76" href="src/icons/apple-icon-76x76.png">
+     <link rel="apple-touch-icon" sizes="114x114" href="src/icons/apple-icon-114x114.png">
+     <link rel="apple-touch-icon" sizes="120x120" href="src/icons/apple-icon-120x120.png">
+     <link rel="apple-touch-icon" sizes="144x144" href="src/icons/apple-icon-144x144.png">
+     <link rel="apple-touch-icon" sizes="152x152" href="src/icons/apple-icon-152x152.png">
+     <link rel="apple-touch-icon" sizes="180x180" href="src/icons/apple-icon-180x180.png">
     <link rel="icon" type="image/png" sizes="16x16" href="src/icons/favicon-16x16.png">
+     <link rel="icon" type="image/png" sizes="32x32" href="src/icons/favicon-32x32.png">
+     <link rel="icon" type="image/png" sizes="96x96" href="src/icons/favicon-96x96.png">
+     <link rel="icon" type="image/png" sizes="192x192"  href="src/icons/android-icon-192x192.png">
 
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="src/icons/ms-icon-144x144.png">
@@ -35,10 +34,10 @@
     <link id="freetimeCSS" rel="stylesheet" href="css/freetime.css" type="text/css"/>
     <link id="bookingsCSS" rel="stylesheet" href="css/bookings.css" type="text/css"/>
 
-
     <link rel="manifest" href="manifest.json">
 
-    <script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver"></script>
+    <!-- <script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver"></script> -->
+    <script src="src/IO_Polyfill.min.js"></script>
     <!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
     <!--<script src="js/sweetAlertMin.js"></script>-->
 
@@ -118,7 +117,7 @@
           <span style="width: 1em"></span>
         <button id="loginButton" onClick="loginButtonClick(this)" style="min-width: 3em">Log in</button>
         <span style="width: 0.5em"></span>
-        <span id="verN"; style="line-height: 1em; font-size: 0.75em; color: lightgrey">n16.1</span>
+        <span id="verN"; style="line-height: 1em; font-size: 0.75em; color: lightgrey">n03.08</span>
 
         <!-- <span style="width: .5em"></span>
         <button id="newDateButton" class="myBeautifulIcon">
