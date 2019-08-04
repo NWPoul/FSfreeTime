@@ -26,7 +26,7 @@ var _date = {
   },
 
   dateToYYYYMMDD: function dateToYYYYMMDD(srcDate, delimeter) {
-    delimeter = delimeter || '-';
+    delimeter = delimeter || '';
     var year =   srcDate.getFullYear(),
       month = (+srcDate.getMonth()+1),
       day =    +srcDate.getDate();
@@ -168,7 +168,7 @@ function setDayHeaderObserver() {
   // console.log('setObserver');
   var options = {
     root: document.getElementById('inner'),
-    rootMargin: '-10% 0% 0% 0%'
+    rootMargin: '-15% 0% 0% 0%'
   };
   var callback = function(entries, observer) {
     let dayHeaderId = 'divHeader';
@@ -194,16 +194,16 @@ function changeHeader(entry, dayHeader) {
 
 
   let xOffset = 10;
-  let yOffset = entry.isIntersecting ? 1 : 30;
+  let yOffset = entry.isIntersecting ? 1 : 40;
 
   let curElem = findCurElem('divHeader', xOffset, yOffset);
   let curTbody = findParent(curElem, 'TBODY');
   let curTbodyHeader = curTbody.rows[0].cells[2];
   let dayHeaderText = curTbodyHeader.innerHTML;
-
+// console.log(entry);
   if (dayHeader.innerHTML != dayHeaderText) {
-    console.log(entry);
     dayHeader.innerHTML = dayHeaderText;
+    dayHeader.setAttribute('data-day', curTbody.id);
   }
 }// end of changeHeader
 

@@ -84,7 +84,7 @@ function setBookingTable(Arr, mainTable) {
     let dateStr = date.toLocaleDateString('ru-RU', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     let dateObj = _date.customDate(date);
 
-    let tbodyId = dateObj.dayN +'_' +dateObj.monthN;
+    let tbodyId = _date.dateToYYYYMMDD(date,'');//dateObj.dayN +'_' +dateObj.monthN;
     let newDayTrStr =
       '<tr class="newDayTr">' +
         '<th>' + dateObj.dayName +', ' +
@@ -105,6 +105,9 @@ function setBookingTable(Arr, mainTable) {
     let divHeader = document.createElement('div');
     divHeader.id = 'divHeader';
     divHeader.classList.add('divHeader');
+    divHeader.setAttribute('data-day', '');
+    divHeader.onclick = callRaspPage;
+
     divHeader.innerHTML = 'div Header!';
     hTh.appendChild(divHeader);
 

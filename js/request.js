@@ -18,7 +18,7 @@ function inputDate() {
   setButtonText('startDateButtonText', stDate.toLocaleDateString());
 
   stDate.setDate(stDate.getDate() - 1); //also take data for prev day
-  let stDateStr = _date.dateToYYYYMMDD(stDate);
+  let stDateStr = _date.dateToYYYYMMDD(stDate, '-');
   GVAR.stDate = stDateStr;
 
   getDates();
@@ -34,13 +34,13 @@ function getDates(buttonCall) {
     setButtonText('startDateButtonText', stDate.toLocaleDateString());
 
     stDate.setDate(stDate.getDate() - 1); //also take data for prev day
-    let stDateStr = _date.dateToYYYYMMDD(stDate);
+    let stDateStr = _date.dateToYYYYMMDD(stDate, '-');
     GVAR.stDate = stDateStr;
   }
 
   let endDate = new Date(GVAR.stDate);
   endDate.setDate(endDate.getDate() + 15);
-  GVAR.endDate = _date.dateToYYYYMMDD(endDate);
+  GVAR.endDate = _date.dateToYYYYMMDD(endDate, '-');
 
   return {
     stDate: GVAR.stDate,
@@ -154,4 +154,22 @@ function loginButtonClick(button) {
     return;
   }
   logIn();
+}
+
+function callRaspPage(e) {
+  let targetDay = e.srcElement.dataset.day;
+
+  let url = 'http://booking.flystation.net/Control/Booking/Timetable/?';
+  let params = {
+    'wtime':                 targetDay,
+    'login':                 'instruktor@flystation.net',
+    'password':              'hfcgbcfybt'
+  };
+
+  let qString = '';
+  for (let param in params){
+    qString += '&' + param + '=' + params[param];
+  }
+  let reqString = url+qString;
+  window.open(reqString);
 }
