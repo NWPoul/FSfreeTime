@@ -173,3 +173,23 @@ function callRaspPage(e) {
   let reqString = url+qString;
   window.open(reqString);
 }
+
+function getBookingSummary(bookingId) {
+  // let e = {
+  //   srcElement: {dataset: {day: '20190805'}}
+  // }
+  // callRaspPage(e)
+  let url = 'https://booking.flystation.net/Control/My/getBookingSummary?';
+  let params = {
+    'bookingid':                 282562,
+    'login':                 'instruktor@flystation.net',
+    'password':              'hfcgbcfybt'
+  };
+
+  let qString = '';
+  for (let param in params){
+    qString += '&' + param + '=' + params[param];
+  }
+  let reqString = url+qString;
+  window.open(reqString);
+}

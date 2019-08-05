@@ -71,11 +71,11 @@ th {
 .newDayTr td {
   height: 1vh;
   padding: 0.2em;
-
+  border-top: 2px solid black;
 
   font-weight: bold;
-  color: #8e188d;
-  background-color: #e0dede;
+  color: #464646;
+  background-color: #ffffff;
 }
 .newDayTr th {
   z-index: 1;
