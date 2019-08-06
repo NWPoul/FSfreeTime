@@ -31,7 +31,9 @@ button {
 
 .inner {
     overflow-x: scroll;
-    overflow-y: visible;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+
 
     margin: 0.5vw;
 
