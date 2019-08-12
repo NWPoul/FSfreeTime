@@ -5,7 +5,8 @@ button {
     height: 2em;
 }
 
-.buttonBar {
+.buttonBar,
+.bottomBar {
     width: 98vw;
     white-space: nowrap;
     display: inline-flex;
