@@ -220,32 +220,30 @@ function parseTariff(tariffStr) {
   return resStr;
 }
 
-
 function scrollToCurrentTime(noScrollToggle) {
   if (MODE != 'bookings') return;
   let currentTime = Date.now();
-  let targetTr = getTarget( currentTime, true );
+  let targetTime = currentTime;
+  let toggleGMT = true;
 
-  if( !targetTr || noScrollToggle ) {
-    let targetTime = Date.parse(GVAR.stDate);
-    targetTr = getTarget( targetTime + _date.hr24, false);
+  let targetTr = getTarget( currentTime, toggleGMT );
+  if ( !targetTr || noScrollToggle ) {
+    targetTime = Date.parse(GVAR.stDate) + _date.hr24;
+    toggleGMT = false;
   }
+
+  scrollToTime(targetTime, toggleGMT);
+} //end scrollToCurrentTime
+
+
+function scrollToTime(targetTime, toggleGMT = true) {
+  if (MODE != 'bookings') return;
+  let targetTr = getTarget( targetTime, toggleGMT );
+
+  if( !targetTr ) return;
 
   setTargetObserver(targetTr);
   scrollToElement(targetTr);
-
-//old scrolling (timeout based)
-  // blinkElem(targetTr);
-  // setTimeout( () => {
-  //   scrollToElement('homeButton');
-  // }, 5000);
-
-  function getTarget(timeMs, toggleGMT) {
-    let dateObj = _date.msToCustomDateObj(timeMs, toggleGMT);
-    let targetTrId = (dateObj.dateN + '_' + dateObj.time);
-    let targetTr = document.getElementById(targetTrId);
-    return targetTr;
-  }//endsub getTarget
 
   function setTargetObserver(targetElem) {
     let options = {
@@ -264,8 +262,14 @@ function scrollToCurrentTime(noScrollToggle) {
     let observer = new IntersectionObserver(callback, options);
     observer.observe(targetElem);
   }//endsub setTargetObserver
-
 }// END scrollToCurrentTime
+
+function getTarget(timeMs, toggleGMT) {
+  let dateObj = _date.msToCustomDateObj(timeMs, toggleGMT);
+  let targetTrId = (dateObj.dateN + '_' + dateObj.time);
+  let targetTr = document.getElementById(targetTrId);
+  return targetTr;
+}//End getTarget
 
 
 function scrollToElement(theElement) {

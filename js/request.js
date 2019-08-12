@@ -156,6 +156,16 @@ function loginButtonClick(button) {
   logIn();
 }
 
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////   additional functional module /////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 function callRaspPage(e) {
   let targetDay = e.srcElement.dataset.day;
 
@@ -192,4 +202,23 @@ function getBookingSummary(bookingId) {
   }
   let reqString = url+qString;
   window.open(reqString);
+}
+
+
+function prevDayButtonClick() {
+  moveToDay('prev');
+}
+function nextDayButtonClick() {
+  moveToDay('next');
+}
+
+function moveToDay(direction) {
+  let divHeader = document.getElementById('divHeader');
+  let curDateStr = divHeader.dataset.day;
+  let dayOffset = ( direction == 'next' ) ? 1 : -1;
+  let curDateMs = Date.parse( curDateStr );
+  console.log(curDateMs);
+  let reqTime = curDateMs + ( _date.hr24 * dayOffset );
+
+  scrollToTime( reqTime, true);
 }
