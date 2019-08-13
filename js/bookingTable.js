@@ -245,7 +245,6 @@ function scrollToTime(targetTime, toggleGMT = true) {
 
   if( !targetTr ) return;
 
-  setTargetObserver(targetTr);
   scrollToElement(targetTr);
 }// END scrollToCurrentTime
 
@@ -259,9 +258,9 @@ function scrollToElement(theElement, observerToggle = true) {
     console.log('element not found! ');
     return;
   }
-  
+
   if (observerToggle) setTargetObserver(theElement);
-  
+
   theElement.scrollIntoView(
     {
       block: 'center',

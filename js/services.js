@@ -191,8 +191,6 @@ function setDayHeaderObserver() {
 }// end testObserver
 
 function changeHeader(entry, dayHeader) {
-
-
   let xOffset = 10;
   let yOffset = entry.isIntersecting ? 1 : 40;
 
@@ -200,7 +198,6 @@ function changeHeader(entry, dayHeader) {
   let curTbody = findParent(curElem, 'TBODY');
   let curTbodyHeader = curTbody.rows[0].cells[2];
   let dayHeaderText = curTbodyHeader.innerHTML;
-// console.log(entry);
   if (dayHeader.innerHTML != dayHeaderText) {
     dayHeader.innerHTML = dayHeaderText;
     dayHeader.setAttribute('data-day', curTbody.id);
