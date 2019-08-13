@@ -213,12 +213,29 @@ function nextDayButtonClick() {
 }
 
 function moveToDay(direction) {
-  let divHeader = document.getElementById('divHeader');
-  let curDateStr = divHeader.dataset.day;
-  let dayOffset = ( direction == 'next' ) ? 1 : -1;
-  let curDateMs = Date.parse( curDateStr );
-  console.log(curDateMs);
-  let reqTime = curDateMs + ( _date.hr24 * dayOffset );
+  let anchorId, yRef, yOffset, dayOffset;
 
-  scrollToTime( reqTime, true);
+  if (direction == 'next') {
+    anchorId = 'inner';
+    yRef = 'bottom';
+    yOffset = -20;
+    dayOffset = +1;
+
+  } else {
+    anchorId = 'divHeader';
+    yRef = 'bottom';
+    yOffset = 10;
+    dayOffset = -1;
+  }  
+
+  let curElem = findCurElem(anchorId, 10, yOffset, yRef);
+  let curTr = findParent(curElem, 'TR')
+  let curTrId = curTr.id;
+  let curDateN = +curTr.id.slice(0,5);
+  let targedDateN = +curDateN +dayOffset;
+  let targetId = targedDateN +'_0';
+
+  // console.log('moveToDay ', curTr);
+
+  scrollToElement( targetId, true);
 }

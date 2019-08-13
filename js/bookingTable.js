@@ -86,7 +86,7 @@ function setBookingTable(Arr, mainTable) {
 
     let tbodyId = _date.dateToYYYYMMDD(date,'');//dateObj.dayN +'_' +dateObj.monthN;
     let newDayTrStr =
-      '<tr class="newDayTr">' +
+      '<tr id="' +dateObj.dateN +'_0"' +'class="newDayTr">' +
         '<th>' + dateObj.dayName +', ' +
                  dateObj.dayN +'/' +
                  dateObj.monthN +' ' +
@@ -220,6 +220,9 @@ function parseTariff(tariffStr) {
   return resStr;
 }
 
+
+
+
 function scrollToCurrentTime(noScrollToggle) {
   if (MODE != 'bookings') return;
   let currentTime = Date.now();
@@ -244,25 +247,32 @@ function scrollToTime(targetTime, toggleGMT = true) {
 
   setTargetObserver(targetTr);
   scrollToElement(targetTr);
-
-  function setTargetObserver(targetElem) {
-    let options = {
-      root: document.getElementById('inner'),
-      rootMargin: '-40% 0% -40% 0%'
-    };
-    let callback = function (entries, observer) {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          blinkElem(entry.target);
-          observer.disconnect();
-          scrollToElement('homeButton');
-        }
-      });
-    };
-    let observer = new IntersectionObserver(callback, options);
-    observer.observe(targetElem);
-  }//endsub setTargetObserver
 }// END scrollToCurrentTime
+
+
+function scrollToElement(theElement, observerToggle = true) {
+  if (typeof theElement === 'string') {
+    theElement = document.getElementById(theElement);
+  }
+
+  if (!theElement) {
+    console.log('element not found! ');
+    return;
+  }
+  
+  if (observerToggle) setTargetObserver(theElement);
+  
+  theElement.scrollIntoView(
+    {
+      block: 'center',
+      behavior: 'smooth'
+    }
+  );
+}// end scrollToElement
+
+
+
+
 
 function getTarget(timeMs, toggleGMT) {
   let dateObj = _date.msToCustomDateObj(timeMs, toggleGMT);
@@ -271,19 +281,23 @@ function getTarget(timeMs, toggleGMT) {
   return targetTr;
 }//End getTarget
 
-
-function scrollToElement(theElement) {
-  if (typeof theElement === 'string') {
-    theElement = document.getElementById(theElement);
-  }
-
-  theElement.scrollIntoView(
-    {
-      block: 'center',
-      behavior: 'smooth'
-    }
-  );
-}// end scrollToElement
+function setTargetObserver(targetElem) {
+  let options = {
+    root: document.getElementById('inner'),
+    rootMargin: '-40% 0% -40% 0%'
+  };
+  let callback = function (entries, observer) {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        blinkElem(entry.target);
+        observer.disconnect();
+        scrollToElement('homeButton', false);
+      }
+    });
+  };
+  let observer = new IntersectionObserver(callback, options);
+  observer.observe(targetElem);
+}//end setTargetObserver
 
 function blinkElem(elem) {
   if (typeof(elem) === 'string') {

@@ -207,11 +207,11 @@ function changeHeader(entry, dayHeader) {
   }
 }// end of changeHeader
 
-function findCurElem(anchorId, xOffset = 1, yOffset = 1) {
+function findCurElem(anchorId, xOffset = 1, yOffset = 1, yRef = 'bottom') {
   let anchor = document.getElementById(anchorId);
   let anchorRect = anchor.getBoundingClientRect();
   let xPos = anchorRect.left + xOffset;
-  let yPos = anchorRect.bottom + yOffset;
+  let yPos = anchorRect[yRef] + yOffset;
 
   let curElem = document.elementFromPoint(xPos, yPos);
   return curElem;
