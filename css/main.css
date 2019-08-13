@@ -47,13 +47,6 @@ button {
     border-radius: 5px
 }
 
-.markLine {
-    position: fixed;
-    margin: 0;
-    z-index: 1000;
-    background-color: red;
-    border-width: 0;
-}
 
 table {
     font-size: 1.5vh;
