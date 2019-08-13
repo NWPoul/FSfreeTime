@@ -13,6 +13,10 @@ button {
     margin: 0.5vw;
 }
 
+.navButton {
+    width: 3em;
+}
+
 .startDateButton {
     position: relative;
     min-width: 7em;

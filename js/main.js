@@ -80,16 +80,23 @@ function initMode() {
     setButtonVis('setMintimeButton', true);
     setButtonVis('homeButton', false);
 
+    setButtonVis('prevDayButton', false);
+    setButtonVis('nextDayButton', false);
+
     runTable(GVAR.bookingObj, 'freetime');
 
     disableCSS('freetimeCSS', false);
     disableCSS('bookingsCSS', true);
+
 
     break;
 
   default: //'bookings'
     setButtonVis('homeButton', true);
     setButtonVis('setMintimeButton', false);
+
+    setButtonVis('prevDayButton', true);
+    setButtonVis('nextDayButton', true);
 
     runTable(GVAR.bookingArr, 'bookings');
 

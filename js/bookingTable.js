@@ -249,7 +249,7 @@ function scrollToTime(targetTime, toggleGMT = true) {
 }// END scrollToCurrentTime
 
 
-function scrollToElement(theElement, observerToggle = true) {
+function scrollToElement(theElement, observerToggle = true, scrollOptions) {
   if (typeof theElement === 'string') {
     theElement = document.getElementById(theElement);
   }
@@ -262,6 +262,7 @@ function scrollToElement(theElement, observerToggle = true) {
   if (observerToggle) setTargetObserver(theElement);
 
   theElement.scrollIntoView(
+    scrollOptions ||
     {
       block: 'center',
       behavior: 'smooth'

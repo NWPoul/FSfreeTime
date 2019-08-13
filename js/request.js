@@ -218,7 +218,7 @@ function moveToDay(direction) {
   if (direction == 'next') {
     anchorId = 'inner';
     yRef = 'bottom';
-    yOffset = -20;
+    yOffset = -30;
     dayOffset = +1;
 
   } else {
@@ -226,7 +226,7 @@ function moveToDay(direction) {
     yRef = 'bottom';
     yOffset = 10;
     dayOffset = -1;
-  }  
+  }
 
   let curElem = findCurElem(anchorId, 10, yOffset, yRef);
   let curTr = findParent(curElem, 'TR')
@@ -237,5 +237,5 @@ function moveToDay(direction) {
 
   // console.log('moveToDay ', curTr);
 
-  scrollToElement( targetId, true);
+  scrollToElement( targetId, true, {block: 'center', behavior: 'instant'} );
 }
