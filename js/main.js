@@ -41,27 +41,20 @@ const GVAR = {
 
 // !!! START POINT !!!
 function start() {
-  var mainTableStatus = document.getElementById('mainTable');
-  mainTableStatus.innerHTML = '<tr><td>Нужна авторизация! Нажмите "Log_in"</td></tr>';
+  let mainTable = document.getElementById('mainTable');
+  mainTable.innerHTML = '<tr><td>Нужна авторизация! Нажмите "Log_in"</td></tr>';
 
   setUser();
   getDates();
   getBookingData(GVAR.stDate, GVAR.endDate)
-  // asyncGetTestData()
     .then( bookingData => {
       GVAR.bookingData = bookingData;
       GVAR.bookingArr = proceedBookingData( GVAR.bookingData );
       GVAR.bookingObj = proceedBookingArrToObj( GVAR.bookingArr );
-      // runTable (GVAR.bookingObj, 'freetime');
+
       initMode();
     });
-
-  mainTableStatus.innerHTML = '<tr><td>Loading data...</td></tr>';
-
-  //testing
-  // let bookingData = getTestData('CSV0106');
-  // GVAR.bookingArr = proceedBookingData(bookingData);
-  // runTable(GVAR.bookingArr);
+  mainTable.innerHTML = '<tr><td>Loading data...</td></tr>';
 }// end start
 
 
