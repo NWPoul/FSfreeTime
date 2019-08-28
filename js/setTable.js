@@ -203,7 +203,7 @@ function runTable(data, toggle) {
     setBookingTable(data, mainTable);
 
     var noScrollToggle = !isNeedScroll();
-    scrollToCurrentTime( noScrollToggle );
+    scrollToCurrentTime( noScrollToggle ); //here was a 100s delay (setTimeOun) to call scroll
     break;
   }
   mainTable.appendChild(tbody);
