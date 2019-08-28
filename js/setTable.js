@@ -65,9 +65,7 @@ function sortBookingData( bookingArr, colIndex ) {
 }// end sortBookingData
 
 
-function tuneResult(resultsArr, tIndex) {
-  tIndex = tIndex || 0;
-
+function tuneResult(resultsArr, tIndex = 0) {
   resultsArr.forEach(function(rec) {
     var extractedDateTimeValues = extractDateTime(rec, tIndex);
     rec.splice(tIndex, 1, extractedDateTimeValues[0], extractedDateTimeValues[1]);
@@ -205,22 +203,8 @@ function runTable(data, toggle) {
     setBookingTable(data, mainTable);
 
     var noScrollToggle = !isNeedScroll();
-    setTimeout(() => {
-      scrollToCurrentTime( noScrollToggle );
-    }, 100);
+    scrollToCurrentTime( noScrollToggle );
     break;
-
-  case 'testing':
-    var initRowsCnt = 100;
-    var initArr = data.slice(0, initRowsCnt);
-    var restArr = data.slice(initRowsCnt);
-    setBookingTable(initArr, tbody);
-
-    setTimeout(() => {
-      setBookingTable(restArr, tbody, true);
-      scrollToCurrentTime( noScrollToggle );
-    }, 100);
-    return;
   }
   mainTable.appendChild(tbody);
 
