@@ -73,8 +73,8 @@ function initMode() {
     setButtonVis('setMintimeButton', true);
     setButtonVis('homeButton', false);
 
-    setButtonVis('prevDayButton', false);
-    setButtonVis('nextDayButton', false);
+    // setButtonVis('prevDayButton', false);
+    // setButtonVis('nextDayButton', false);
 
     runTable(GVAR.bookingObj, 'freetime');
 
@@ -88,8 +88,8 @@ function initMode() {
     setButtonVis('homeButton', true);
     setButtonVis('setMintimeButton', false);
 
-    setButtonVis('prevDayButton', true);
-    setButtonVis('nextDayButton', true);
+    // setButtonVis('prevDayButton', true);
+    // setButtonVis('nextDayButton', true);
 
     runTable(GVAR.bookingArr, 'bookings');
 

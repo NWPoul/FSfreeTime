@@ -206,10 +206,29 @@ function getBookingSummary(bookingId) {
 
 
 function prevDayButtonClick() {
-  moveToDay('prev');
+  switch ( MODE ) {
+
+  case 'bookings':
+    moveToDay('prev');
+    break;
+
+  case 'freetime':
+    moveToBlock('prev');
+    break;
+  }
 }
+
 function nextDayButtonClick() {
-  moveToDay('next');
+  switch ( MODE ) {
+
+  case 'bookings':
+    moveToDay('next');
+    break;
+
+  case 'freetime':
+    moveToBlock('next');
+    break;
+  }
 }
 
 function moveToDay(direction) {
@@ -238,4 +257,27 @@ function moveToDay(direction) {
   // console.log('moveToDay ', curTr);
 
   scrollToElement( targetId, true, {block: 'center', behavior: 'instant'} );
+}
+
+function moveToBlock(direction) {
+  let startDateInput = document.getElementById('startDateInput');
+  let curStDate = GVAR.stDate;
+  let curEndDate = GVAR.endDate;
+
+  let newStDate;
+
+  switch (direction) {
+  case 'next':
+    newStDate = curEndDate;
+    break;
+
+  case 'prev':
+    newStDate = new Date(curStDate);
+    newStDate.setDate(newStDate.getDate() - 13);
+    newStDate = _date.dateToYYYYMMDD(newStDate, '-');
+    break;
+  }
+
+  startDateInput.value = newStDate;
+  inputDate();
 }
