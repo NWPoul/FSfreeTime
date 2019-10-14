@@ -3,6 +3,10 @@
   "workbench.editor.enablePreview": false,
   "files.exclude": {
     "package-lock.json": true,
-    "README.md": true
+    "README.md": true,
+
+    ".eslintrc.json": true,
+    ".gitignore": true,
+    "manifest.json": true
   }
 }

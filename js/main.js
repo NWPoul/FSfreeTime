@@ -24,8 +24,8 @@ const GVAR = {
   GMToffset: new Date().getTimezoneOffset() * 60000
 };
 /* global
+ disableCSS
  setUser
-
  getDates
  getBookingData
  proceedBookingData
