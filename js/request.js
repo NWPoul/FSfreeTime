@@ -59,8 +59,8 @@ async function getBookingData (stDate, endDate) {
   // '_search': "false",  GFilter[search]': '',  'GFilterReset': 1,
     'method': 'POST',
 
-    'login':                 'instruktor@flystation.net',
-    'password':              'hfcgbcfybt',
+    'login':                  GVAR.user,
+    'password':               GVAR.userPs,
     'GFilter[filtermore]':    1,
     'GFilter[bookingactive]': 'y',
     'GFilter[dateid]':        'bookingtimefly',
@@ -119,7 +119,7 @@ function setUser() {
 }
 
 function logIn () {
-  let user = prompt( 'введите Ваш login в системе', '' );
+  let user = prompt( 'введите Ваш  (e-mail) в системе', '' );
   let ps = prompt('введите Ваш пароль в системе', '');
   if (!user || !ps) {
     alert('user and password required!');
@@ -172,8 +172,8 @@ function callRaspPage(e) {
   let url = 'http://booking.flystation.net/Control/Booking/Timetable/?';
   let params = {
     'wtime':                 targetDay,
-    'login':                 'instruktor@flystation.net',
-    'password':              'hfcgbcfybt'
+    'login':                 GVAR.user,
+    'password':              GVAR.userPs
   };
 
   let qString = '';
