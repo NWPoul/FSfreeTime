@@ -291,6 +291,7 @@ function setTargetObserver(targetElem) {
       if (entry.isIntersecting) {
         blinkElem(entry.target);
         observer.disconnect();
+        changeHeader();
         scrollToElement('homeButton', false);
       }
     });

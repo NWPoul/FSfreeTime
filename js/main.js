@@ -63,7 +63,7 @@ function start() {
 
 function initMode() {
   if(GVAR.dayHeaderObserver) {
-    console.log('Disconection of GVAR.dayHeaderObserver');
+    console.log('Disconection of GVAR.dayHeaderObserver /initMode');
     GVAR.dayHeaderObserver.disconnect();
   }
 
@@ -129,6 +129,10 @@ function setMintime() {
 }// end setMinTime
 
 function reloadButtonClick() {
+  if(GVAR.dayHeaderObserver) {
+    console.log('Disconection of GVAR.dayHeaderObserver /reload button');
+    GVAR.dayHeaderObserver.disconnect();
+  }
   start();
   // let res = bench( null, 100)
   // alert(res);

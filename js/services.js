@@ -165,7 +165,6 @@ function getSVGicon(iconName) {
 
 
 function setDayHeaderObserver() {
-  // console.log('setObserver');
   var options = {
     root: document.getElementById('inner'),
     rootMargin: '-15% 0% 0% 0%'
@@ -192,7 +191,12 @@ function setDayHeaderObserver() {
 
 function changeHeader(entry, dayHeader) {
   let xOffset = 10;
-  let yOffset = entry.isIntersecting ? 1 : 40;
+  let yOffset = ( entry && entry.isIntersecting ) ? 1 : 40;
+  if( !dayHeader ) {
+    let dayHeaderId = 'divHeader';
+    dayHeader = document.getElementById(dayHeaderId);
+console.log('rev changeHeader!');
+  }
 
   let curElem = findCurElem('divHeader', xOffset, yOffset);
   let curTbody = findParent(curElem, 'TBODY');
@@ -210,7 +214,7 @@ function findCurElem(anchorId, xOffset = 1, yOffset = 1, yRef = 'bottom') {
   let xPos = anchorRect.left + xOffset;
   let yPos = anchorRect[yRef] + yOffset;
 
-// showTargetCoordinates(xPos+1, yPos+1); //DEVELOPING
+ // showTargetCoordinates(xPos+1, yPos+1); //DEVELOPING
 
   let curElem = document.elementFromPoint(xPos, yPos);
   // console.log(curElem);

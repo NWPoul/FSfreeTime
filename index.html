@@ -118,7 +118,7 @@
           <span style="width: 1em"></span>
         <button id="loginButton" onClick="loginButtonClick(this)" style="min-width: 3em">Log in</button>
         <span style="width: 0.5em"></span>
-        <span id="verN"; style="line-height: 1em; font-size: 0.75em; color: lightgrey">n11.09</span>
+        <span id="verN"; style="line-height: 1em; font-size: 0.75em; color: lightgrey">n03.12</span>
 
         <!-- <span style="width: .5em"></span>
         <button id="newDateButton" class="myBeautifulIcon">
@@ -168,8 +168,9 @@
 
   <script>
     window.addEventListener('error', function (e) {
-      var stack = e.error.stack;
-      var message = e.error.toString();
+ console.log(e);
+      var stack = e.error && e.error.stack;
+      var message = e.error && e.error.toString() || e.message;
       if (stack) {
           message += '\n' + stack;
       }
