@@ -73,7 +73,7 @@ var _date = {
 
   isHoliday: function isHoliday(monthN, dayN, dayWeekN) {
     var holidays2020 = [
-      [1,2,3,6,7,8], //[0]JAN 2019
+      [1,2,3,6,7,8], //[0]JAN 2020
       [24],            //[1]FEB
       [9],           //[2]MAR
       [],            //[3]ARP
