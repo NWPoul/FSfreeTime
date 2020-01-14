@@ -72,12 +72,12 @@ var _date = {
   },//end customDate
 
   isHoliday: function isHoliday(monthN, dayN, dayWeekN) {
-    var holidays2019 = [
-      [1,2,3,4,7,8], //[0]JAN 2019
-      [],            //[1]FEB
-      [8],           //[2]MAR
+    var holidays2020 = [
+      [1,2,3,6,7,8], //[0]JAN 2019
+      [24],            //[1]FEB
+      [9],           //[2]MAR
       [],            //[3]ARP
-      [1,2,3,9,10],  //[4]MAY
+      [1,4,5,11],  //[4]MAY
       [12],          //[5]JUN
       [],[],[],[],   //JUL//AUG//SEP//OKT
       [4], []        //[10]NOV//DEC
@@ -85,7 +85,7 @@ var _date = {
 
     if (dayWeekN == 0 || dayWeekN == 6) {
       return true;
-    } else if (holidays2019[monthN].indexOf(dayN)!= -1) {
+    } else if (holidays2020[monthN].indexOf(dayN)!= -1) {
       return true;
     }
     return false;
