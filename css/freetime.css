@@ -2,7 +2,16 @@
 table, th, td {
   border-style: none solid;
   border-color: #ffffff3b;
-  border-width: 1px
+  border-width: 1px;
+
+  --noTime-fill: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0.1) 17%,
+    rgba(0, 0, 0, 0.2) 17%,
+    rgba(0, 0, 0, 0.2) 34%
+  );
+
 }
 
 td {
@@ -83,11 +92,13 @@ th {
 .fullTime {
    color: #ffffff00 !important;
 }
+
 .noTime {
-   background-color: #ffffffc4;
-   color: #ffffff21 !important;
-}
-.lessTime {
-   background-color: #ffffffc4;
-   color: #ffffff !important;
-}
+   background-image: var(--noTime-fill);
+   color: #00000000 !important;
+ }
+
+ .lessTime {
+   background-image: var(--noTime-fill);
+   color: #ffffff3f !important;
+ }
