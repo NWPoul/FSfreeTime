@@ -44,3 +44,13 @@ table,
     #btHeaderTr .td-header {
         font-size: 14px;
     }
+
+    table {
+        --noTime-fill: repeating-linear-gradient(
+            45deg,
+            rgba(0, 0, 0, 0.2),
+            rgba(0, 0, 0, 0.2) 9%,
+            rgba(0, 0, 0, 0.3) 9%,
+            rgba(0, 0, 0, 0.3) 18%
+          );
+    }
