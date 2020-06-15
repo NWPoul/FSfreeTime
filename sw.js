@@ -1,12 +1,12 @@
 // Caches
-var Gpref = 19.05;
+var Gpref = 15.06;
 
 var CURRENT_CACHES = {
-  font: 'font-cache-v' +Gpref +'.' +'1',
-  css:'css-cache-v' +Gpref +'.' +'3',
-  js:'js-cache-v' +Gpref +'.' +'2',
-  site: 'site-cache-v' +Gpref +'.' +'1',
-  image: 'image-cache-v' +Gpref +'.' +'1'
+  font: 'font-cache-v'  +Gpref +'.' +'1',
+  css:  'css-cache-v'   +Gpref +'.' +'3',
+  js:   'js-cache-v'    +Gpref +'.' +'2',
+  site: 'site-cache-v'  +Gpref +'.' +'1',
+  image:'image-cache-v' +Gpref +'.' +'1'
 };
 
 self.addEventListener('install', (event) => {

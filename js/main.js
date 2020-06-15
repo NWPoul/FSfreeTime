@@ -1,25 +1,35 @@
 // eslint-disable-next-line no-unused-vars
 var DEVMOD = false; // toggle for dev mode links/res on dev pages or not
-var MODE = 'bookings'; //'freetime' or 'bookings'
+var MODE   = 'bookings'; //'freetime' or 'bookings'
 
 //GLOBAL NAME SPACE
 const GVAR = {
-  user: '',
-  userPs: '',
+  user:     '',
+  userPs:   '',
   userData: {},
 
-  bookingData: {},
+  bookingData:    {},
   bookingDataMap: {
-    timeCol: 0, timeValCol: 1, restRecStCol: 2
+    timeCol:        0,
+    timeValCol:     1,
+    restRecStCol:   2
   },
 
   bookingArr: [],
   bookingObj: {},
 
-  stDate: '',
-  endDate: '',
-  minTime: 15,
+  stDate:         '',
+  endDate:        '',
+  minTime:        15,
   mainTableState: {},
+
+  bookingListUrl:      'http://booking.flystation.net/Control/Booking/ListBooking'
+                      +'/loadDataList'
+                      +'/0/1/1',
+
+  bookingTimetableUrl: 'http://booking.flystation.net/Control/Booking/Timetable/?',
+
+  bookingSummaryUrl:   'http://booking.flystation.net/Control/My/getBookingSummary?',
 
   GMToffset: new Date().getTimezoneOffset() * 60000
 };

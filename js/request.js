@@ -51,9 +51,7 @@ function getDates(buttonCall) {
 
 
 async function getBookingData (stDate, endDate) {
-  var url = 'https://booking.flystation.net/Control/Booking/ListBooking'
-           +'/loadDataList'
-           +'/0/1/1';
+  var url    = GVAR.bookingListUrl;
 
   var params = {
   // '_search': "false",  GFilter[search]': '',  'GFilterReset': 1,
@@ -169,8 +167,8 @@ function loginButtonClick(button) {
 function callRaspPage(e) {
   let targetDay = e.srcElement.dataset.day;
 
-  let url = 'http://booking.flystation.net/Control/Booking/Timetable/?';
-  let params = {
+  let url     = GVAR.bookingTimetableUrl;
+  let params  = {
     'wtime':                 targetDay,
     'login':                 GVAR.user,
     'password':              GVAR.userPs
@@ -185,13 +183,9 @@ function callRaspPage(e) {
 }
 
 function getBookingSummary(bookingId) {
-  // let e = {
-  //   srcElement: {dataset: {day: '20190805'}}
-  // }
-  // callRaspPage(e)
-  let url = 'https://booking.flystation.net/Control/My/getBookingSummary?';
+  let url    = GVAR.bookingSummaryUrl;
   let params = {
-    'bookingid':                 282562,
+    'bookingid':             282562,
     'login':                 'instruktor@flystation.net',
     'password':              'hfcgbcfybt'
   };
