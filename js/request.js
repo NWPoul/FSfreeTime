@@ -182,23 +182,6 @@ function callRaspPage(e) {
   window.open(reqString);
 }
 
-function getBookingSummary(bookingId) {
-  let url    = GVAR.bookingSummaryUrl;
-  let params = {
-    'bookingid':             282562,
-    'login':                 'instruktor@flystation.net',
-    'password':              'hfcgbcfybt'
-  };
-
-  let qString = '';
-  for (let param in params){
-    qString += '&' + param + '=' + params[param];
-  }
-  let reqString = url+qString;
-  window.open(reqString);
-}
-
-
 function prevDayButtonClick() {
   switch ( MODE ) {
 

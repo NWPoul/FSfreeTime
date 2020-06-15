@@ -23,13 +23,13 @@ const GVAR = {
   minTime:        15,
   mainTableState: {},
 
-  bookingListUrl:      'http://booking.flystation.net/Control/Booking/ListBooking'
+  bookingListUrl:      'https://booking.flystation.net/Control/Booking/ListBooking'
                       +'/loadDataList'
                       +'/0/1/1',
 
-  bookingTimetableUrl: 'http://booking.flystation.net/Control/Booking/Timetable/?',
+  bookingTimetableUrl: 'https://booking.flystation.net/Control/Booking/Timetable/?',
 
-  bookingSummaryUrl:   'http://booking.flystation.net/Control/My/getBookingSummary?',
+  bookingSummaryUrl:   'https://booking.flystation.net/Control/My/getBookingSummary?',
 
   GMToffset: new Date().getTimezoneOffset() * 60000
 };
