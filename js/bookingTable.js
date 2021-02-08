@@ -282,22 +282,24 @@ function getTarget(timeMs, toggleGMT) {
 }//End getTarget
 
 function setTargetObserver(targetElem) {
-  let options = {
-    root: document.getElementById('inner'),
-    rootMargin: '-40% 0% -40% 0%'
-  };
-  let callback = function (entries, observer) {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        blinkElem(entry.target);
-        observer.disconnect();
-        changeHeader();
-        scrollToElement('homeButton', false);
-      }
-    });
-  };
-  let observer = new IntersectionObserver(callback, options);
-  observer.observe(targetElem);
+  // let options = {
+  //   root: document.getElementById('inner'),
+  //   rootMargin: '-40% 0% -40% 0%'
+  // };
+  // let callback = function (entries, observer) {
+  //   entries.forEach(entry => {
+  //     if (entry.isIntersecting) {
+  //       blinkElem(entry.target);
+  //       observer.disconnect();
+  //       changeHeader();
+  //       scrollToElement('homeButton', false);
+  //     }
+  //   });
+  // };
+  // let observer = new IntersectionObserver(callback, options);
+  // observer.observe(targetElem);
+
+  console.log('setTargetObserver');
 }//end setTargetObserver
 
 function blinkElem(elem) {

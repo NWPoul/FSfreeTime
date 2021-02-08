@@ -217,7 +217,7 @@ function findCurElem(anchorId, xOffset = 1, yOffset = 1, yRef = 'bottom') {
  // showTargetCoordinates(xPos+1, yPos+1); //DEVELOPING
 
   let curElem = document.elementFromPoint(xPos, yPos);
-  // console.log(curElem);
+  console.log(curElem);
   return curElem;
 }
 
@@ -226,26 +226,26 @@ function findParent(elem, targetTagName) {
   return elem;
 }
 
-function showTargetCoordinates(xPos=0, yPos=0) {
-  let curLines = document.body.getElementsByClassName('markLine');
-  if (curLines.length > 0) {
-    while (curLines[0]) { curLines[0].remove(); }
-  }
+// function showTargetCoordinates(xPos=0, yPos=0) {
+//   let curLines = document.body.getElementsByClassName('markLine');
+//   if (curLines.length > 0) {
+//     while (curLines[0]) { curLines[0].remove(); }
+//   }
 
-  let hLine = document.createElement('hr');
-  hLine.id = 'hLine';
-  hLine.className = 'markLine';
-  hLine.style.cssText = ' top:' +yPos +'px; left: 0; height: 1px; width: 100%' ;
+//   let hLine = document.createElement('hr');
+//   hLine.id = 'hLine';
+//   hLine.className = 'markLine';
+//   hLine.style.cssText = ' top:' +yPos +'px; left: 0; height: 1px; width: 100%' ;
 
 
-  let vLine = document.createElement('hr');
-  vLine.id = 'vLine';
-  vLine.className = 'markLine';
-  vLine.style.cssText = 'left:' +xPos +'px; top: 0; height: 100%; width: 1px';
+//   let vLine = document.createElement('hr');
+//   vLine.id = 'vLine';
+//   vLine.className = 'markLine';
+//   vLine.style.cssText = 'left:' +xPos +'px; top: 0; height: 100%; width: 1px';
 
-  document.body.appendChild(hLine);
-  document.body.appendChild(vLine);
-}
+//   document.body.appendChild(hLine);
+//   document.body.appendChild(vLine);
+// }
 
 
 
